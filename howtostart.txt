@@ -1,0 +1,9 @@
+1.open xampp and start first two
+2.open mysql workbrench or mysql in chrome
+3.run on file springcrudapplication in spring-crud
+5.open postman
+6.if port 8080 is already use in spring
+    1.run admin cmd
+    2.netstat -ano | findstr 8080
+    3.taskkill /F /pid z(z = pid that use port 8080)
+
