@@ -1,1 +1,1 @@
-เนททำใน branch thanet นะ
+เนทแยก ropo frontend กับ backend นะ
