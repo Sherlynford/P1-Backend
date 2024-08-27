@@ -1,0 +1,24 @@
+nav-main{
+    height: 80px;
+}
+
+.nav-login-right{
+    margin-right: 13px;
+}
+
+.login{
+    color: #6C757D;
+    border: 1px solid #6C757D;
+    border-radius: 5px;
+    height: 40px;
+    width: 135px;
+    margin-right: 40px;
+
+}
+.rigister{
+    color: #28A745;
+    border: 1px solid #28A745;
+    border-radius: 5px;
+    height: 50px;
+    width: 145px;
+}
