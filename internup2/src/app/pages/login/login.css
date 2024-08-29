@@ -1,0 +1,76 @@
+body{
+    background: #EEEBF8;
+} 
+.Login-container{
+    height: 100vh;
+    width: 100%;
+}
+.block-login{
+    position: relative;
+    width: 1100px;
+    height: 550px;
+    background: rgb(255, 255, 255,0.6);
+    border-radius: 20px;
+}
+
+.left-login{
+    position: relative;
+    width: 550px;
+    height: 550px;
+    background: #FFFFFF;
+    border-radius: 20px;
+}
+.left-login img{
+    height: 361px;
+    width: 361px;
+    object-fit: cover;
+    object-position: center;
+}
+.right-login{
+    position: relative;
+    width: 550px;
+    height: 550px;
+}
+.right-login h1{
+    font-size: 48px;
+    font-weight: bold;
+    margin: 30px 0;
+}
+.login-main{
+    margin: 40px;
+}
+.login-main p{
+    font-size: 20px;
+}
+.login-main input{
+    width: 450px;
+    height: 50px;
+    border-radius: 20px;
+    margin: 10px 0;
+}
+
+
+.login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 180px;
+    height: 35px;
+    font-size: 20px;
+    color: #FFFFFF;
+    background: #9E00FF;
+    border-radius: 20px;
+    margin: 20px 0;
+}
+.Register{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 180px;
+    height: 35px;
+    font-size: 20px;
+    color: #FFFFFF;
+    background: #9E00FF;
+    border-radius: 20px;
+    margin: 20px 0;
+}

@@ -1,0 +1,131 @@
+body{
+    background: #EEEBF8;
+}
+.bg-main{
+    height: 735px;
+    background-image: url('../image/bg-main.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.block-main{
+    position: relative;
+    top: 155px;
+    width: 100%;
+    height: 580px;
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+}
+.img-work{
+    position: relative;
+    top: 55px;
+    left: 288px;
+    width: 500px;
+    height: 500px;
+}
+.left-block{
+    width: 50%;
+}
+.block-content{
+    position: relative;
+    top: 170px;
+    
+}
+.block-content h1{
+    font-size: 40px;
+    font-weight: bold;
+}
+.block-content p{
+    margin: 40px 0 50px 0;
+    font-size: 20px;
+    color: #565156;
+}
+.block-content input{
+    width: 785px;
+    height: 60px;
+    border: none;
+    border-radius: 20px;
+}
+.job-announce{
+    width: 100%;
+    margin: 100px 0 100px 0;
+}
+.job-announce h1{
+    font-size: 26px;
+    font-weight: bold;
+    text-align: center;
+}
+.show-more-job{
+    width: 100%;
+    margin: 50px 0;
+}
+.show-more-job button{
+    width: 200px;
+    height: 50px;
+    color: #FFFFFF;
+    font-size: 18px;
+    background-color: #B540FD;
+    border-radius: 20px;
+}
+.card-job{
+    width: 100%;
+}
+.card{
+    width: 980px;
+    height: 220px;
+    border-radius: 5px;
+    background: #F8F8F8;
+}
+.img-job{
+    width: 370px;
+    height: 100%;
+}
+.img-job img{
+    object-fit: cover;
+    object-position: center;
+}
+.subtitle-card img{
+    width: 20px;
+    height: 20px;
+}
+.subtitle-card h1,p{
+   font-size: 14px;
+   color: black;
+}
+.title-card{
+    font-size: 20px;
+    color: black;
+    margin: 20px 0;
+}
+.subtitle-card{
+    width: 560px;
+    height: 35px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    border: 1px solid #9E00FF;
+}
+.detail-short{
+    width: 560px;
+    height: 60px;
+    font-size: 14px;
+}
+.lo-read button{
+    width: 130px;
+    height: 30px;
+    background: #B540FD;
+    font-size: 14px;
+    color: #FFFFFF;
+    border-radius: 10px;
+}
+.lo-read img{
+    width: 20px;
+    height: 20px;
+}
+.name-location{
+    font-size: 14px;
+    color: black;
+}
+
+.card-container{
+    margin: 60px 0;
+}

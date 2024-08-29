@@ -1,17 +1,17 @@
 import Image from "next/image";
-import NavberLogin from "./component/navbar-login/page";
-import './style/mainpage.css';
-import imgperson from '../app/image/image-person.png';
-import imgjob from '../app/image/image-job1.png'
-import organization from '../app/image/icon-organization.png'
-import calender from '../app/image/iocn-calendar.png'
-import location from '../app/image/icon-location.png'
-import Polygon from '../app/image/Polygon.png'
+import NavberLoginstudent from "../../component/navbar-student/page";
+import '../../style/mainpage.css';
+import imgperson from '../../image/image-person.png';
+import imgjob from '../../image/image-job1.png'
+import organization from '../../image/icon-organization.png'
+import calender from '../../image/iocn-calendar.png'
+import location from '../../image/icon-location.png'
+import Polygon from '../../image/Polygon.png'
 
 export default function Home() {
   return (
     <><div>
-      <NavberLogin />
+      <NavberLoginstudent />
     </div>
       <div>
         <div className="bg-main">
