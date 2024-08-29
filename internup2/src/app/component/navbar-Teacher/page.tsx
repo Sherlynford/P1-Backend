@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import './nav-teacher.css';
 import Image from 'next/image';
 import Logo from '../../image/UP-Logo.png'
-import Profilestudent from '../../image/img-student.png'
+import Profileteacher from '../../image/img-teacher.png'
 
 
 export default function NavberLogin() {
@@ -24,8 +24,8 @@ export default function NavberLogin() {
             <p style={{ marginLeft: "40px" }}>สถานะนิสิต</p>
         </div>
         <div className='nav-teacher-right'>
-            <button className='profile-student' onClick={toggleDropdown}>
-                <Image src={Profilestudent} alt='this is image student' />
+            <button className='profile-teacher' onClick={toggleDropdown}>
+                <Image src={Profileteacher} alt='this is image teacher' />
             </button>
             {isDropdownOpen && (
                 <div className='dropdown-menu'>
