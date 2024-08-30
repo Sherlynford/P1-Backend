@@ -7,7 +7,7 @@ body{
 .blcok-profile{
     margin: 100px 0;
     width: 1000px;
-    height: 2000px;
+    height: 100%;
     background: #FFFFFF;
     border-radius: 20px;
     border: 1px solid black;
@@ -25,12 +25,12 @@ body{
 .content-profile{
     padding: 50px;
 }
-.content-profile p{
+.content-profile label{
     font-size: 24px;
     margin-bottom: 10px;
     color: black;
 }
-.fristname{
+.firstname{
     font-size: 20px;
     color: black;
     width: 850px;
@@ -95,17 +95,27 @@ body{
 }
 .cv{
     width: 850px;
-    height: 100px;
+    height: 100%;
     border: 1px solid black;
     border-radius: 10px;
     margin-bottom: 20px
 }
+.cv img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
 .transcript{
     width: 850px;
-    height: 100px;
+    height: 100%;
     border: 1px solid black;
     border-radius: 10px;
     margin-bottom: 20px
+}
+.transcript img{
+    width: 100%;
+
 }
 .start-intern{
     font-size: 20px;
@@ -132,4 +142,5 @@ body{
     color: #FFFFFF;
     border-radius: 20px;
     font-size: 20px;
+    margin-bottom: 50px;
 }

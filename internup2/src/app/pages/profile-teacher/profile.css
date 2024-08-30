@@ -7,7 +7,7 @@ body{
 .blcok-profile{
     margin: 100px 0;
     width: 1000px;
-    height: 1400px;
+    height: 100%;
     background: #FFFFFF;
     border-radius: 20px;
     border: 1px solid black;
@@ -25,19 +25,19 @@ body{
 .content-profile{
     padding: 50px;
 }
-.content-profile p{
+.content-profile label{
     font-size: 24px;
     margin-bottom: 10px;
     color: black;
 }
-.fristname{
+.firstname{
     font-size: 20px;
     color: black;
     width: 850px;
     height: 60px;
     border: 1px solid black;
     border-radius: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 20px
 }
 .lastname{
     font-size: 20px;
@@ -100,4 +100,5 @@ body{
     color: #FFFFFF;
     border-radius: 20px;
     font-size: 20px;
+    margin-bottom: 50px;
 }

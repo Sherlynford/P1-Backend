@@ -21,7 +21,7 @@ body{
     text-align: center;
     margin-bottom: 20px;
 }
-.content-register p{
+.content-register label{
     font-size: 24px;
     color: black;
     margin-bottom: 10px;
