@@ -57,22 +57,3 @@ body{
     border-radius: 10px;
     background: #FF6A6A;
 }
-.react-datepicker__month-container{
-    width: 500px;
-}
-.react-datepicker__header{
-    width: 500px;
-}
-.react-datepicker__header h2{
-    font-size: 24px;
-}
-.react-datepicker__day-names {
-    font-size: 20px;
-}
-.react-datepicker__week{
-    width: 100%;
-}
-.react-datepicker__day-name, .react-datepicker__day, .react-datepicker__time-name{
-    font-size: 20px;
-    margin: 5px 20px !important;
-}

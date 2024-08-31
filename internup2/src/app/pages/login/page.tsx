@@ -14,11 +14,11 @@ export default function Login() {
                 <div className=''>
                     <div className='right-login'>
                         <h1 className='flex justify-center'>เข้าสู่ระบบ</h1>
-                        <div className='login-main'>
-                            <p>อีเมล</p>
-                            <input type="text" placeholder="กรุณากรอก อีเมล" />
-                            <p>รหัสผ่าน</p>
-                            <input type="text" placeholder="กรุณากรอก รหัสผ่าน" /><br />
+                        <div className='login-main flex flex-col'>
+                            <label htmlFor="email">อีเมล</label>
+                            <input type="email" placeholder="กรุณากรอก อีเมล" />
+                            <label htmlFor="password">รหัสผ่าน</label>
+                            <input type="password" placeholder="กรุณากรอก รหัสผ่าน" /><br />
                            <div className='btn-login flex flex-col items-center'>
                            <button className='login'>เข้าสู่ระบบ</button>
                             <p className='flex justify-center'>หรือ</p>

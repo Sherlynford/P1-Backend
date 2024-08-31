@@ -63,7 +63,7 @@ export default function Home() {
                       ต้องการคนที่สามารถทำงานเป็นทีมและเรียนรู้เร็ว....</p>
                   </div>
                   <div className="lo-read mt-3">
-                    <div className="flex justify-between">
+                    <div className="flex justify-between mb-3">
                       <div className="flex">
                         <Image src={location} alt="this is icon location" />
                         <p className="name-location ml-2">Bangkok</p>
@@ -103,7 +103,7 @@ export default function Home() {
                       ใจใน API และการทำ Unit Testing มีโอกาสเรียนรู้และพัฒนาทักษะกับทีมงานที่มีประสบการณ์</p>
                   </div>
                   <div className="lo-read mt-3">
-                    <div className="flex justify-between">
+                    <div className="flex justify-between mb-3">
                       <div className="flex">
                         <Image src={location} alt="this is icon location" />
                         <p className="name-location ml-2">Chiang mai</p>
@@ -144,7 +144,7 @@ export default function Home() {
                       โอกาสร่วมงานกับทีมที่มุ่งเน้นการพัฒนาและปรับปรุงกระบวนการทำงาน</p>
                   </div>
                   <div className="lo-read mt-3">
-                    <div className="flex justify-between">
+                    <div className="flex justify-between mb-3">
                       <div className="flex">
                         <Image src={location} alt="this is icon location" />
                         <p className="name-location ml-2">Bangkok</p>
@@ -185,7 +185,7 @@ export default function Home() {
                       โอกาสเรียนรู้การทำงานในโปรเจกต์ขนาดใหญ่และสภาพแวดล้อมการทำงานจริง</p>
                   </div>
                   <div className="lo-read mt-3">
-                    <div className="flex justify-between">
+                    <div className="flex justify-between mb-3">
                       <div className="flex">
                         <Image src={location} alt="this is icon location" />
                         <p className="name-location ml-2">Khon Kaen</p>

@@ -13,35 +13,35 @@ export default function Profile() {
                 <div className='blcok-profile'>
                     <div className='content-profile'>
                         <div className='image-teacher flex justify-center'>
-                            <Image src={Profileteacher2} alt='' />
+                            <Image src={Profileteacher2} alt='image teacher' />
                         </div>
                         <div className='flex flex-col'>
                             <label htmlFor="firstname" className='title-firstname'>ชื่อ</label>
-                            <input className='firstname' type="text" value={"กิตติพงศ์"} />
+                            <input className='firstname' type="text" defaultValue={"กิตติพงศ์"} readOnly/>
                         </div>
                         <div className='flex flex-col'>
                             <label htmlFor="lastname" className='title-lastname'>นามสกุล</label>
-                            <input className='lastname' type="text" value={"ยินดีชื่นชม"} />
+                            <input className='lastname' type="text" defaultValue={"ยินดีชื่นชม"} readOnly/>
                         </div>
                         <div className='flex flex-col'>
                             <label htmlFor="studentid" className='title-studentid'>รหัสประจำตัวนิสิต</label>
-                            <input className='studentid' type="text" value={"291107"} />
+                            <input className='studentid' type="text" defaultValue={"291107"} readOnly/>
                         </div>
                         <div className='flex flex-col'>
                             <label htmlFor="number-phone" className='title-numberphone'>เบอร์โทรศัพน์</label>
-                            <input className='number-phone' type="text" value={"0726175672"} />
+                            <input className='number-phone' type="text" defaultValue={"0726175672"} readOnly/>
                         </div>
                         <div className='flex flex-col'>
                             <label htmlFor="faculty" className='title-faculty'>คณะ</label>
-                            <input className='faculty' type="text" value={"เทคโนโลยีสารสนเทศและการสื่อสาร"} />
+                            <input className='faculty' type="text" defaultValue={"เทคโนโลยีสารสนเทศและการสื่อสาร"} readOnly/>
                         </div>
                         <div className='flex flex-col'>
                             <label htmlFor="major" className='title-major'>สาขา</label>
-                            <input className='major' type="text" value={"วิศวกรรมคอมพิวเตอร์"} />
+                            <input className='major' type="text" defaultValue={"วิศวกรรมคอมพิวเตอร์"} readOnly/>
                         </div>
                         <div className='flex flex-col'>
                             <label htmlFor="email" className='title-email'>อีเมล</label>
-                            <input className='email' type="text" value={"kittiphog@up.ac.th"} />
+                            <input className='email' type="text" defaultValue={"kittiphog@up.ac.th"} readOnly/>
                         </div>
                     </div>
                     <div className='btn-edit flex justify-center'>
