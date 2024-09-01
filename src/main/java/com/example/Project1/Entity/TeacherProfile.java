@@ -34,6 +34,8 @@ public class TeacherProfile {
 
     private String major;
 
+    private String profileIMG;
+
     @Column(unique = true) 
     private String teacherID;
 

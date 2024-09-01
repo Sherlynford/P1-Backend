@@ -19,8 +19,5 @@ Done
 11.student cant have jobApplication status 'choose' more than one
 
 Not Done
-Deploy database and api (later now use DBeaver)
-add some missing feature(if i miss something)
-fix something in code(if has something wrong)
-maybe DTO(if necessary)
-websocket
+Deploy database and api chang store img link
+store img

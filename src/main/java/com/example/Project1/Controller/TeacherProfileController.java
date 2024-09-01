@@ -3,13 +3,20 @@ package com.example.Project1.Controller;
 import com.example.Project1.Entity.TeacherProfile;
 import com.example.Project1.Service.TeacherProfileService;
 
+import com.example.Project1.Service.FileStorageService;
+
+import io.jsonwebtoken.io.IOException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -19,11 +26,29 @@ import java.util.Optional;
 public class TeacherProfileController {
 
     private final TeacherProfileService teacherProfileService;
+    private final FileStorageService fileStorageService;
 
     @PostMapping("/")
     public ResponseEntity<TeacherProfile> createTeacherProfile(@RequestBody TeacherProfile teacherProfile) {
         TeacherProfile newTeacherProfile = teacherProfileService.createTeacherProfile(teacherProfile);
         return new ResponseEntity<>(newTeacherProfile, HttpStatus.CREATED);
+    }
+
+        @PostMapping("/upload")
+    public ResponseEntity<Map<String, List<String>>> uploadFiles(@RequestParam("files") MultipartFile[] files) {
+        List<String> fileUrls = new ArrayList<>();
+        Map<String, List<String>> response = new HashMap<>();
+        
+        try {
+            for (MultipartFile file : files) {
+                String fileUrl = fileStorageService.storeFile(file);
+                fileUrls.add(fileUrl);
+            }
+            response.put("fileUrls", fileUrls);
+            return ResponseEntity.ok(response);
+        } catch (IOException | java.io.IOException e) {
+            return ResponseEntity.status(500).body(Map.of("error", List.of("Failed to upload files: " + e.getMessage())));
+        }
     }
 
     @GetMapping("/")
