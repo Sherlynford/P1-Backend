@@ -31,12 +31,10 @@ export default function Register() {
                         <div className='flex flex-col'>
                             <label htmlFor="email" className='title-email'>อีเมล</label>
                             <input id="email" className='email' type="email" placeholder='กรุณากรอก อีเมล....' />
-                        </div>
-                        <div className='flex flex-col'>
+                        
                             <label htmlFor="password" className='title-password'>รหัสผ่าน</label>
                             <input id="password" className='password' type="password" placeholder='กรุณากรอก รหัสผ่าน....' />
-                        </div>
-                        <div className='flex flex-col'>
+                        
                             <label htmlFor="confirm-password" className='title-confirm-password'>ยืนยันรหัสผ่าน</label>
                             <input id="confirm-password" className='password' type="password" placeholder='กรุณากรอก ยืนยันรหัสผ่าน....' />
                         </div>

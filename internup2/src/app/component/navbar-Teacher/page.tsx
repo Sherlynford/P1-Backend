@@ -24,7 +24,7 @@ export default function NavberLogin() {
             <p style={{ marginLeft: "40px" }}>สถานะนิสิต</p>
         </div>
         <div className='nav-teacher-right'>
-            <button className='profile-teacher' onClick={toggleDropdown}>
+            <button className='profile-teacher-nav' onClick={toggleDropdown}>
                 <Image src={Profileteacher} alt='this is image teacher' />
             </button>
             {isDropdownOpen && (

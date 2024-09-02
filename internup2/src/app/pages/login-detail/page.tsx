@@ -4,7 +4,7 @@ import '../../style/detail.css';
 import Imgdetail from '../../image/img-job.png'
 import Imgcalendar from '../../image/iocn-calendar.png'
 
-export default function Home() {
+export default function Detail() {
     return (
         <><div>
             <NavberLogin />

@@ -63,7 +63,7 @@ export default function ProfileEdit() {
                             <label htmlFor="major" className='title-major'>สาขา</label>
                             <input className='major' type="text" placeholder='กรุณากรอก สาขา....' />
                             <label htmlFor="email" className='title-email'>อีเมล</label>
-                            <input className='email' type="text" placeholder={"กรุณากรอก อีเมล..."} />
+                            <input className='email' type="text" placeholder="กรุณากรอก อีเมล..." />
                             <label htmlFor="cv" className='title-cv'>CV</label>
                             <div className='cv'>
                                 <div className="upload-img flex items-center justify-center">
