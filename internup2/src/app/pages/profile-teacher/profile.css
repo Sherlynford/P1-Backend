@@ -1,0 +1,104 @@
+body{
+    background: #EEEBF8;
+}
+.proflie-teacher{
+    height: 100vh;
+}
+.blcok-profile{
+    margin: 100px 0;
+    width: 1000px;
+    height: 100%;
+    background: #FFFFFF;
+    border-radius: 20px;
+    border: 1px solid black;
+}
+.image-teacher{
+    width: 100%;
+    height: 180px;
+    border-radius: 100px;
+    margin: 50px 0;
+}
+.image-teacher img{
+    width: 180px;
+    height: 180px;
+}
+.content-profile{
+    padding: 50px;
+}
+.content-profile label{
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: black;
+}
+.firstname{
+    font-size: 20px;
+    color: black;
+    width: 850px;
+    height: 60px;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 20px
+}
+.lastname{
+    font-size: 20px;
+    color: black;
+    width: 850px;
+    height: 60px;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 20px
+}
+.studentid{
+    font-size: 20px;
+    color: black;
+    width: 850px;
+    height: 60px;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 20px
+}
+.number-phone{
+    font-size: 20px;
+    color: black;
+    width: 850px;
+    height: 60px;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 20px
+}
+.faculty{
+    font-size: 20px;
+    color: black;
+    width: 850px;
+    height: 60px;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 20px
+}
+.major{
+    font-size: 20px;
+    color: black;
+    width: 850px;
+    height: 60px;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 20px
+}
+.email{
+    font-size: 20px;
+    color: black;
+    width: 850px;
+    height: 60px;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 20px
+}
+.edit{
+    width: 200px;
+    height: 60px;
+    background: #B540FD;
+    color: #FFFFFF;
+    border-radius: 20px;
+    font-size: 20px;
+    margin-bottom: 50px;
+}

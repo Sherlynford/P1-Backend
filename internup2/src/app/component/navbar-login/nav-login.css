@@ -1,0 +1,53 @@
+.nav-main{
+    width: 100%;
+    height: 80px;
+    background: #FFFFFF;
+}
+.nav-login-left{
+    margin-left: 18px;
+}
+.nav-login-right{
+    margin-right: 13px;
+}
+/* .nav-login-right button{
+    font-size: ;
+} */
+.nav-login-left h1{
+    cursor: pointer;
+    font-size: 20px;
+    color: black;
+}
+.nav-login-left p{
+    cursor: pointer;
+    font-size: 20px;
+    color: black;
+}
+
+.login{
+    color: #6C757D;
+    border: 1px solid #6C757D;
+    border-radius: 5px;
+    height: 40px;
+    width: 135px;
+    margin-right: 40px;
+    font-size: 16px;
+
+}
+.rigister{
+    color: #28A745;
+    border: 1px solid #28A745;
+    border-radius: 5px;
+    height: 50px;
+    width: 145px;
+    font-size: 24px;
+}
+
+
+.nav-login-right .rigister:hover{
+    background-color: #28A745;
+    color: #FFFFFF;
+}
+.nav-login-right .login:hover{
+    background-color: #6C757D;
+    color: #FFFFFF;
+}

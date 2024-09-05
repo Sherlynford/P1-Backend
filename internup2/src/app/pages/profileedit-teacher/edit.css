@@ -1,0 +1,59 @@
+body{
+    background: #EEEBF8;
+}
+.block-profileedit{
+    width: 1000px;
+    height: 100%;
+    background: #FFFFFF;
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 50px;
+    margin: 100px 0;
+}
+
+.change-img{
+    width: 180px;
+    height: 180px;
+    border-radius: 100%;
+}
+.edit-profile label{
+    font-size: 24px;
+    color: black;
+    margin: 20px 0;
+}
+.edit-profile input{
+    font-size: 20px;
+    color: black;
+    border-radius: 10px;
+    width: 850px;
+    height: 60px;
+}
+.faculty{
+    width: 850px;
+    height: 60px;
+    border-radius: 10px;
+    font-size: 20px;
+    color: black;
+}
+.upload-img{
+    width: 850px;
+}
+.btn-confirm-cancel{
+    margin: 50px 200px;
+}
+.confirm{
+    width: 200px;
+    height: 60px;
+    font-size: 20px;
+    color: #FFFFFF;
+    border-radius: 10px;
+    background: #A865FF;
+}
+.cancel{
+    width: 200px;
+    height: 60px;
+    font-size: 20px;
+    color: #FFFFFF;
+    border-radius: 10px;
+    background: #FF6A6A;
+}

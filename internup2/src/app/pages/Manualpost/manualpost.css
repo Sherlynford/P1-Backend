@@ -1,0 +1,75 @@
+body{
+    background: #EEEBF8;
+}
+.block-manualpost{
+    width: 1000px;
+    height: 100%;
+    background: #FFFFFF;
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 50px;
+    margin: 100px 0;
+}
+.manualpost-title{
+    font-size: 32px;
+    font-weight: bold;
+    color: black;
+    margin: 20px 0;
+}
+.enter-manual label{
+    font-size: 24px;
+    color: black;
+    margin: 20px 0;
+}
+.enter-manual input{
+    font-size: 20px;
+    color: black;
+    border-radius: 10px;
+    width: 850px;
+    height: 60px;
+}
+.status-apply{
+    font-size: 20px;
+    color: black;
+    border-radius: 10px;
+    width: 850px;
+    height: 60px;
+}
+.btn-confirm-cancel{
+    margin: 50px 200px;
+}
+.confirm{
+    width: 200px;
+    height: 60px;
+    font-size: 20px;
+    color: #FFFFFF;
+    border-radius: 10px;
+    background: #A865FF;
+}
+.cancel{
+    width: 200px;
+    height: 60px;
+    font-size: 20px;
+    color: #FFFFFF;
+    border-radius: 10px;
+    background: #FF6A6A;
+}
+.react-datepicker__month-container{
+    width: 500px;
+}
+.react-datepicker__header{
+    width: 500px;
+}
+.react-datepicker__header h2{
+    font-size: 24px;
+}
+.react-datepicker__day-names {
+    font-size: 20px;
+}
+.react-datepicker__week{
+    width: 100%;
+}
+.react-datepicker__day-name, .react-datepicker__day, .react-datepicker__time-name{
+    font-size: 20px;
+    margin: 5px 20px !important;
+}
