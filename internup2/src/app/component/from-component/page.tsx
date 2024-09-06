@@ -52,7 +52,7 @@ const PdfDownload = () => {
                 </p>
             </div>
 
-            <button onClick={downloadPDF}>Download PDF</button>
+            <button className='pt-5' onClick={downloadPDF}>Download PDF</button>
         </div>
     );
 };
