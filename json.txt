@@ -18,7 +18,8 @@ http://localhost:8080/api/teachers/
     "phoneNumber": "1234567890",
     "faculty": "Science",
     "major": "Physics",
-    "teacherID": 1001
+    "teacherID": 1001 ,
+    "profileIMG": "IMG.png"
 }
 StudentProfile JSON: (id สร้างเองหลังบ้าน)
 http://localhost:8080/api/students/

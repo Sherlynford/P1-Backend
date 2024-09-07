@@ -38,6 +38,7 @@ public class TeacherProfileService {
                     teacherProfile.setFaculty(newTeacherProfile.getFaculty());
                     teacherProfile.setMajor(newTeacherProfile.getMajor());
                     teacherProfile.setTeacherID(newTeacherProfile.getTeacherID());
+                    teacherProfile.setProfileIMG(newTeacherProfile.getProfileIMG());
                     return teacherProfileRepository.save(teacherProfile);
                 })
                 .orElseGet(() -> {
