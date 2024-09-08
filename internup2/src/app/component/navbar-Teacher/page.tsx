@@ -19,7 +19,7 @@ export default function NavberLogin() {
         <div className='nav-teacher-left flex items-center'>
             <Image src={Logo} alt='Logo UP' />
             <h1 style={{}}>INTERN<strong style={{ color: "#92268F" }}>UP</strong></h1>
-            <p style={{ marginLeft: "83px" }}>สร้างโพสต์</p>
+            <p style={{ marginLeft: "83px" }}> <a href="/pages/createpost-teacher">สร้างโพสต์</a></p>
             <p style={{ marginLeft: "40px" }}>ยืนยันสถานะนิสิต</p>
             <p style={{ marginLeft: "40px" }}>สถานะนิสิต</p>
         </div>

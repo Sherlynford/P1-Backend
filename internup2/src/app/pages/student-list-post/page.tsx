@@ -1,218 +1,131 @@
-import Image from "next/image";
-import NavberLoginstudent from "../../component/navbar-student/page";
+'use client'
+import Navbarstudent from "../../component/navbar-student/page";
 import '../../style/mainpage.css';
-import imgjob from '../../image/image-job1.png'
-import organization from '../../image/icon-organization.png'
-import calender from '../../image/iocn-calendar.png'
-import location from '../../image/icon-location.png'
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import JobCard from '../../component/card/page'; // Adjust the path if necessary
+
+interface Job {
+    topic: string;
+    organizationName: string;
+    dateTime: string;
+    detail: string;
+    location: string;
+    img: string;
+}
 
 export default function Home() {
+    const [jobs, setJobs] = useState<Job[]>([]);
+    const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
+    const [error, setError] = useState<string | null>(null);
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    
+    // Pagination states
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [itemsPerPage] = useState<number>(5); // Number of items per page
+
+    useEffect(() => {
+        axios
+            .get("http://localhost:8080/api/blogs/") // Adjust this URL to your API endpoint
+            .then((res) => {
+                const sortedJobs = res.data.sort((a: Job, b: Job) => {
+                    return new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime();
+                });
+                setJobs(sortedJobs);
+                setFilteredJobs(sortedJobs); // Initialize filteredJobs with all jobs
+            })
+            .catch((err) => {
+                console.error(err);
+                setError("Failed to fetch jobs. Please try again later.");
+            });
+    }, []);
+
+    useEffect(() => {
+        // Filter jobs based on the search query
+        const filtered = jobs.filter(job =>
+            job.topic.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            job.organizationName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            job.detail.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            job.location.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredJobs(filtered);
+    }, [searchQuery, jobs]);
+
+    useEffect(() => {
+        setCurrentPage(1); // Reset to the first page whenever the filtered jobs change
+    }, [filteredJobs]);
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.target.value);
+    };
+
+    // Calculate the indices for the current page
+    const indexOfLastJob = currentPage * itemsPerPage;
+    const indexOfFirstJob = indexOfLastJob - itemsPerPage;
+    const currentJobs = filteredJobs.slice(indexOfFirstJob, indexOfLastJob);
+
+    const handlePageChange = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const totalPages = Math.ceil(filteredJobs.length / itemsPerPage);
+
     return (
-        <><div>
-            <NavberLoginstudent />
-        </div>
+        <>
+            <div>
+                <Navbarstudent />
+            </div>
             <div className="job-latest">
                 <div className="job-announce flex justify-between">
-                    <h1>ประกาศรับสมัครรับสมัครงานทั้งหมด <span>3,477</span> post </h1>
+                    <h1>ประกาศรับสมัครรับสมัครงานทั้งหมด <span>{filteredJobs.length}</span> post </h1>
                     <label htmlFor="search" className="hidden"></label>
-                    <input type="search" name="searchjob" id="search" placeholder="ค้นหาชื่อบริษัท, สถานที่ทำงาน" />
+                    <input type="search" name="searchjob" id="search" placeholder="ค้นหาชื่อบริษัท, สถานที่ทำงาน" 
+                    value={searchQuery}
+                    onChange={handleSearchChange}/>
                 </div>
-                <div className="card-container flex-col">
-                    <div className="card-job flex justify-center">
-                        <div className="card flex">
-                            <div className="crad-left">
-                                <div className="img-job">
-                                    <Image src={imgjob} alt="this is image job" />
-                                </div>
-                            </div>
-                            <div className="crad-right">
-                                <div className="content-card">
-                                    <h1 className="title-card">รับสมัครนักศึกษาฝึกงานจำนวนมาก: Frontend, Backend, PM, ...</h1>
-                                    <div className="subtitle-card flex items-center ">
-                                        <div className="flex ml-3">
-                                            <Image src={organization} alt="this is icon organization" />
-                                            <p className="name-organization ml-2 mr-3">Sodium Software Co.</p>
-                                            <Image src={calender} alt="this is icon calendar" />
-                                            <p className="date-time ml-2">09/08/2567</p>
-                                            <p className="time-latest ml-2">02:08</p>
-                                        </div>
-                                    </div>
-                                    <div className="short-detail">
-                                        <p className="detail-short mt-1">เปิดรับสมัครนักศึกษาฝึกงานหลายตำแหน่ง เน้นความเชี่ยวชาญใน Frontend, Backend และ PM ต้องการคนที่สามารถทำงานเป็นทีมและเรียนรู้เร็ว....</p>
-                                    </div>
-                                    <div className="lo-read mt-3">
-                                        <div className="flex justify-between mb-3">
-                                            <div className="flex">
-                                                <Image src={location} alt="this is icon location" />
-                                                <p className="name-location ml-2">Bangkok</p>
-                                            </div>
-                                            <button className="read-more mr-5">อ่านเพิ่มเติม
-                                                {/* <Image className="absolute" src={Polygon} alt="this is icon Polygon"/> */}
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="card-container flex-col">
-                    <div className="card-job flex justify-center">
-                        <div className="card flex">
-                            <div className="crad-left">
-                                <div className="img-job">
-                                    <Image src={imgjob} alt="this is  image  job" />
-                                </div>
-                            </div>
-                            <div className="crad-right">
-                                <div className="content-card">
-                                    <h1 className="title-card">รับนักศึกษาฝึกงาน ตำแหน่ง Back-end , Tester</h1>
-                                    <div className="subtitle-card flex items-center ">
-                                        <div className="flex ml-3">
-                                            <Image src={organization} alt="this is icon orhanization" />
-                                            <p className="name-organization ml-2 mr-3">Tester Software Co.</p>
-                                            <Image src={calender} alt="this is icon calendar" />
-                                            <p className="date-time ml-2">09/08/2567</p>
-                                            <p className="time-latest ml-2">02:08</p>
-                                        </div>
-                                    </div>
-                                    <div className="short-detail">
-                                        <p className="detail-short mt-1">เปิดรับสมัครนักศึกษาฝึกงานที่มีทักษะด้านBackendและการทดสอบซอฟต์แวร์ต้องการผู้ที่มีความเข้า
-                                            ใจใน API และการทำ Unit Testing มีโอกาสเรียนรู้และพัฒนาทักษะกับทีมงานที่มีประสบการณ์</p>
-                                    </div>
-                                    <div className="lo-read mt-3">
-                                        <div className="flex justify-between mb-3">
-                                            <div className="flex">
-                                                <Image src={location} alt="this is icon location" />
-                                                <p className="name-location ml-2">Chiang mai</p>
-                                            </div>
-                                            <button className="read-more mr-5">อ่านเพิ่มเติม
-                                                {/* <Image className="absolute" src={Polygon} alt="this is icon Polygon"/> */}
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="card-container flex-col">
-                    <div className="card-job flex justify-center">
-                        <div className="card flex">
-                            <div className="crad-left">
-                                <div className="img-job">
-                                    <Image src={imgjob} alt="this is  image  job" />
-                                </div>
-                            </div>
-                            <div className="crad-right">
-                                <div className="content-card">
-                                    <h1 className="title-card">รับนักศึกษาฝึกงานตำแหน่ง Front-end , QA  , PM</h1>
-                                    <div className="subtitle-card flex items-center ">
-                                        <div className="flex ml-3">
-                                            <Image src={organization} alt="this is icon orhanization" />
-                                            <p className="name-organization ml-2 mr-3">Milk Software Co.</p>
-                                            <Image src={calender} alt="this is icon calendar" />
-                                            <p className="date-time ml-2">09/08/2567</p>
-                                            <p className="time-latest ml-2">02:08</p>
-                                        </div>
-                                    </div>
-                                    <div className="short-detail">
-                                        <p className="detail-short mt-1">เปิดรับนักศึกษาที่สนใจทำงานในตำแหน่ง Front-end, QA และ PM
-                                            ต้องการผู้ที่มีทักษะใน HTML/CSS/JS และมีประสบการณ์ในการตรวจสอบคุณภาพซอฟต์แวร์
-                                            โอกาสร่วมงานกับทีมที่มุ่งเน้นการพัฒนาและปรับปรุงกระบวนการทำงาน</p>
-                                    </div>
-                                    <div className="lo-read mt-3">
-                                        <div className="flex justify-between mb-3">
-                                            <div className="flex">
-                                                <Image src={location} alt="this is icon location" />
-                                                <p className="name-location ml-2">Bangkok</p>
-                                            </div>
-                                            <button className="read-more mr-5">อ่านเพิ่มเติม
-                                                {/* <Image className="absolute" src={Polygon} alt="this is icon Polygon"/> */}
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="card-container flex-col">
-                    <div className="card-job flex justify-center">
-                        <div className="card flex">
-                            <div className="crad-left">
-                                <div className="img-job">
-                                    <Image src={imgjob} alt="this is  image  job" />
-                                </div>
-                            </div>
-                            <div className="crad-right">
-                                <div className="content-card">
-                                    <h1 className="title-card">รับนักศึกษาฝึกงานตำแหน่ง Design , IT , Devops</h1>
-                                    <div className="subtitle-card flex items-center ">
-                                        <div className="flex ml-3">
-                                            <Image src={organization} alt="this is icon orhanization" />
-                                            <p className="name-organization ml-2 mr-3">Gao Tao Software Co.</p>
-                                            <Image src={calender} alt="this is icon calendar" />
-                                            <p className="date-time ml-2">09/08/2567</p>
-                                            <p className="time-latest ml-2">02:08</p>
-                                        </div>
-                                    </div>
-                                    <div className="short-detail">
-                                        <p className="detail-short mt-1">เปิดรับนักศึกษาที่มีความสนใจในตำแหน่ง Project Manager และ Full-Stack Developer
-                                            ต้องการคนที่สามารถบริหารจัดการโครงการและเขียนโค้ดทั้ง Front-end และ Back-end ได้
-                                            โอกาสเรียนรู้การทำงานในโปรเจกต์ขนาดใหญ่และสภาพแวดล้อมการทำงานจริง</p>
-                                    </div>
-                                    <div className="lo-read mt-3">
-                                        <div className="flex justify-between mb-3">
-                                            <div className="flex">
-                                                <Image src={location} alt="this is icon location" />
-                                                <p className="name-location ml-2">Khon Kaen</p>
-                                            </div>
-                                            <button className="read-more mr-5">อ่านเพิ่มเติม
-                                                {/* <Image className="absolute" src={Polygon} alt="this is icon Polygon"/> */}
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div>
+                    {error && <p className="error-message">{error}</p>}
+                    {currentJobs.length === 0 && !error ? (
+                        <p>No jobs found</p>
+                    ) : (
+                        currentJobs.map((job, index) => (
+                            <JobCard key={index} job={job} />
+                        ))
+                    )}
                 </div>
                 <div className="pagination-job flex justify-center">
                     <nav aria-label="Page navigation">
                         <ul className="flex items-center -space-x-px h-10 text-base">
                             <li>
-                                <a href="#" className="flex items-center justify-center">
+                                <a 
+                                    href="#"
+                                    className={`flex items-center justify-center ${currentPage === 1 ? 'disabled' : ''}`}
+                                    onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                                >
                                     <span className="sr-only">Previous</span>
                                     <svg className="w-5 h-5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 1 1 5l4 4" />
                                     </svg>
                                 </a>
                             </li>
+                            {[...Array(totalPages)].map((_, i) => (
+                                <li key={i}>
+                                    <a 
+                                        href="#"
+                                        aria-current={currentPage === i + 1 ? "page" : undefined}
+                                        className={`page-job ${currentPage === i + 1 ? 'active' : ''}`}
+                                        onClick={() => handlePageChange(i + 1)}
+                                    >
+                                        {i + 1}
+                                    </a>
+                                </li>
+                            ))}
                             <li>
-                                <a href="#" aria-current="page" className="page-job active">1</a>
-                            </li>
-                            <li>
-                                <a href="#" className="page-job">2</a>
-                            </li>
-                            <li>
-                                <a href="#" className="page-job">3</a>
-                            </li>
-                            <li>
-                                <a href="#" className="page-job">4</a>
-                            </li>
-                            <li>
-                                <a href="#" className="page-job">5</a>
-                            </li>
-                            <li>
-                                <a href="#" className="page-job">...</a>
-                            </li>
-                            <li>
-                                <a href="#" className="page-job">100</a>
-                            </li>
-                            <li>
-                                <a href="#" className="flex items-center justify-center">
+                                <a 
+                                    href="#"
+                                    className={`flex items-center justify-center ${currentPage === totalPages ? 'disabled' : ''}`}
+                                    onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
+                                >
                                     <span className="sr-only">Next</span>
                                     <svg className="w-5 h-5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />
@@ -222,7 +135,7 @@ export default function Home() {
                         </ul>
                     </nav>
                 </div>
-
-            </div></>
+            </div>
+        </>
     );
 }

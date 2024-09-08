@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +18,7 @@ public class BlogService {
     private final BlogRepository blogRepository;
     
     public Blog createBlog(Blog blog) {
-        blog.setDate(LocalDate.now());
+        blog.setDateTime(LocalDateTime.now());
         return blogRepository.save(blog);
     }
 
@@ -36,7 +36,7 @@ public class BlogService {
                     blog.setTopic(newBlog.getTopic());
                     blog.setDetail(newBlog.getDetail());
                     blog.setImg(newBlog.getImg());
-                    blog.setDate(LocalDate.now());
+                    blog.setDateTime(LocalDateTime.now());
                     blog.setLink(newBlog.getLink());
                     blog.setOrganizationName(newBlog.getOrganizationName());
                     blog.setUsername(newBlog.getUsername());

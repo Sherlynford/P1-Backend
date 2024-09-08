@@ -176,3 +176,18 @@ body{
     border-radius: 100%;
     height: 35px;
 }
+
+@media screen and(min-width: 1700px){
+    
+    .job-announce{padding: 0 300px;}
+}
+
+@media screen and (min-width: 1440px) {
+    .img-work {
+        left: 100px;
+    }
+    .block-content {
+        right: 50px;
+    }
+    .job-announce{padding: 0 100px;}
+}
