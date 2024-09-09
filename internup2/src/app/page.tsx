@@ -72,7 +72,7 @@ export default function Home() {
               <div className="block-inside">
                 <div className="block-content">
                   <h1>ค้นหา ที่ฝึกงานสำหรับนักศึกษา ม.พะเยา</h1>
-                  <p><a href="/">INTERN <strong style={{ color: "#92268F" }}>UP</strong> เว็บหาที่ฝึกงาน หางานในเครือและหน่วยงานนอก สำหรับนิสิตนักศึกษา <strong style={{ color: "#92268F" }}>มหาวิทยาลัยพะเยา</strong></a> </p>
+                  <p><a href="/">INTERN <strong style={{ color: "#92268F" }}>UP</strong> เว็บหาที่ฝึกงาน หางานในเครือและหน่วยงานนอก สำหรับนิสิตนักศึกษา <strong style={{ color: "#92268F" }}>มหาวิทยาลัยพะเยา</strong> </a></p>
                   <input
                     id="search1"
                     type="search"
@@ -102,7 +102,7 @@ export default function Home() {
         </div>
         <div className="show-more-job">
           <div className="flex justify-center">
-            <button>ดูเพิ่มเติม</button>
+            <button><a href="/pages/login-list-post">ดูเพิ่มเติม</a></button>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
@@ -6,6 +6,7 @@ import '../../style/mainpage.css';
 import organization from '../../image/icon-organization.png';
 import calender from '../../image/iocn-calendar.png';
 import location from '../../image/icon-location.png';
+import Link from 'next/link'; // Import the Link component from Next.js
 
 // Define the Job interface for consistency
 interface Job {
@@ -15,6 +16,7 @@ interface Job {
   detail: string;
   location: string;
   img: string;
+  id: string; // Ensure you have an ID in the Job interface
 }
 
 // Define the props interface for the JobCard component
@@ -51,7 +53,9 @@ const JobCard = ({ job }: JobCardProps) => (
                   <Image src={location} alt="Location icon" />
                   <p className="name-location ml-2" id="location">{job.location}</p>
                 </div>
-                <button id='read' className="read-more mr-5"><a href="/pages/blockdetail">อ่านเพิ่มเติม</a></button>
+                <button id='read' className="read-more mr-5">
+                  <Link href='/component/blockdetail'>อ่านเพิ่มเติม</Link>
+                </button>
               </div>
             </div>
           </div>

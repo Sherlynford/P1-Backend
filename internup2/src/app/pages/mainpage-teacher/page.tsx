@@ -102,7 +102,7 @@ export default function Home() {
         </div>
         <div className="show-more-job">
           <div className="flex justify-center">
-            <button>ดูเพิ่มเติม</button>
+            <button><a href="/pages/teacher-list-post">ดูเพิ่มเติม</a></button>
           </div>
         </div>
       </div>
