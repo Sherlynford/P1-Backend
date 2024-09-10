@@ -3,9 +3,9 @@ import { useState } from 'react';
 import axios from 'axios';
 import '../../style/createpost.css';
 import Swal from 'sweetalert2';
- 
+
 const url = 'http://localhost:8080/api/blogs/';
-const imageUploadUrl ='http://localhost:8080/api/blogs/upload'
+const imageUploadUrl ='http://localhost:8080/api/blogs/upload';
 
 export default function Createpost() {
     // State to manage form fields
@@ -19,8 +19,8 @@ export default function Createpost() {
         location: ''
     });
 
-    // Handle change in form fields
-    const [imgPreview, setImgPreview] = useState(''); // State to manage image preview
+    // State to manage image preview
+    const [imgPreview, setImgPreview] = useState('');
 
     // Handle change in form fields
     const handleChange = (event) => {
@@ -36,9 +36,9 @@ export default function Createpost() {
             const reader = new FileReader();
             reader.onloadend = () => {
                 if (reader.result !== null) {
-                  setImgPreview(reader.result.toString());
+                    setImgPreview(reader.result.toString());
                 }
-              };
+            };
             if (file) {
                 reader.readAsDataURL(file);
             }
@@ -50,81 +50,91 @@ export default function Createpost() {
         }
     };
 
-
     // Handle form submission
     const handleSubmit = async (event) => {
         event.preventDefault(); // Prevent the default form submission behavior
-    
+
         const { img, username, topic, organizationName, detail, link, location } = formData;
-    
-        try {
-            // Create formData for image upload
-            const imageFormData = new FormData();
-            if (img) {
-                imageFormData.append('files', img);
-            }
-    
-            // Upload image and get URL
-            const imageResponse = await fetch(imageUploadUrl, {
-                method: 'POST',
-                body: imageFormData,
-            });
-    
-            const imageResponseData = await imageResponse.json();
-            if (imageResponse.ok && imageResponseData.fileUrls && imageResponseData.fileUrls.length > 0) {
-                const uploadedImgURL = imageResponseData.fileUrls[0];
-    
-                // Prepare final JSON data
-                const postData = {
-                    username,
-                    topic,
-                    organizationName,
-                    detail,
-                    link,
-                    location,
-                    img: uploadedImgURL, // Use the URL from the image upload response
-                };
-    
-                // Send JSON data
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(postData),
-                });
-    
-                const responseData = await response.json(); // Parse JSON if the response is JSON
-    
-                if (response.ok) {
-                    Swal.fire('Success', 'Post created successfully!', 'success');
-                    // Reset form fields
-                    setFormData({
-                        img: '',
-                        username: '',
-                        topic: '',
-                        organizationName: '',
-                        detail: '',
-                        link: '',
-                        location: ''
-                    });
-                    // Redirect or perform any other actions
-                    window.location.href = '/';
-                } else {
-                    // Handle error response based on the response data format
-                    const errorMessage = responseData.message || 'Failed to create post. Please try again.';
-                    Swal.fire('Error', errorMessage, 'error');
+
+        // Show confirmation popup
+        const result = await Swal.fire({
+            title: 'ยืนยันการสร้างโพสต์',
+            text: 'คุณแน่ใจว่าต้องการสร้างโพสต์นี้หรือไม่?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'ตกลง',
+            cancelButtonText: 'ยกเลิก',
+            reverseButtons: true,
+        });
+
+        if (result.isConfirmed) {
+            try {
+                // Create formData for image upload
+                const imageFormData = new FormData();
+                if (img) {
+                    imageFormData.append('files', img);
                 }
-            } else {
-                Swal.fire('Error', 'Failed to upload image. Please try again.', 'error');
+
+                // Upload image and get URL
+                const imageResponse = await fetch(imageUploadUrl, {
+                    method: 'POST',
+                    body: imageFormData,
+                });
+
+                const imageResponseData = await imageResponse.json();
+                if (imageResponse.ok && imageResponseData.fileUrls && imageResponseData.fileUrls.length > 0) {
+                    const uploadedImgURL = imageResponseData.fileUrls[0];
+
+                    // Prepare final JSON data
+                    const postData = {
+                        username,
+                        topic,
+                        organizationName,
+                        detail,
+                        link,
+                        location,
+                        img: uploadedImgURL, // Use the URL from the image upload response
+                    };
+
+                    // Send JSON data
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(postData),
+                    });
+
+                    const responseData = await response.json(); // Parse JSON if the response is JSON
+
+                    if (response.ok) {
+                        Swal.fire('Success', 'Post created successfully!', 'success');
+                        // Reset form fields
+                        setFormData({
+                            img: '',
+                            username: '',
+                            topic: '',
+                            organizationName: '',
+                            detail: '',
+                            link: '',
+                            location: ''
+                        });
+                        // Redirect or perform any other actions
+                        window.location.href = '/';
+                    } else {
+                        // Handle error response based on the response data format
+                        const errorMessage = responseData.message || 'Failed to create post. Please try again.';
+                        Swal.fire('Error', errorMessage, 'error');
+                    }
+                } else {
+                    Swal.fire('Error', 'Failed to upload image. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire('Error', 'Failed to create post. Please try again.', 'error');
             }
-        } catch (error) {
-            console.error('Error:', error);
-            Swal.fire('Error', 'Failed to create post. Please try again.', 'error');
         }
     };
-    
-     
 
     return (
         <div className='Createpost'>
@@ -138,7 +148,7 @@ export default function Createpost() {
                             <div className="change-img flex items-center justify-center">
                                 <label htmlFor="img" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                    {imgPreview ? (
+                                        {imgPreview ? (
                                             <img src={imgPreview} alt="Uploaded preview" className="w-full h-full object-cover rounded-lg" />
                                         ) : (
                                             <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
@@ -171,7 +181,7 @@ export default function Createpost() {
                                 <input id="location" className='location' type="text" placeholder="กรุณากรอก สถานที่อยู่..." aria-label="สถานที่อยู่" value={formData.location} onChange={handleChange} />
 
                                 <div className='btn-confirm-cancel flex justify-between mt-4'>
-                                    <button type="submit" className='confirm' onClick={handleSubmit}>ตกลง</button>
+                                    <button type="submit" className='confirm'>ตกลง</button>
                                     <button type="button" className='cancel'>ยกเลิก</button>
                                 </div>
                             </form>

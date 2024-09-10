@@ -15,7 +15,7 @@ export default function NavberLogin() {
         setIsDropdownOpen(prevState => !prevState);
     };
 
-    return <div className='nav-main flex justify-between items-center'>
+    return <div className='nav-main-teacher flex justify-between items-center'>
         <div className='nav-teacher-left flex items-center'>
             <Image src={Logo} alt='Logo UP' />
             <h1 style={{}}>INTERN<strong style={{ color: "#92268F" }}>UP</strong></h1>

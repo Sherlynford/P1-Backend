@@ -1,14 +1,12 @@
-'use client'; // Ensure client-side rendering
+'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSearchParams } from 'next/navigation';
-import Image from 'next/image';
 import axios from 'axios';
+import Image from 'next/image';
 import '../../style/detail.css';
 import Imgcalendar from '../../image/iocn-calendar.png';
 
-// Define the interface for the job details
+// Define the type for job details
 interface Job {
     topic: string;
     organizationName: string;
@@ -16,15 +14,18 @@ interface Job {
     detail: string;
     location: string;
     img: string;
-    link?: string;          // Optional fields
-    username?: string;      // Optional fields
+    link?: string;          
+    username?: string;      
 }
 
-export default function Detail() {
+interface BlockdetailProps {
+    id: string | null; // id เป็น string หรือ null
+}
+
+export default function Blockdetail({ id }: BlockdetailProps) {
     const [jobDetail, setJobDetail] = useState<Job | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const searchParams = useSearchParams();
-    const id = searchParams.get('id'); // Safely handle dynamic query parameters
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         if (id) {
@@ -35,16 +36,21 @@ export default function Detail() {
                 })
                 .catch(err => {
                     console.error("Error fetching job details:", err);
+                    setError("Failed to load job details.");
                     setLoading(false);
                 });
         } else {
-            console.error("ID is not available in searchParams");
+            setError("ID parameter is missing.");
             setLoading(false);
         }
-    }, [id]); // Add `id` as a dependency
+    }, [id]); // เรียกใช้งานเมื่อ id เปลี่ยนแปลง
 
     if (loading) {
         return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
     }
 
     if (!jobDetail) {
@@ -54,46 +60,44 @@ export default function Detail() {
     const formattedDate = new Date(jobDetail.dateTime).toLocaleDateString();
 
     return (
-        <div>
-            <div className="detail">
-                <div className="flex justify-center w-full">
-                    <div className="block-detail">
-                        <div className="flex justify-center items-center w-full">
-                            <div className="image-jobdetail">
-                                <img id="img" src={jobDetail.img} alt="Job" />
-                                <div className="name-organization w-full text-center">
-                                    <h1 id="organizationName">{jobDetail.organizationName}</h1>
-                                </div>
+        <div className="detail">
+            <div className="flex justify-center w-full">
+                <div className="block-detail">
+                    <div className="flex justify-center items-center w-full">
+                        <div className="image-jobdetail">
+                            <img id="img" src={jobDetail.img} alt="Job" />
+                            <div className="name-organization w-full text-center">
+                                <h1 id="organizationName">{jobDetail.organizationName}</h1>
                             </div>
                         </div>
-                        <div className="deside-job">
-                            <div className="Title-job">
-                                <h2 id="topic">{jobDetail.topic}</h2>
+                    </div>
+                    <div className="deside-job">
+                        <div className="Title-job">
+                            <h2 id="topic">{jobDetail.topic}</h2>
+                        </div>
+                        <div className="content-detail">
+                            <p id="detail">{jobDetail.detail}</p>
+                        </div>
+                        {jobDetail.link && (
+                            <div className="link-about">
+                                <strong>Link: </strong>
+                                <a href={jobDetail.link} target="_blank" rel="noopener noreferrer">
+                                    <strong id="link">{jobDetail.link}</strong>
+                                </a>
                             </div>
-                            <div className="content-detail">
-                                <p id="detail">{jobDetail.detail}</p>
-                            </div>
-                            {jobDetail.link && (
-                                <div className="link-about">
-                                    <strong>Link: </strong>
-                                    <a href={jobDetail.link} target="_blank" rel="noopener noreferrer">
-                                        <strong id="link">{jobDetail.link}</strong>
-                                    </a>
+                        )}
+                        <div className="Location">
+                            <strong>Location:</strong> <span id="location">{jobDetail.location}</span>
+                        </div>
+                        <div className="name-date flex">
+                            {jobDetail.username && (
+                                <div className="name-post">
+                                    <p id="username">{jobDetail.username}</p>
                                 </div>
                             )}
-                            <div className="Location">
-                                <strong>Location:</strong> <span id="location">{jobDetail.location}</span>
-                            </div>
-                            <div className="name-date flex">
-                                {jobDetail.username && (
-                                    <div className="name-post">
-                                        <p id="username">{jobDetail.username}</p>
-                                    </div>
-                                )}
-                                <div className="date-post flex ml-10">
-                                    <Image src={Imgcalendar} alt="Date Calendar" />
-                                    <div id="dateTime" className="dateTime">{formattedDate}</div>
-                                </div>
+                            <div className="date-post flex ml-10">
+                                <Image src={Imgcalendar} alt="Date Calendar" />
+                                <div id="dateTime" className="dateTime">{formattedDate}</div>
                             </div>
                         </div>
                     </div>

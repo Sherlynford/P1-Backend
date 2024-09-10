@@ -15,7 +15,7 @@ export default function NavberLogin() {
   };
 
   return (
-    <div className='nav-main flex justify-between items-center'>
+    <div className='nav-main-student flex justify-between items-center'>
       <div className='nav-student-left flex items-center'>
         <Image src={Logo} alt='Logo UP' />
         <h1><a href="/">INTERN<strong style={{ color: "#92268F" }}>UP</strong></a></h1>

@@ -1,9 +1,10 @@
-'use client'
+'use client';
+
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import JobCard from '../../component/card/page'; // Adjust the path if necessary
 import Image from "next/image";
-import Navberstudent from "../../component/navbar-student/page";
+import Navberstudent from '../../component/navbar-student/page'; // Use Navberstudent for students
 import '../../style/mainpage.css';
 import imgperson from '../../image/image-person.png';
 
@@ -15,6 +16,7 @@ interface Job {
   detail: string;
   location: string;
   img: string;
+  id: string;
 }
 
 export default function Home() {
@@ -22,6 +24,7 @@ export default function Home() {
   const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [role, setRole] = useState<'student' | 'teacher' | 'login'>('student'); // Set default role to 'student'
 
   useEffect(() => {
     axios
@@ -57,9 +60,7 @@ export default function Home() {
 
   return (
     <>
-      <div>
-        <Navberstudent />
-      </div>
+      <Navberstudent /> {/* Use Navberstudent for students */}
       <div>
         <div className="bg-main">
           <div className="block-main flex">
@@ -96,13 +97,13 @@ export default function Home() {
             <p>No jobs found</p> // Display message if no jobs match the search query
           ) : (
             filteredJobs.map((job, index) => (
-              <JobCard key={index} job={job} />
+              <JobCard key={index} job={job} role={role} />
             ))
           )}
         </div>
         <div className="show-more-job">
           <div className="flex justify-center">
-            <button><a href="/pages/student-list-post">ดูเพิ่มเติม</a></button>
+            <button><a href="/pages/student-list-post">ดูเพิ่มเติม</a></button> {/* Adjust link for students */}
           </div>
         </div>
       </div>
