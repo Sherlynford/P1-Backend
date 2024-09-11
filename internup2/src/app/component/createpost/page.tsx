@@ -5,7 +5,7 @@ import '../../style/createpost.css';
 import Swal from 'sweetalert2';
 
 const url = 'http://localhost:8080/api/blogs/';
-const imageUploadUrl ='http://localhost:8080/api/blogs/upload';
+const imageUploadUrl = 'http://localhost:8080/api/blogs/upload';
 
 export default function Createpost() {
     // State to manage form fields
@@ -136,6 +136,11 @@ export default function Createpost() {
         }
     };
 
+    // Handle cancel action
+    const handleCancel = () => {
+        window.history.back();
+    };
+
     return (
         <div className='Createpost'>
             <div className='flex items-center justify-center'>
@@ -172,7 +177,7 @@ export default function Createpost() {
                                 <input id="organizationName" className='nameorganization' type="text" placeholder='กรุณากรอก ชื่อหน่วยงาน....' aria-label="ชื่อหน่วยงาน" value={formData.organizationName} onChange={handleChange} />
 
                                 <label htmlFor="detail" className='title-detail'>รายละเอียด</label>
-                                <textarea id="detail" className='detail' placeholder='กรุณากรอก รายละเอียด....' aria-label="รายละเอียด" value={formData.detail} onChange={handleChange}></textarea>
+                                <textarea id="detail" className='detail' placeholder='กรุณากรอก รายละเอียด....' aria-label="รายละเอียด" value={formData.detail} onChange={handleChange} rows={5}></textarea>
 
                                 <label htmlFor="link" className='title-Link'>ลิงค์ที่เกียวข้อง</label>
                                 <input id="link" className='Link' type="text" placeholder='กรุณากรอก ลิงค์ที่เกียวข้อง....' aria-label="ลิงค์ที่เกี่ยวข้อง" value={formData.link} onChange={handleChange} />
@@ -182,7 +187,7 @@ export default function Createpost() {
 
                                 <div className='btn-confirm-cancel flex justify-between mt-4'>
                                     <button type="submit" className='confirm'>ตกลง</button>
-                                    <button type="button" className='cancel'>ยกเลิก</button>
+                                    <button type="button" className='cancel' onClick={handleCancel}>ยกเลิก</button>
                                 </div>
                             </form>
                         </div>

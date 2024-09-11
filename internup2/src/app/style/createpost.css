@@ -49,8 +49,12 @@ body{
     font-size: 20px;
     color: black;
     border-radius: 10px;
-    width: 1000px;
-    height: 300px;
+    width: 100%;
+    min-height: 300px;
+    padding: 10px;
+    resize: vertical;
+    white-space: pre-wrap;
+    word-wrap: break-word; /* ทำให้คำยาวๆ พอดีกับพื้นที่ */
 }
 .faculty{
     width: 850px;

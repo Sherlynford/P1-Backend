@@ -1,6 +1,15 @@
-// pages/detail.tsx or app/detail/page.tsx (Next.js 13+)
-import Detail from '../../component/blockdetail/page'; // Adjust the path as necessary
+'use client';
 
-export default function DetailPage() {
-    return <Detail />;
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+
+export default function TestRouter() {
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirect to /mainpage-student when the component mounts
+    router.push('/mainpage-student');
+  }, [router]);
+
+  return <div>Redirecting...</div>;
 }
