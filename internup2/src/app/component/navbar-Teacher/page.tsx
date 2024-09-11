@@ -30,7 +30,7 @@ export default function NavberLogin() {
             {isDropdownOpen && (
                 <div className='dropdown-menu'>
                     <ul>
-                        <li><a href="#" className='flex items-center justify-center'>Profile</a></li>
+                        <li><a href="/apges/profile-teacher" className='flex items-center justify-center'>Profile</a></li>
                         <li><a href="#" className='flex items-center justify-center'>Logout</a></li>
                     </ul>
                 </div>
