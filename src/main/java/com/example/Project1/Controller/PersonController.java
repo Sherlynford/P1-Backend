@@ -61,10 +61,19 @@ public class PersonController {
     public ResponseEntity<?> login(@RequestBody Person person) {
         if (authenticationService.authenticate(person.getEmail(), person.getPassword())) {
             String token = tokenService.generateToken(person.getEmail());
-            return ResponseEntity.ok(Map.of("token", token));
+            
+            // Fetch the user by email to get their role
+            Person authenticatedPerson = personService.getPersonByEmail(person.getEmail());
+            
+            // Return both the token and the role
+            return ResponseEntity.ok(Map.of(
+                "token", token,
+                "role", authenticatedPerson.getRole() // Include role in the response
+            ));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
+    
 
 }

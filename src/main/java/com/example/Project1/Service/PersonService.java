@@ -43,4 +43,10 @@ public class PersonService {
     public void deletePerson(Long id) {
         personRepository.deleteById(id);
     }
+
+    public Person getPersonByEmail(String email) {
+        return personRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+    
 }

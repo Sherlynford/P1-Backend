@@ -11,11 +11,11 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
 
     try {
-      // Step 1: Log in and get the token
+      // Step 1: Log in and get the token and role in the same response
       const loginResponse = await fetch('http://localhost:8080/api/persons/login', {
         method: 'POST',
         headers: {
@@ -26,32 +26,19 @@ export default function Login() {
 
       const loginResult = await loginResponse.json();
 
-      if (loginResponse.ok && loginResult.token) {
+      if (loginResponse.ok && loginResult.token && loginResult.role) {
         const token = loginResult.token;
+        const userRole = loginResult.role; // Getting the role from the login response
 
-        // Step 2: Fetch user information including the role
-        const userResponse = await fetch('http://localhost:8080/api/persons/', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`, // Use the token to authenticate the request
-          },
-        });
+        localStorage.setItem('token', token);
 
-        const userResult = await userResponse.json();
-
-        if (userResponse.ok) {
-          const userRole = userResult.role; // Assuming role is included in the response
-
-          // Step 3: Navigate based on user role
-          if (userRole === 'student') {
-            router.push('/mainpage-student');
-          } else if (userRole === 'teacher') {
-            router.push('/mainpage-teacher');
-          } else {
-            alert('Unknown role');
-          }
+        // Step 2: Navigate based on user role
+        if (userRole === 'student') {
+          router.push('/pages/mainpage-student');
+        } else if (userRole === 'teacher') {
+          router.push('/pages/mainpage-teacher');
         } else {
-          alert(userResult.message || 'Failed to fetch user role');
+          alert('Unknown role');
         }
       } else {
         alert(loginResult.message || 'Login failed');
