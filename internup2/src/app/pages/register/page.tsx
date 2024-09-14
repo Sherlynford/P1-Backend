@@ -4,6 +4,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 import '../register/register.css';
+import AuthGuard from '@/app/component/checktoken/AuthGuard';
 
 export default function Register() {
     const [role, setUserRole] = useState("");
@@ -75,6 +76,8 @@ export default function Register() {
     };
 
     return (
+    <AuthGuard>
+        <>
         <div>
             <div className='register-container flex justify-center items-center'>
                 <div className='block-register'>
@@ -142,6 +145,6 @@ export default function Register() {
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        </div></>
+        </AuthGuard> );
 }

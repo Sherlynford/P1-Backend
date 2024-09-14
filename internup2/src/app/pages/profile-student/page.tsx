@@ -7,6 +7,7 @@ import Navbarstudent from '../../component/navbar-student/page';
 import Profilestudent1 from '../../image/img-student2.png'; // Placeholder image, update if necessary
 import IMGCV from '../../image/img-cv.png'; // Placeholder image, update if necessary
 import Transcript from '../../image/transcript.jpg'; // Placeholder image, update if necessary
+import AuthGuard from '@/app/component/checktoken/AuthGuard';
 
 export default function Profile() {
     const [studentData, setStudentData] = useState<any | null>(null); // Changed to null initially
@@ -48,6 +49,7 @@ export default function Profile() {
     }
 
     return (
+        <AuthGuard>
         <>
             <Navbarstudent />
             <section className='profile-student'>
@@ -103,5 +105,5 @@ export default function Profile() {
                 </div>
             </section>
         </>
-    );
+        </AuthGuard>);
 }
