@@ -4,7 +4,7 @@ body{
 .proflie-teacher{
     height: 100vh;
 }
-.blcok-profile{
+.block-profile{
     margin: 100px 0;
     width: 1000px;
     height: 100%;
@@ -48,7 +48,7 @@ body{
     border-radius: 10px;
     margin-bottom: 20px
 }
-.studentid{
+.teacherid{
     font-size: 20px;
     color: black;
     width: 850px;

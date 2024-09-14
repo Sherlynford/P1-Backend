@@ -46,7 +46,7 @@ export default function Register() {
         if (isConfirmed) {
             try {
                 const response = await axios.post('http://localhost:8080/api/persons/', user);
-                console.log('Response:', response.data);
+                // console.log('Response:', response.data);
 
                 setUsername("");
                 setUserRole("");
@@ -135,13 +135,7 @@ export default function Register() {
                                 />
                             </div>
                             <div className='btn-register mt-5 flex justify-between'>
-                                <button type='submit' className='register'onClick={() => {
-                                    setUsername("");
-                                    setUserRole("");
-                                    setEmail("");
-                                    setPassword("");
-                                    setConfirmPassword("");
-                                }}>ลงทะเบียน</button>
+                                <button type='submit' className='register'onClick={() => {}}>ลงทะเบียน</button>
                                 <button type='button' className='cancel'><a href="/">ยกเลิก</a></button>
                             </div>
                         </form>
