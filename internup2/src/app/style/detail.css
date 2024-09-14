@@ -45,6 +45,11 @@ body{
     color: black;
     margin-bottom: 20px;
 }
+.link-about strong{
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+}
 .Location{
     font-size: 20px;
     color: black;

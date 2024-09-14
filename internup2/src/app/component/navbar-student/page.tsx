@@ -28,7 +28,7 @@ export default function NavberLogin() {
           <Image src={Profilestudent} alt='this is image student' />
         </button>
         {isDropdownOpen && (
-          <div className='dropdown-menu'>
+          <div className='dropdown-menu-student'>
             <ul>
               <li><a href="/pages/profile-student" className='flex items-center justify-center'>Profile</a></li>
               <li><a href="#" className='flex items-center justify-center'>Logout</a></li>

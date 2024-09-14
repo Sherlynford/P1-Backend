@@ -34,7 +34,7 @@
 }
 
 
-.dropdown-menu {
+.dropdown-menu-student {
     position: absolute;
     top: 90%; 
     right: -30px; 
@@ -46,18 +46,18 @@
     min-width: 120px; 
 }
 
-.dropdown-menu ul {
+.dropdown-menu-student ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.dropdown-menu li {
+.dropdown-menu-student li {
     width: 120px;
     height: 40px;
 }
 
-.dropdown-menu li a {
+.dropdown-menu-student li a {
     text-decoration: none;
     color: black;
     font-size: 20px;
@@ -65,6 +65,6 @@
     height: 40px;
 }
 
-.dropdown-menu li a:hover {
+.dropdown-menu-student li a:hover {
     background-color: #B540FD;
 }
