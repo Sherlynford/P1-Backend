@@ -4,9 +4,10 @@ import Navbarstudent from '../../component/navbar-student/page';
 import Profilestudent1 from '../../image/img-student2.png';
 import IMGCV from '../../image/img-cv.png';
 import Transcript from '../../image/transcript.jpg';
+import AuthGuard from '../../component/checktoken/AuthGuard';
 
 export default function Profile() {
-    return (
+    return (<AuthGuard>
         <>
             <div>
                 <Navbarstudent />
@@ -64,5 +65,6 @@ export default function Profile() {
                 </div>
             </div>
         </>
+        </AuthGuard>
     );
 }

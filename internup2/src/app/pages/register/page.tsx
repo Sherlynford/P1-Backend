@@ -4,6 +4,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 import '../register/register.css';
+import AuthGuard from '../../component/checktoken/AuthGuard';
 
 export default function Register() {
     const [role, setUserRole] = useState("");
@@ -14,7 +15,7 @@ export default function Register() {
 
     const router = useRouter();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
 
         if (password !== confirmPassword) {
@@ -66,7 +67,7 @@ export default function Register() {
                 console.error("There was an error registering!", error);
                 Swal.fire({
                     title: 'Error!',
-                    text: error.response?.data?.message || 'ลงทะเบียนไม่สำเร็จ',
+                    text: 'ลงทะเบียนไม่สำเร็จ',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
@@ -74,7 +75,7 @@ export default function Register() {
         }
     };
 
-    return (
+    return ( <AuthGuard>
         <div>
             <div className='register-container flex justify-center items-center'>
                 <div className='block-register'>
@@ -135,13 +136,7 @@ export default function Register() {
                                 />
                             </div>
                             <div className='btn-register mt-5 flex justify-between'>
-                                <button type='submit' className='register'onClick={() => {
-                                    setUsername("");
-                                    setUserRole("");
-                                    setEmail("");
-                                    setPassword("");
-                                    setConfirmPassword("");
-                                }}>ลงทะเบียน</button>
+                                <button type='submit' className='register'>ลงทะเบียน</button>
                                 <button type='button' className='cancel'><a href="/">ยกเลิก</a></button>
                             </div>
                         </form>
@@ -149,5 +144,6 @@ export default function Register() {
                 </div>
             </div>
         </div>
+        </AuthGuard>
     );
 }

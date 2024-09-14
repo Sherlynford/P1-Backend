@@ -8,6 +8,7 @@ import Navberteacher from "../../component/navbar-Teacher/page";
 import Navberstudent from '../../component/navbar-student/page';
 import '../../style/mainpage.css';
 import imgperson from '../../image/image-person.png';
+import AuthGuard from '../../component/checktoken/AuthGuard';
 
 // Define the Job interface for consistency
 interface Job {
@@ -60,7 +61,7 @@ export default function Home() {
   };
 
   return (
-    <>
+    <AuthGuard><>
       {role === 'teacher' ? <Navberteacher /> : <Navberstudent />} {/* Conditionally render NavBar based on role */}
       <div>
         <div className="bg-main">
@@ -109,5 +110,6 @@ export default function Home() {
         </div>
       </div>
     </>
+    </AuthGuard>
   );
 }

@@ -4,10 +4,11 @@ import '../../style/status.css'
 import Navbarteacher from '../../component/navbar-Teacher/page';
 import Image from 'next/image';
 import Imgedit from '../../image/img-edit.png'
+import AuthGuard from '../../component/checktoken/AuthGuard';
 
 export default function ProfileEdit() {
 
-    return <><div>
+    return <AuthGuard><><div>
         <Navbarteacher />
 
     </div><div className='Status-student'>
@@ -116,4 +117,5 @@ export default function ProfileEdit() {
                 </div>
             </div>
         </div></>
+        </AuthGuard>
 }

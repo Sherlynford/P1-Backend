@@ -2,10 +2,10 @@ import '../profile-teacher/profile.css';
 import Image from 'next/image';
 import Navbarteacher from '../../component/navbar-Teacher/page';
 import Profileteacher2 from '../../image/img-teacher2.png';
-
+import AuthGuard from '../../component/checktoken/AuthGuard';
 
 export default function Profile() {
-    return <><div>
+    return <AuthGuard> <><div>
         <Navbarteacher />
 
     </div><div className='proflie-teacher'>
@@ -44,4 +44,5 @@ export default function Profile() {
                 </div>
             </div>
         </div></>
+        </AuthGuard>
 }

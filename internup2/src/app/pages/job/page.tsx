@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import AuthGuard from '../../component/checktoken/AuthGuard';
 
 export default function TestRouter() {
   const router = useRouter();
@@ -11,5 +12,7 @@ export default function TestRouter() {
     router.push('/mainpage-student');
   }, [router]);
 
-  return <div>Redirecting...</div>;
+  return <AuthGuard>
+    <div>Redirecting...</div>;
+  </AuthGuard>
 }

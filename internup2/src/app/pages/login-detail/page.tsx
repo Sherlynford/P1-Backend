@@ -9,6 +9,7 @@ import Imgcalendar from '../../image/iocn-calendar.png';
 import NavberLogin from '../../component/navbar-login/page';
 import Student from '../../component/navbar-student/page'; // Import the Student component
 import Teacher from '../../component/navbar-Teacher/page'; // Import the Teacher component
+import AuthGuard from '../../component/checktoken/AuthGuard';
 
 // Define the Job interface for consistency
 interface Job {
@@ -62,7 +63,7 @@ const LoginDetail = () => {
 
     const formattedDate = new Date(jobDetail.dateTime).toLocaleDateString();
 
-    return (
+    return (<AuthGuard>
         <div>
             {componentType === 'navbar' && <NavberLogin />}
             {componentType === 'student' && <Student />}
@@ -112,6 +113,7 @@ const LoginDetail = () => {
                 </div>
             </div>
         </div>
+        </AuthGuard>
     );
 }
 
