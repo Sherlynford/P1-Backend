@@ -24,7 +24,7 @@ public class Blog {
     private String topic;
 
     @NotBlank(message = "cannot be null or empty")
-    @Column(nullable = false)  
+    @Column(nullable = false , columnDefinition = "TEXT")  
     private String detail;
 
     private String img;

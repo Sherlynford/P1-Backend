@@ -14,7 +14,7 @@ http://localhost:8080/api/teachers/
     },
     "firstName": "liquid",
     "lastName": "lion",
-    "contract": "john.doe@example.com",
+    "email": "john.doe@example.com",
     "phoneNumber": "1234567890",
     "faculty": "Science",
     "major": "Physics",
@@ -29,7 +29,7 @@ http://localhost:8080/api/students/
     },
     "firstName": "solid",
     "lastName": "snake",
-    "contract": "jane.doe@example.com",
+    "email": "jane.doe@example.com",
     "faculty": "Engineering",
     "major": "Computer Science",
     "studentID": 2001,
@@ -53,7 +53,7 @@ http://localhost:8080/api/blogs/
 }
 
 ManualJobApplication JSON: (id สร้างเองหลังบ้าน)
-http://localhost:8000/api/ManualJobApplications/
+http://localhost:8080/api/ManualJobApplications/
 {
     "studentProfile": {
         "id": 1
@@ -68,7 +68,7 @@ http://localhost:8000/api/ManualJobApplications/
 }
 
 ConfirmJobApplication JSON: (id,confirmDateTime สร้างเองหลังบ้าน)
-http://localhost:8000/api/ConfirmJobApplications/
+http://localhost:8080/api/ConfirmJobApplications/
 {
     "teacherProfile": {
         "id": 1
