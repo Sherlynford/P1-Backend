@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'; // Correct import for Next.js 13
 import Image from 'next/image';
 import Logologin from '../../image/Logo-login.png';
 import './login.css';
+import AuthGuard from '../../component/checktoken/AuthGuard';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -49,7 +50,7 @@ export default function Login() {
     }
   };
 
-  return (
+  return  (<AuthGuard>
     <div className='Login-container flex justify-center items-center'>
       <div className='block-login flex'>
         <div className='left-login flex items-center justify-center'>
@@ -89,5 +90,6 @@ export default function Login() {
         </div>
       </div>
     </div>
+    </AuthGuard>
   );
 }

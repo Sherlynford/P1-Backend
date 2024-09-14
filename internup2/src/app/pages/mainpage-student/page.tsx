@@ -7,6 +7,7 @@ import Image from "next/image";
 import Navberstudent from '../../component/navbar-student/page'; // Use Navberstudent for students
 import '../../style/mainpage.css';
 import imgperson from '../../image/image-person.png';
+import AuthGuard from '../../component/checktoken/AuthGuard'; // Import the AuthGuard component
 
 // Define the Job interface for consistency
 interface Job {
@@ -59,7 +60,7 @@ export default function Home() {
   };
 
   return (
-    <>
+    <AuthGuard> {/* Wrap your content inside AuthGuard */}
       <Navberstudent /> {/* Use Navberstudent for students */}
       <div>
         <div className="bg-main">
@@ -107,6 +108,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </>
+    </AuthGuard>
   );
 }

@@ -5,12 +5,13 @@ import '../Manualpost/manualpost.css'
 import Navbarstudent from '../../component/navbar-student/page';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
+import AuthGuard from '../../component/checktoken/AuthGuard';
 
 export default function Manualpost() {
     const [userRole, setUserRole] = useState("");
     const [applyDate, setapplyDate] = useState<Date | null>(null);
 
-    return (
+    return (<AuthGuard>
         <>
             <div>
                 <Navbarstudent />
@@ -70,5 +71,6 @@ export default function Manualpost() {
                 </div>
             </div>
         </>
+        </AuthGuard>
     );
 }

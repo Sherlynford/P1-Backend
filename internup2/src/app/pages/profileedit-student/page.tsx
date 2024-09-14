@@ -5,12 +5,13 @@ import Navbarstudent from '../../component/navbar-student/page';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import { useState } from 'react';
+import AuthGuard from '../../component/checktoken/AuthGuard';
 
 export default function ProfileEdit() {
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
 
-    return <><div>
+    return <AuthGuard><><div>
         <Navbarstudent />
 
     </div><div className='proflieedit-student'>
@@ -117,4 +118,5 @@ export default function ProfileEdit() {
                 </div>
             </div>
         </div></>
+        </AuthGuard>
 }

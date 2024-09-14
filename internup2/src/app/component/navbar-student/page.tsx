@@ -1,6 +1,7 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter for redirection
 import './nav-student.css';
 import Image from 'next/image';
 import Logo from '../../image/UP-Logo.png';
@@ -8,10 +9,19 @@ import Profilestudent from '../../image/img-student.png';
 
 export default function NavberLogin() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const router = useRouter(); // Initialize useRouter for redirection
 
   // Toggle dropdown visibility
   const toggleDropdown = () => {
     setIsDropdownOpen(prevState => !prevState);
+  };
+
+  // Handle Logout
+  const handleLogout = () => {
+    // Clear local storage
+    localStorage.clear(); 
+
+    router.push('/pages/login'); // Adjust the path if needed
   };
 
   return (
@@ -31,7 +41,7 @@ export default function NavberLogin() {
           <div className='dropdown-menu-student'>
             <ul>
               <li><a href="/pages/profile-student" className='flex items-center justify-center'>Profile</a></li>
-              <li><a href="#" className='flex items-center justify-center'>Logout</a></li>
+              <li><a href="#" onClick={handleLogout} className='flex items-center justify-center'>Logout</a></li> {/* Call handleLogout on click */}
             </ul>
           </div>
         )}

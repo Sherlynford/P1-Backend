@@ -4,6 +4,7 @@ import '../../style/mainpage.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import JobCard from '../../component/card/page'; // Adjust the path if necessary
+import AuthGuard from '../../component/checktoken/AuthGuard';
 
 interface Job {
     topic: string;
@@ -70,7 +71,7 @@ export default function Home() {
 
     const totalPages = Math.ceil(filteredJobs.length / itemsPerPage);
 
-    return (
+    return  (<AuthGuard>
         <>
             <div>
                 <NavberLogin />
@@ -137,5 +138,6 @@ export default function Home() {
                 </div>
             </div>
         </>
+        </AuthGuard>
     );
 }

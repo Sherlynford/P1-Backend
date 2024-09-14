@@ -3,9 +3,10 @@
 import '../profileedit-teacher/edit.css';
 import Navbarteacher from '../../component/navbar-Teacher/page';
 import { useState } from 'react';
+import AuthGuard from '../../component/checktoken/AuthGuard';
 
 export default function ProfileEdit() {
-    return <><div>
+    return <AuthGuard><><div>
         <Navbarteacher />
 
     </div><div className='proflieedit-student'>
@@ -68,4 +69,5 @@ export default function ProfileEdit() {
                 </div>
             </div>
         </div></>
+        </AuthGuard>
 }
