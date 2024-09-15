@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
@@ -14,7 +14,28 @@ export default function Register() {
 
     const router = useRouter();
 
-    const handleSubmit = async (e) => {
+      // Function to check authentication state
+  const checkAuthStatus = () => {
+    const token = localStorage.getItem('token');
+    const userRole = localStorage.getItem('userRole');
+    
+    // If token and role are present, redirect based on role
+    if (token && userRole) {
+      if (userRole === 'student') {
+        router.push('/pages/mainpage-student');
+      } else if (userRole === 'teacher') {
+        router.push('/pages/mainpage-teacher');
+      } else {
+        router.push('/'); // Redirect to a default page if the role is unknown
+      }
+    }
+  };
+
+  // Check auth status on component mount
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
 
         if (password !== confirmPassword) {

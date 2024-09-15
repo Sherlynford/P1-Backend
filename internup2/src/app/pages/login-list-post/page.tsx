@@ -4,7 +4,7 @@ import '../../style/mainpage.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import JobCard from '../../component/card/page'; // Adjust the path if necessary
-import AuthGuard from '../../component/checktoken/AuthGuard';
+import { useRouter } from 'next/navigation';
 
 interface Job {
     topic: string;
@@ -24,6 +24,30 @@ export default function Home() {
     // Pagination states
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [itemsPerPage] = useState<number>(5); // Number of items per page
+
+    const router = useRouter();
+
+                  // Function to check authentication state
+  const checkAuthStatus = () => {
+    const token = localStorage.getItem('token');
+    const userRole = localStorage.getItem('userRole');
+    
+    // If token and role are present, redirect based on role
+    if (token && userRole) {
+      if (userRole === 'student') {
+        router.push('/pages/mainpage-student');
+      } else if (userRole === 'teacher') {
+        router.push('/pages/mainpage-teacher');
+      } else {
+        router.push('/'); // Redirect to a default page if the role is unknown
+      }
+    }
+  };
+
+  // Check auth status on component mount
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
 
     useEffect(() => {
         axios
@@ -71,7 +95,7 @@ export default function Home() {
 
     const totalPages = Math.ceil(filteredJobs.length / itemsPerPage);
 
-    return  (<AuthGuard>
+    return  (
         <>
             <div>
                 <NavberLogin />
@@ -138,6 +162,5 @@ export default function Home() {
                 </div>
             </div>
         </>
-        </AuthGuard>
     );
 }

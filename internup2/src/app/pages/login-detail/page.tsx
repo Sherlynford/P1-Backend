@@ -9,7 +9,7 @@ import Imgcalendar from '../../image/iocn-calendar.png';
 import NavberLogin from '../../component/navbar-login/page';
 import Student from '../../component/navbar-student/page'; // Import the Student component
 import Teacher from '../../component/navbar-Teacher/page'; // Import the Teacher component
-import AuthGuard from '../../component/checktoken/AuthGuard';
+import { useRouter } from 'next/navigation';
 
 // Define the Job interface for consistency
 interface Job {
@@ -30,6 +30,29 @@ const LoginDetail = () => {
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
     const [componentType, setComponentType] = useState<'navbar' | 'student' | 'teacher'>('navbar');
+    const router = useRouter();
+
+              // Function to check authentication state
+  const checkAuthStatus = () => {
+    const token = localStorage.getItem('token');
+    const userRole = localStorage.getItem('userRole');
+    
+    // If token and role are present, redirect based on role
+    if (token && userRole) {
+      if (userRole === 'student') {
+        router.push('/pages/mainpage-student');
+      } else if (userRole === 'teacher') {
+        router.push('/pages/mainpage-teacher');
+      } else {
+        router.push('/'); // Redirect to a default page if the role is unknown
+      }
+    }
+  };
+
+  // Check auth status on component mount
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
 
     useEffect(() => {
         if (id) {
@@ -63,7 +86,7 @@ const LoginDetail = () => {
 
     const formattedDate = new Date(jobDetail.dateTime).toLocaleDateString();
 
-    return (<AuthGuard>
+    return (
         <div>
             {componentType === 'navbar' && <NavberLogin />}
             {componentType === 'student' && <Student />}
@@ -113,7 +136,6 @@ const LoginDetail = () => {
                 </div>
             </div>
         </div>
-        </AuthGuard>
     );
 }
 
