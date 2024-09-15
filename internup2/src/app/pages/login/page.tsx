@@ -1,22 +1,42 @@
 'use client'; // Ensure this is at the top of the file
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Correct import for Next.js 13
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Logologin from '../../image/Logo-login.png';
 import './login.css';
-import AuthGuard from '../../component/checktoken/AuthGuard';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
 
+  // Function to check authentication state
+  const checkAuthStatus = () => {
+    const token = localStorage.getItem('token');
+    const userRole = localStorage.getItem('userRole');
+    
+    // If token and role are present, redirect based on role
+    if (token && userRole) {
+      if (userRole === 'student') {
+        router.push('/pages/mainpage-student');
+      } else if (userRole === 'teacher') {
+        router.push('/pages/mainpage-teacher');
+      } else {
+        router.push('/'); // Redirect to a default page if the role is unknown
+      }
+    }
+  };
+
+  // Check auth status on component mount
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
+
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
 
     try {
-      // Step 1: Log in and get the token and role in the same response
       const loginResponse = await fetch('http://localhost:8080/api/persons/login', {
         method: 'POST',
         headers: {
@@ -29,11 +49,12 @@ export default function Login() {
 
       if (loginResponse.ok && loginResult.token && loginResult.role) {
         const token = loginResult.token;
-        const userRole = loginResult.role; // Getting the role from the login response
+        const userRole = loginResult.role;
 
         localStorage.setItem('token', token);
+        localStorage.setItem('userRole', userRole);
 
-        // Step 2: Navigate based on user role
+        // Redirect based on user role
         if (userRole === 'student') {
           router.push('/pages/mainpage-student');
         } else if (userRole === 'teacher') {
@@ -50,7 +71,7 @@ export default function Login() {
     }
   };
 
-  return  (
+  return (
     <div className='Login-container flex justify-center items-center'>
       <div className='block-login flex'>
         <div className='left-login flex items-center justify-center'>
