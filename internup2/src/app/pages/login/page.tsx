@@ -50,7 +50,7 @@ export default function Login() {
     }
   };
 
-  return  (<AuthGuard>
+  return  (
     <div className='Login-container flex justify-center items-center'>
       <div className='block-login flex'>
         <div className='left-login flex items-center justify-center'>
@@ -84,12 +84,11 @@ export default function Login() {
             <div className='btn-login flex flex-col items-center'>
               <button type="submit" className='login'>เข้าสู่ระบบ</button>
               <p className='flex justify-center'>หรือ</p>
-              <a href="/register" className='Register'>ลงทะเบียน</a>
+              <a href="/pages/register" className='Register'>ลงทะเบียน</a>
             </div>
           </form>
         </div>
       </div>
     </div>
-    </AuthGuard>
   );
 }

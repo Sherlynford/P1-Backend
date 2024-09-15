@@ -105,7 +105,7 @@ export default function ProfileEdit() {
                              <label htmlFor="end-intern" className='title-email'>วันที่เลิกฝึกงาน</label>
                             <DatePicker
                                 selected={endDate}
-                                onChange={(date) => setStartDate((prevState) => date)}
+                                onChange={(date) => setEndDate((prevState) => date)}
                                 className="end-intern"
                                 placeholderText="Select end date"
                             />

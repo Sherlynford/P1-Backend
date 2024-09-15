@@ -76,7 +76,6 @@ export default function Register() {
     };
 
     return (
-    <AuthGuard>
         <>
         <div>
             <div className='register-container flex justify-center items-center'>
@@ -145,6 +144,5 @@ export default function Register() {
                     </div>
                 </div>
             </div>
-        </div></>
-        </AuthGuard> );
+        </div></>);
 }
