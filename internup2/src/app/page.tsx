@@ -6,7 +6,6 @@ import Image from "next/image";
 import NavberLogin from "./component/navbar-login/page";
 import './style/mainpage.css';
 import imgperson from '../app/image/image-person.png';
-import { useRouter } from 'next/navigation';
 
 // Define the Job interface for consistency
 interface Job {
@@ -23,30 +22,6 @@ export default function Home() {
   const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
-
-      const router = useRouter();
-
-                  // Function to check authentication state
-  const checkAuthStatus = () => {
-    const token = localStorage.getItem('token');
-    const userRole = localStorage.getItem('userRole');
-    
-    // If token and role are present, redirect based on role
-    if (token && userRole) {
-      if (userRole === 'student') {
-        router.push('/pages/mainpage-student');
-      } else if (userRole === 'teacher') {
-        router.push('/pages/mainpage-teacher');
-      } else {
-        router.push('/'); // Redirect to a default page if the role is unknown
-      }
-    }
-  };
-
-  // Check auth status on component mount
-  useEffect(() => {
-    checkAuthStatus();
-  }, []);
 
   useEffect(() => {
     axios
