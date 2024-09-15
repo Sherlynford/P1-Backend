@@ -28,7 +28,6 @@ public class PersonService {
     public Person updatePerson(Person newPerson, Long id) {
         return personRepository.findById(id)
                 .map(person -> {
-                    person.setUsername(newPerson.getUsername());
                     person.setPassword(newPerson.getPassword());
                     person.setRole(newPerson.getRole());
                     person.setEmail(newPerson.getEmail());

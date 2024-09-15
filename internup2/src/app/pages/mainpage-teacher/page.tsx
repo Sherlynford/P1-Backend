@@ -10,16 +10,6 @@ import '../../style/mainpage.css';
 import imgperson from '../../image/image-person.png';
 import AuthGuard from '../../component/checktoken/AuthGuard';
 
-// Define the Job interface for consistency
-interface Job {
-  topic: string;
-  organizationName: string;
-  dateTime: string;
-  detail: string;
-  location: string;
-  img: string;
-  id: string;
-}
 
 export default function Home() {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -79,7 +69,7 @@ export default function Home() {
                   <input
                     id="search1"
                     type="search"
-                    placeholder="เช่น นักพัฒนาเว็บไซต์, UX/UI Designer, บัญชี "
+                    placeholder="เช่น งาน สถานที่ฝึกงาน หน่วยงาน รายละเอียดงาน ..."
                     value={searchQuery}
                     onChange={handleSearchChange}
                   />
@@ -96,7 +86,7 @@ export default function Home() {
         <div>
           {error && <p className="error-message">{error}</p>}
           {filteredJobs.length === 0 && !error ? (
-            <p>No jobs found</p> // Display message if no jobs match the search query
+            <p className="no-jobs-message flex justify-center">ไม่มีงาน หน่วยงาน สถานที่ฝึกงาน หรือ รายละเอียดงาน ที่คุณค้นหา</p> // Display message if no jobs match the search query
           ) : (
             filteredJobs.map((job, index) => (
               <JobCard key={index} job={job} role={role} />

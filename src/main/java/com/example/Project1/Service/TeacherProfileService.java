@@ -33,11 +33,9 @@ public class TeacherProfileService {
                 .map(teacherProfile -> {
                     teacherProfile.setFirstName(newTeacherProfile.getFirstName());
                     teacherProfile.setLastName(newTeacherProfile.getLastName());
-                    teacherProfile.setEmail(newTeacherProfile.getEmail());
                     teacherProfile.setPhoneNumber(newTeacherProfile.getPhoneNumber());
                     teacherProfile.setFaculty(newTeacherProfile.getFaculty());
                     teacherProfile.setMajor(newTeacherProfile.getMajor());
-                    teacherProfile.setTeacherID(newTeacherProfile.getTeacherID());
                     teacherProfile.setProfileIMG(newTeacherProfile.getProfileIMG());
                     return teacherProfileRepository.save(teacherProfile);
                 })

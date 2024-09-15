@@ -6,47 +6,13 @@ import Image from "next/image";
 import NavberLogin from "./component/navbar-login/page";
 import './style/mainpage.css';
 import imgperson from '../app/image/image-person.png';
-import { useRouter } from 'next/navigation';
 
-// Define the Job interface for consistency
-interface Job {
-  topic: string;
-  organizationName: string;
-  dateTime: string;
-  detail: string;
-  location: string;
-  img: string;
-}
 
 export default function Home() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
-
-      const router = useRouter();
-
-                  // Function to check authentication state
-  const checkAuthStatus = () => {
-    const token = localStorage.getItem('token');
-    const userRole = localStorage.getItem('userRole');
-    
-    // If token and role are present, redirect based on role
-    if (token && userRole) {
-      if (userRole === 'student') {
-        router.push('/pages/mainpage-student');
-      } else if (userRole === 'teacher') {
-        router.push('/pages/mainpage-teacher');
-      } else {
-        router.push('/'); // Redirect to a default page if the role is unknown
-      }
-    }
-  };
-
-  // Check auth status on component mount
-  useEffect(() => {
-    checkAuthStatus();
-  }, []);
 
   useEffect(() => {
     axios
@@ -101,7 +67,7 @@ export default function Home() {
                   <input
                     id="search1"
                     type="search"
-                    placeholder="เช่น นักพัฒนาเว็บไซต์, UX/UI Designer, บัญชี "
+                    placeholder="เช่น งาน สถานที่ฝึกงาน หน่วยงาน รายละเอียดงาน ..."
                     value={searchQuery}
                     onChange={handleSearchChange}
                   />
@@ -118,7 +84,7 @@ export default function Home() {
         <div>
           {error && <p className="error-message">{error}</p>}
           {filteredJobs.length === 0 && !error ? (
-            <p>No jobs found</p> // Display message if no jobs match the search query
+            <p className="no-jobs-message flex justify-center">ไม่มีงาน หน่วยงาน สถานที่ฝึกงาน หรือ รายละเอียดงาน ที่คุณค้นหา</p> // Display message if no jobs match the search query
           ) : (
             filteredJobs.map((job, index) => (
               <JobCard key={index} job={job} />

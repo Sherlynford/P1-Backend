@@ -14,10 +14,6 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "person-id")
     private Long id;
-    
-    @NotBlank(message = "Username cannot be null or empty")
-    @Column(nullable = false, unique = true)    
-    private String username;
 
     @NotBlank(message = "Password cannot be null or empty")
     @Column(nullable = false, unique = true)   
