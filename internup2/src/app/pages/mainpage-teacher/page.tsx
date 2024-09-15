@@ -65,7 +65,6 @@ export default function Home() {
               <div className="block-inside">
                 <div className="block-content">
                   <h1>ค้นหา ที่ฝึกงานสำหรับนักศึกษา ม.พะเยา</h1>
-                  <p>INTERN <strong style={{ color: "#92268F" }}>UP</strong> เว็บหาที่ฝึกงาน หางานในเครือและหน่วยงานนอก สำหรับนิสิตนักศึกษา <strong style={{ color: "#92268F" }}>มหาวิทยาลัยพะเยา</strong> </p>
                   <input
                     id="search1"
                     type="search"
@@ -73,6 +72,7 @@ export default function Home() {
                     value={searchQuery}
                     onChange={handleSearchChange}
                   />
+                  <p>INTERN <strong style={{ color: "#92268F" }}>UP</strong> เว็บหาที่ฝึกงาน หางานในเครือและหน่วยงานนอก สำหรับนิสิตนักศึกษา <strong style={{ color: "#92268F" }}>มหาวิทยาลัยพะเยา</strong> </p>
                 </div>
               </div>
             </div>

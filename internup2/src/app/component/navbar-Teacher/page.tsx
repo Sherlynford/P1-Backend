@@ -33,7 +33,8 @@ export default function NavberLogin() {
         <p style={{ marginLeft: "40px" }}>ยืนยันสถานะนิสิต</p>
         <p style={{ marginLeft: "40px" }}>สถานะนิสิต</p>
       </div>
-      <div className='nav-teacher-right'>
+      <div className='nav-teacher-right flex items-center'>
+      <div className=' mr-10'>student</div>
         <button className='profile-teacher-nav' onClick={toggleDropdown}>
           <Image src={Profileteacher} alt='this is image teacher' />
         </button>
