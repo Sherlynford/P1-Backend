@@ -1,7 +1,6 @@
 Person JSON: (id สร้างเองหลังบ้าน)
 http://localhost:8080/api/persons/
 {
-    "username": "john_doe",
     "password": "password123",
     "role": "teacher",
     "email": "john.doe@example.com"
@@ -14,11 +13,9 @@ http://localhost:8080/api/teachers/
     },
     "firstName": "liquid",
     "lastName": "lion",
-    "email": "john.doe@example.com",
     "phoneNumber": "1234567890",
     "faculty": "Science",
     "major": "Physics",
-    "teacherID": 1001 ,
     "profileIMG": "IMG.png"
 }
 StudentProfile JSON: (id สร้างเองหลังบ้าน)
@@ -29,7 +26,6 @@ http://localhost:8080/api/students/
     },
     "firstName": "solid",
     "lastName": "snake",
-    "email": "jane.doe@example.com",
     "faculty": "Engineering",
     "major": "Computer Science",
     "studentID": 2001,

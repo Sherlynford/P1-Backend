@@ -29,6 +29,7 @@ body{
 .image-student img{
     width: 180px;
     height: 180px;
+    border-radius: 100%;
 }
 .content-profile{
     padding: 50px;

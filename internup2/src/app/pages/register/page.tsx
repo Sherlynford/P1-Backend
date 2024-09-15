@@ -8,7 +8,6 @@ import AuthGuard from '@/app/component/checktoken/AuthGuard';
 
 export default function Register() {
     const [role, setUserRole] = useState("");
-    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -29,7 +28,6 @@ export default function Register() {
         }
 
         const user = {
-            username,
             role,
             email,
             password
@@ -49,7 +47,6 @@ export default function Register() {
                 const response = await axios.post('http://localhost:8080/api/persons/', user);
                 // console.log('Response:', response.data);
 
-                setUsername("");
                 setUserRole("");
                 setEmail("");
                 setPassword("");
@@ -84,14 +81,14 @@ export default function Register() {
                         <h1>ลงทะเบียน</h1>
                         <form onSubmit={handleSubmit}>
                             <div className='flex flex-col'>
-                                <label htmlFor="username" className='title-username'>ชื่อ</label>
+                            <label htmlFor="email" className='title-email'>อีเมล (สามารถใส่อีเมลอะไรก็ได้)</label>
                                 <input
-                                    id="username"
-                                    className='username'
-                                    type="text"
-                                    placeholder='กรุณากรอก ชื่อผู้ใช้....'
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
+                                    id="email"
+                                    className='email'
+                                    type="email"
+                                    placeholder='กรุณากรอก อีเมล....'
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                             </div>
                             <div className="role">
@@ -103,21 +100,12 @@ export default function Register() {
                                     onChange={(e) => setUserRole(e.target.value)}
                                 >
                                     <option value="" disabled>เลือกประเภทผู้ใช้</option>
-                                    <option value="teacher">อาจารย์</option>
                                     <option value="student">นักศึกษา</option>
+                                    <option value="teacher">อาจารย์</option>
                                 </select>
                             </div>
                             <div className='flex flex-col'>
-                                <label htmlFor="email" className='title-email'>อีเมล</label>
-                                <input
-                                    id="email"
-                                    className='email'
-                                    type="email"
-                                    placeholder='กรุณากรอก อีเมล....'
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                />
-                                <label htmlFor="password" className='title-password'>รหัสผ่าน</label>
+                                <label htmlFor="password" className='title-password'>รหัสผ่าน (8 ตัวอักษรขึ้นไป)</label>
                                 <input
                                     id="password"
                                     className='password'
@@ -126,7 +114,7 @@ export default function Register() {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
-                                <label htmlFor="confirm-password" className='title-confirm-password'>ยืนยันรหัสผ่าน</label>
+                                <label htmlFor="confirm-password" className='title-confirm-password'>ยืนยันรหัสผ่าน (8 ตัวอักษรขึ้นไป)</label>
                                 <input
                                     id="confirm-password"
                                     className='password'
@@ -138,7 +126,7 @@ export default function Register() {
                             </div>
                             <div className='btn-register mt-5 flex justify-between'>
                                 <button type='submit' className='register'onClick={() => {}}>ลงทะเบียน</button>
-                                <button type='button' className='cancel'><a href="/">ยกเลิก</a></button>
+                                <button type='button' className='cancel'><a href="/pages/login">ยกเลิก</a></button>
                             </div>
                         </form>
                     </div>

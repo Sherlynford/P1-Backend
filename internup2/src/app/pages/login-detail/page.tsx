@@ -99,13 +99,17 @@ const LoginDetail = () => {
                             </div>
                             <div className="name-date flex">
                                 {jobDetail.username && (
-                                    <div className="name-post">
-                                        <p id="username">{jobDetail.username}</p>
+                                    <div className="name-post flex items-center">
+                                        <strong>โพสต์โดย: </strong>
+                                        <p className='ml-6' id="username">{jobDetail.username}</p>
                                     </div>
                                 )}
                                 <div className="date-post flex ml-10">
-                                    <Image src={Imgcalendar} alt="Date Calendar" />
-                                    <div id="dateTime" className="dateTime">{formattedDate}</div>
+                                    <div className='flex items-center'>
+                                        <Image src={Imgcalendar} alt="Date Calendar" />
+                                        <strong>วันที่โพสต์: </strong>
+                                        <div id="dateTime" className="dateTime ml-6">{formattedDate}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -113,7 +117,7 @@ const LoginDetail = () => {
                 </div>
             </div>
         </div>
-        </AuthGuard>
+    </AuthGuard>
     );
 }
 

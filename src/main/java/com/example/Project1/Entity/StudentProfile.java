@@ -30,8 +30,6 @@ public class StudentProfile {
 
     private String lastName;
 
-    private String email;
-
     private String faculty;
 
     private String major;

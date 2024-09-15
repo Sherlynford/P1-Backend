@@ -29,7 +29,6 @@ public class TokenService {
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("id", person.getId());
         claims.put("email", person.getEmail());
-        claims.put("username", person.getUsername());
         claims.put("role", person.getRole());
         
         // Add only necessary information from profiles (e.g., IDs or roles)

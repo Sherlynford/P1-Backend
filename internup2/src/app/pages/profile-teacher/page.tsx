@@ -91,9 +91,6 @@ export default function Profile() {
                                 <label htmlFor="lastname" className='title-lastname'>นามสกุล</label>
                                 <input className='lastname' type="text" value={teacherData?.lastName || ''} readOnly />
 
-                                <label htmlFor="teacherid" className='title-teacherid'>รหัสประจำตัวอาจารย์</label>
-                                <input className='teacherid' type="text" value={teacherData?.teacherID || ''} readOnly />
-
                                 <label htmlFor="number-phone" className='title-numberphone'>เบอร์โทรศัพท์</label>
                                 <input className='number-phone' type="text" value={teacherData?.phoneNumber || ''} readOnly />
 
@@ -103,8 +100,6 @@ export default function Profile() {
                                 <label htmlFor="major" className='title-major'>สาขา</label>
                                 <input className='major' type="text" value={teacherData?.major || ''} readOnly />
 
-                                <label htmlFor="email" className='title-email'>อีเมล</label>
-                                <input className='email' type="text" value={teacherData?.email || ''} readOnly />
                             </form>
                         </div>
                         <div className='btn-edit flex justify-center'>

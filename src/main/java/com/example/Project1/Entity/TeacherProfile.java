@@ -27,8 +27,6 @@ public class TeacherProfile {
 
     private String lastName;
 
-    private String email;
-
     private String phoneNumber;
 
     private String faculty;
@@ -36,9 +34,6 @@ public class TeacherProfile {
     private String major;
 
     private String profileIMG;
-
-    @Column(unique = true) 
-    private String teacherID;
 
     @OneToMany(mappedBy = "teacherProfile", fetch = FetchType.LAZY)
     @JsonManagedReference(value = "teacher-ConfirmApply")

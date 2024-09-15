@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'; // Correct import for Next.js 13
 import Image from 'next/image';
 import Logologin from '../../image/Logo-login.png';
 import './login.css';
-import AuthGuard from '../../component/checktoken/AuthGuard';
 
 export default function Login() {
   const [email, setEmail] = useState('');

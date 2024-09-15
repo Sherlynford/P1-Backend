@@ -6,21 +6,6 @@ import Image from 'next/image';
 import '../../style/detail.css';
 import Imgcalendar from '../../image/iocn-calendar.png';
 
-// Define the type for job details
-interface Job {
-    topic: string;
-    organizationName: string;
-    dateTime: string;
-    detail: string;
-    location: string;
-    img: string;
-    link?: string;          
-    username?: string;      
-}
-
-interface BlockdetailProps {
-    id: string | null; // id เป็น string หรือ null
-}
 
 export default function Blockdetail({ id }: BlockdetailProps) {
     const [jobDetail, setJobDetail] = useState<Job | null>(null);
@@ -90,16 +75,20 @@ export default function Blockdetail({ id }: BlockdetailProps) {
                             <strong>Location:</strong> <span id="location">{jobDetail.location}</span>
                         </div>
                         <div className="name-date flex">
-                            {jobDetail.username && (
-                                <div className="name-post">
-                                    <p id="username">{jobDetail.username}</p>
+                                {jobDetail.username && (
+                                    <div className="name-post flex items-center">
+                                        <strong>โพสต์โดย: </strong>
+                                        <p className='ml-6' id="username">{jobDetail.username}</p>
+                                    </div>
+                                )}
+                                <div className="date-post flex ml-10">
+                                    <div className='flex items-center'>
+                                        <Image src={Imgcalendar} alt="Date Calendar" />
+                                        <strong>วันที่โพสต์: </strong>
+                                        <div id="dateTime" className="dateTime ml-6">{formattedDate}</div>
+                                    </div>
                                 </div>
-                            )}
-                            <div className="date-post flex ml-10">
-                                <Image src={Imgcalendar} alt="Date Calendar" />
-                                <div id="dateTime" className="dateTime">{formattedDate}</div>
                             </div>
-                        </div>
                     </div>
                 </div>
             </div>
