@@ -1,6 +1,6 @@
 'use client'; // Ensure this is at the top of the file
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; // Correct import for Next.js 13
 import Image from 'next/image';
 import Logologin from '../../image/Logo-login.png';
@@ -10,6 +10,27 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
+
+  const checkAuthStatus = () => {
+    const token = localStorage.getItem('token');
+    const userRole = localStorage.getItem('userRole');
+
+    // If token and role are present, redirect based on role
+    if (token && userRole) {
+      if (userRole === 'student') {
+        router.push('/pages/mainpage-student');
+      } else if (userRole === 'teacher') {
+        router.push('/pages/mainpage-teacher');
+      } else {
+        router.push('/'); // Redirect to a default page if the role is unknown
+      }
+    }
+  };
+
+  // Check auth status on component mount
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -31,6 +52,7 @@ export default function Login() {
         const userRole = loginResult.role; // Getting the role from the login response
 
         localStorage.setItem('token', token);
+        localStorage.setItem('userRole', userRole);
 
         // Step 2: Navigate based on user role
         if (userRole === 'student') {

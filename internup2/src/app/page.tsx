@@ -6,13 +6,37 @@ import Image from "next/image";
 import NavberLogin from "./component/navbar-login/page";
 import './style/mainpage.css';
 import imgperson from '../app/image/image-person.png';
-
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
+
+        const router = useRouter();
+
+                  // Function to check authentication state
+  const checkAuthStatus = () => {
+    const token = localStorage.getItem('token');
+    const userRole = localStorage.getItem('userRole');
+
+    // If token and role are present, redirect based on role
+    if (token && userRole) {
+      if (userRole === 'student') {
+        router.push('/pages/mainpage-student');
+      } else if (userRole === 'teacher') {
+        router.push('/pages/mainpage-teacher');
+      } else {
+        router.push('/'); // Redirect to a default page if the role is unknown
+      }
+    }
+  };
+
+  // Check auth status on component mount
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
 
   useEffect(() => {
     axios
@@ -63,7 +87,6 @@ export default function Home() {
               <div className="block-inside">
                 <div className="block-content">
                   <h1>ค้นหา ที่ฝึกงานสำหรับนักศึกษา ม.พะเยา</h1>
-                  <p><a href="/">INTERN <strong style={{ color: "#92268F" }}>UP</strong> เว็บหาที่ฝึกงาน หางานในเครือและหน่วยงานนอก สำหรับนิสิตนักศึกษา <strong style={{ color: "#92268F" }}>มหาวิทยาลัยพะเยา</strong> </a></p>
                   <input
                     id="search1"
                     type="search"
@@ -71,6 +94,7 @@ export default function Home() {
                     value={searchQuery}
                     onChange={handleSearchChange}
                   />
+                  <p><a href="/">INTERN <strong style={{ color: "#92268F" }}>UP</strong> เว็บหาที่ฝึกงาน หางานในเครือและหน่วยงานนอก สำหรับนิสิตนักศึกษา <strong style={{ color: "#92268F" }}>มหาวิทยาลัยพะเยา</strong> </a></p>
                 </div>
               </div>
             </div>

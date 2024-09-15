@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 @Entity
 @Data
@@ -16,6 +17,7 @@ public class Person {
     private Long id;
 
     @NotBlank(message = "Password cannot be null or empty")
+    @Size(min = 8, message = "Password must be at least 8 characters long")
     @Column(nullable = false, unique = true)   
     private String password;
 
