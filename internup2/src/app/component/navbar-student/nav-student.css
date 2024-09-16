@@ -67,4 +67,23 @@
 
 .dropdown-menu-student li a:hover {
     background-color: #B540FD;
+    color: #FFFFFF;
+}
+@media screen and (min-width: 1280px) {
+    .nav-main-student{
+        height: 60px;
+    }
+    .nav-student-left img{
+        height: 50px;
+        width: 50px;
+    }
+    .profile-student-nav img{
+        height: 50px;
+        width: 50px;
+    }
+}
+@media screen and (min-width: 1440px) {
+    .nav-main-student{
+        height: 80px;
+    }
 }

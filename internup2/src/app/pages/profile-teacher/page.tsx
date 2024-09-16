@@ -4,7 +4,6 @@ import axios from "axios";
 import "../profile-teacher/profile.css";
 import Image from "next/image";
 import Navbarteacher from "../../component/navbar-Teacher/page";
-import Profileteacher2 from "../../image/img-teacher2.png"; // Placeholder image, update if necessary
 import AuthGuard from "@/app/component/checktoken/AuthGuard";
 import Swal from "sweetalert2";
 

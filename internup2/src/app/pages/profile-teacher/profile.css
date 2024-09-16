@@ -21,6 +21,12 @@ body{
 .image-teacher img{
     width: 180px;
     height: 180px;
+    border-radius: 100%;
+}
+.image-teacher label{
+    width: 180px;
+    height: 180px;
+    border-radius: 100%;
 }
 .content-profile{
     padding: 50px;
@@ -28,7 +34,7 @@ body{
 .content-profile label{
     font-size: 24px;
     margin-bottom: 10px;
-    color: black;
+    color: black;  
 }
 .firstname{
     font-size: 20px;

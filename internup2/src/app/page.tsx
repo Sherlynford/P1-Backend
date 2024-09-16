@@ -50,7 +50,7 @@ export default function Home() {
       })
       .catch((err) => {
         console.error(err);
-        setError("Failed to fetch jobs. Please try again later.");
+        setError("ไม่สามารถดึงงานได้ กรุณาลองอีกครั้ง");
       });
   }, []);
 

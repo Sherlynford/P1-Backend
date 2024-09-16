@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, lazy } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../profile-student/profile.css';
 import Image from 'next/image';
@@ -38,7 +38,7 @@ const transcripturl = 'http://localhost:8080/api/blogs/upload';
 const url = 'http://localhost:8080/api/students/';
 
 export default function Profile() {
-    const [studentData, setStudentData] = useState<StudentData | null>(null);
+    const [studentData, setStudentData] = useState<any | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [id, setId] = useState<string | null>(null);
@@ -71,7 +71,7 @@ export default function Profile() {
                 ...prevState,
                 [id]: file || ''
             }));
-
+            
             // Generate and set file preview
             if (file) {
                 const reader = new FileReader();
@@ -96,7 +96,7 @@ export default function Profile() {
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault(); // Prevent the default form submission behavior
+        event.preventDefault();
     
         const { firstName, lastName, faculty, major, studentID, phoneNumber, profileIMG, cv, transcript } = formData;
         const internStartDate = startDate ? formatDate(startDate.toISOString()) : '';
@@ -117,34 +117,33 @@ export default function Profile() {
             setLoading(true);
     
             try {
-                // Create formData for image uploads
+                // Upload files
                 const uploadFiles = async (file: File | null, url: string): Promise<string> => {
                     if (!file) return '';
-    
+                
                     const formData = new FormData();
                     formData.append('file', file);
-    
+                
                     const response = await fetch(url, {
                         method: 'POST',
                         body: formData,
                     });
-    
+                
                     if (!response.ok) {
                         const errorText = await response.text();
                         console.error('File upload error:', response.status, errorText);
                         throw new Error('Failed to upload file.');
                     }
-    
+                
                     const responseData = await response.json();
-                    return responseData.fileUrls[0]; // Adjust according to your API response structure
+                    return responseData.fileUrls[0];
                 };
     
-                // Upload files and get URLs
                 const uploadedProfileIMG = await uploadFiles(profileIMG, imageUploadUrl);
                 const uploadedCV = await uploadFiles(cv, cvurl);
                 const uploadedTranscript = await uploadFiles(transcript, transcripturl);
     
-                // Prepare final JSON data
+                // Prepare post data
                 const postData = {
                     firstName,
                     lastName,
@@ -157,15 +156,14 @@ export default function Profile() {
                     cv: uploadedCV,
                     transcript: uploadedTranscript,
                     profileIMG: uploadedProfileIMG,
+                    studentProfileId: id // Add studentProfileId here
                 };
     
-                // Include the studentProfileId from the token
-                const token = localStorage.getItem('token');
-                const decoded = parseJwt(token!);
-                const studentProfileId = decoded?.studentProfileId;
+                // Log final post data
+                console.log('Post Data:', postData);
     
-                // Send JSON data with ID in URL
-                const response = await fetch(`${url}${studentProfileId}`, {
+                // Send JSON data
+                const response = await fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -173,12 +171,11 @@ export default function Profile() {
                     body: JSON.stringify(postData),
                 });
     
-                const responseData = await response.json(); // Parse JSON if the response is JSON
+                const responseData = await response.json();
                 console.log('API response:', responseData);
     
                 if (response.ok) {
                     Swal.fire('Success', 'Post created successfully!', 'success');
-                    // Reset form fields
                     setFormData({
                         profileIMG: '',
                         firstName: '',
@@ -197,10 +194,8 @@ export default function Profile() {
                     setImgPreview('');
                     setCvPreview('');
                     setTranscriptPreview('');
-                    // Redirect or perform any other actions
                     window.location.href = '/pages/profile-student';
                 } else {
-                    // Handle error response based on the response data format
                     const errorMessage = responseData.message || 'Failed to create post. Please try again.';
                     Swal.fire('Error', errorMessage, 'error');
                 }
@@ -212,6 +207,7 @@ export default function Profile() {
             }
         }
     };
+    
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -231,6 +227,7 @@ export default function Profile() {
             setShowAlternativeSection(true);
         }
     }, []);
+    
 
     useEffect(() => {
         if (!id) return;
