@@ -12,7 +12,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import Swal from 'sweetalert2';
 
-function parseJwt(token: string): { studentProfileID?: string } | null {
+function parseJwt(token: string): { studentProfileId?: string } | null {
     try {
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -27,13 +27,14 @@ function parseJwt(token: string): { studentProfileID?: string } | null {
     }
 }
 
-const formatDate = (dateString: string): string => {
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0]; // แปลงเป็น 'yyyy-MM-dd'
 };
 
-
 const imageUploadUrl = 'http://localhost:8080/api/blogs/upload';
+const cvurl = 'http://localhost:8080/api/blogs/upload';
+const transcripturl = 'http://localhost:8080/api/blogs/upload';
 const url = 'http://localhost:8080/api/students/';
 
 export default function Profile() {
@@ -47,7 +48,7 @@ export default function Profile() {
     const [showAlternativeSection, setShowAlternativeSection] = useState<boolean>(false);
     const [formData, setFormData] = useState({
         firstName: '',
-        lastname: '',
+        lastName: '',
         faculty: '',
         major: '',
         studentID: '',
@@ -62,23 +63,28 @@ export default function Profile() {
     const [imgPreview, setImgPreview] = useState('');
     const [cvPreview, setCvPreview] = useState('');
     const [transcriptPreview, setTranscriptPreview] = useState('');
-    const handleChange = (event) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { id, value, type, files } = event.target;
         if (type === 'file') {
-            const file = files[0];
+            const file = files ? files[0] : null;
             setFormData(prevState => ({
                 ...prevState,
-                [id]: file
+                [id]: file || ''
             }));
 
-            // Generate and set image preview
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                if (reader.result !== null) {
-                    setImgPreview(reader.result.toString());
-                }
-            };
+            // Generate and set file preview
             if (file) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const result = reader.result as string;
+                    if (id === 'imgFile') {
+                        setImgPreview(result);
+                    } else if (id === 'cvFile') {
+                        setCvPreview(result);
+                    } else if (id === 'transcriptFile') {
+                        setTranscriptPreview(result);
+                    }
+                };
                 reader.readAsDataURL(file);
             }
         } else {
@@ -88,11 +94,14 @@ export default function Profile() {
             }));
         }
     };
-    const handleSubmit = async (event) => {
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault(); // Prevent the default form submission behavior
-
-        const { firstName, lastname, faculty, major, studentID, phoneNumber, internStartDate, internEndDate, cv, transcript, profileIMG } = formData;
-
+    
+        const { firstName, lastName, faculty, major, studentID, phoneNumber, profileIMG, cv, transcript } = formData;
+        const internStartDate = startDate ? formatDate(startDate.toISOString()) : '';
+        const internEndDate = endDate ? formatDate(endDate.toISOString()) : '';
+    
         // Show confirmation popup
         const result = await Swal.fire({
             title: 'ต้องการบันทึกข้อมูล',
@@ -103,80 +112,103 @@ export default function Profile() {
             cancelButtonText: 'ยกเลิก',
             reverseButtons: true,
         });
-
+    
         if (result.isConfirmed) {
+            setLoading(true);
+    
             try {
-                // Create formData for image upload
-                const imageFormData = new FormData();
-                if (profileIMG) {
-                    imageFormData.append('files', profileIMG);
-                }
-
-                // Upload image and get URL
-                const imageResponse = await fetch(imageUploadUrl, {
-                    method: 'POST',
-                    body: imageFormData,
-                });
-
-                const imageResponseData = await imageResponse.json();
-                if (imageResponse.ok && imageResponseData.fileUrls && imageResponseData.fileUrls.length > 0) {
-                    const uploadedImgURL = imageResponseData.fileUrls[0];
-
-                    // Prepare final JSON data
-                    const postData = {
-                        firstName,
-                        lastname,
-                        faculty,
-                        major,
-                        studentID,
-                        phoneNumber,
-                        internStartDate,
-                        internEndDate,
-                        cv,
-                        transcript,
-                        profileIMG: uploadedImgURL, // Use the URL from the image upload response
-                    };
-
-                    // Send JSON data
+                // Create formData for image uploads
+                const uploadFiles = async (file: File | null, url: string): Promise<string> => {
+                    if (!file) return '';
+    
+                    const formData = new FormData();
+                    formData.append('file', file);
+    
                     const response = await fetch(url, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(postData),
+                        body: formData,
                     });
-
-                    const responseData = await response.json(); // Parse JSON if the response is JSON
-
-                    if (response.ok) {
-                        Swal.fire('Success', 'Post created successfully!', 'success');
-                        // Reset form fields
-                        setFormData({
-                            profileIMG: '',
-                            firstName: '',
-                            lastname: '',
-                            faculty: '',
-                            major: '',
-                            studentID: '',
-                            phoneNumber: '',
-                            internStartDate: '',
-                            internEndDate: '',
-                            cv: '',
-                            transcript: '',
-                        });
-                        // Redirect or perform any other actions
-                        window.location.href = '/';
-                    } else {
-                        // Handle error response based on the response data format
-                        const errorMessage = responseData.message || 'Failed to create post. Please try again.';
-                        Swal.fire('Error', errorMessage, 'error');
+    
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error('File upload error:', response.status, errorText);
+                        throw new Error('Failed to upload file.');
                     }
+    
+                    const responseData = await response.json();
+                    return responseData.fileUrls[0]; // Adjust according to your API response structure
+                };
+    
+                // Upload files and get URLs
+                const uploadedProfileIMG = await uploadFiles(profileIMG, imageUploadUrl);
+                const uploadedCV = await uploadFiles(cv, cvurl);
+                const uploadedTranscript = await uploadFiles(transcript, transcripturl);
+    
+                // Prepare final JSON data
+                const postData = {
+                    firstName,
+                    lastName,
+                    faculty,
+                    major,
+                    studentID,
+                    phoneNumber,
+                    internStartDate,
+                    internEndDate,
+                    cv: uploadedCV,
+                    transcript: uploadedTranscript,
+                    profileIMG: uploadedProfileIMG,
+                };
+    
+                // Include the studentProfileId from the token
+                const token = localStorage.getItem('token');
+                const decoded = parseJwt(token!);
+                const studentProfileId = decoded?.studentProfileId;
+    
+                // Send JSON data with ID in URL
+                const response = await fetch(`${url}${studentProfileId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(postData),
+                });
+    
+                const responseData = await response.json(); // Parse JSON if the response is JSON
+                console.log('API response:', responseData);
+    
+                if (response.ok) {
+                    Swal.fire('Success', 'Post created successfully!', 'success');
+                    // Reset form fields
+                    setFormData({
+                        profileIMG: '',
+                        firstName: '',
+                        lastName: '',
+                        faculty: '',
+                        major: '',
+                        studentID: '',
+                        phoneNumber: '',
+                        internStartDate: '',
+                        internEndDate: '',
+                        cv: '',
+                        transcript: '',
+                    });
+                    setStartDate(null);
+                    setEndDate(null);
+                    setImgPreview('');
+                    setCvPreview('');
+                    setTranscriptPreview('');
+                    // Redirect or perform any other actions
+                    window.location.href = '/pages/profile-student';
                 } else {
-                    Swal.fire('Error', 'Failed to upload image. Please try again.', 'error');
+                    // Handle error response based on the response data format
+                    const errorMessage = responseData.message || 'Failed to create post. Please try again.';
+                    Swal.fire('Error', errorMessage, 'error');
                 }
             } catch (error) {
                 console.error('Error:', error);
                 Swal.fire('Error', 'Failed to create post. Please try again.', 'error');
+            } finally {
+                setLoading(false);
             }
         }
     };
@@ -303,37 +335,38 @@ export default function Profile() {
                         <div className='flex items-center justify-center'>
                             <div className='block-profile'>
                                 <div className='content-profile'>
-                                    <div className='image-student flex justify-center'>
-                                        <div className="change-img flex items-center justify-center">
-                                            <label htmlFor="dropzone-file" className="change-img flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                                    {imgPreview ? (
-                                                        <img src={imgPreview} alt="Uploaded preview" className="w-full h-full object-cover object-center border-none backgroung-white rounded-lg" />
-                                                    ) : (
-                                                        <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                                        </svg>
-                                                    )}
-                                                </div>
-                                                <input id="dropzone-file" type="file" className="hidden" onChange={handleChange} />
-                                            </label>
+                                    <form className='flex flex-col' onSubmit={handleSubmit}>
+                                        <div className='image-student flex justify-center'>
+                                            <div className="change-img flex items-center justify-center">
+                                                <label htmlFor="imgFile" className="change-img flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                                        {imgPreview ? (
+                                                            <img src={imgPreview} alt="Uploaded preview" className="w-full h-full object-cover object-center border-none backgroung-white rounded-lg" />
+                                                        ) : (
+                                                            <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                                            </svg>
+                                                        )}
+                                                    </div>
+                                                    <input id="imgFile" type="file" className="hidden" onChange={handleChange} />
+                                                </label>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <form className='flex flex-col'>
-                                        <label htmlFor="firstname" className='title-firstname'>ชื่อ</label>
-                                        <input className='firstname' type="text" placeholder='กรุณากรอกชื่อ'value={formData.firstName} onChange={handleChange} />
 
-                                        <label htmlFor="lastname" className='title-lastname'>นามสกุล</label>
-                                        <input className='lastname' type="text" placeholder='กรุณากรอกนามสกุล' value={formData.lastname} onChange={handleChange}/>
+                                        <label htmlFor="firstName" className='title-firstname'>ชื่อ</label>
+                                        <input id="firstName" className='firstname' type="text" placeholder='กรุณากรอกชื่อ' value={formData.firstName} onChange={handleChange} />
 
-                                        <label htmlFor="studentid" className='title-studentid'>รหัสประจำตัวนิสิต</label>
-                                        <input className='studentid' type="text" placeholder='กรุณากรอกรหัสประจำตัวนิสิต' value={formData.studentID} onChange={handleChange}/>
+                                        <label htmlFor="lastName" className='title-lastName'>นามสกุล</label>
+                                        <input id="lastName" className='lastname' type="text" placeholder='กรุณากรอกนามสกุล' value={formData.lastName} onChange={handleChange} />
 
-                                        <label htmlFor="number-phone" className='title-numberphone'>เบอร์โทรศัพท์</label>
-                                        <input className='number-phone' type="text" placeholder='กรุณากรอกเบอร์โทรศัพท์' value={formData.phoneNumber} onChange={handleChange}/>
+                                        <label htmlFor="studentID" className='title-studentid'>รหัสประจำตัวนิสิต</label>
+                                        <input id="studentID" className='studentid' type="text" placeholder='กรุณากรอกรหัสประจำตัวนิสิต' value={formData.studentID} onChange={handleChange} />
+
+                                        <label htmlFor="phoneNumber" className='title-numberphone'>เบอร์โทรศัพท์</label>
+                                        <input id="phoneNumber" className='number-phone' type="text" placeholder='กรุณากรอกเบอร์โทรศัพท์' value={formData.phoneNumber} onChange={handleChange} />
 
                                         <label htmlFor="faculty" className='title-faculty'>คณะ</label>
-                                        <select id="faculty" className="faculty">
+                                        <select id="faculty" className="faculty" value={formData.faculty} onChange={handleChange}>
                                             <option value="">เลือกคณะ</option>
                                             <option value="faculty1">คณะเกษตรศาสตร์และทรัพยากรธรรมชาติ</option>
                                             <option value="faculty2">คณะเทคโนโลยีสารสนเทศและการสื่อสาร</option>
@@ -357,23 +390,22 @@ export default function Profile() {
                                         </select>
 
                                         <label htmlFor="major" className='title-major'>สาขา</label>
-                                        <input className='major' type="text" placeholder='กรุณากรอกสาขา' value={formData.major} onChange={handleChange} />
+                                        <input id="major" className='major' type="text" placeholder='กรุณากรอกสาขา' value={formData.major} onChange={handleChange} />
 
                                         <label htmlFor="cv" className='title-cv'>CV</label>
                                         <div className='cv cv-uploading'>
                                             <div className="upload-img flex items-center justify-center">
-                                                <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                                <label htmlFor="cvFile" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                                                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                                    {imgPreview ? (
-                                                        <img src={imgPreview} alt="Uploaded preview" className="w-full h-full object-cover object-center border-none backgroung-white rounded-lg" />
-                                                    ) : (
-                                                        <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                                        </svg>
-                                                    )}
-
+                                                        {cvPreview ? (
+                                                            <img src={cvPreview} alt="Uploaded preview" className="w-full h-full object-cover object-center border-none backgroung-white rounded-lg" />
+                                                        ) : (
+                                                            <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                                            </svg>
+                                                        )}
                                                     </div>
-                                                    <input id="dropzone-file" type="file" className="hidden" />
+                                                    <input id="cvFile" type="file" className="hidden" onChange={handleChange} />
                                                 </label>
                                             </div>
                                         </div>
@@ -381,15 +413,17 @@ export default function Profile() {
                                         <label htmlFor="transcript" className='title-transcript'>Transcript</label>
                                         <div className='transcript transcript-uploading'>
                                             <div className="upload-img flex items-center justify-center">
-                                                <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                                <label htmlFor="transcriptFile" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                                                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                                        <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                                        </svg>
-                                                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span></p>
-                                                        <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG</p>
+                                                        {transcriptPreview ? (
+                                                            <img src={transcriptPreview} alt="Uploaded preview" className="w-full h-full object-cover object-center border-none backgroung-white rounded-lg" />
+                                                        ) : (
+                                                            <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                                            </svg>
+                                                        )}
                                                     </div>
-                                                    <input id="dropzone-file" type="file" className="hidden" />
+                                                    <input id="transcriptFile" type="file" className="hidden" onChange={handleChange} />
                                                 </label>
                                             </div>
                                         </div>
@@ -409,10 +443,11 @@ export default function Profile() {
                                             className="end-intern"
                                             placeholderText="กดเลือกวันที่เลิกฝึกงาน"
                                         />
+
+                                        <div className='btn-edit flex justify-center'>
+                                            <button type='submit' className='edit'>บันทึก</button>
+                                        </div>
                                     </form>
-                                </div>
-                                <div className='btn-edit flex justify-center'>
-                                    <button className='edit'><a href="/pages/profileedit-student">บันทึก</a></button>
                                 </div>
                             </div>
                         </div>
