@@ -2,25 +2,73 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../profile-student/profile.css';
+import Image from 'next/image';
 import Navbarstudent from '../../component/navbar-student/page';
+import Profilestudent1 from '../../image/img-student2.png'; // Placeholder image
+import IMGCV from '../../image/img-cv.png'; // Placeholder image
+import Transcript from '../../image/transcript.jpg'; // Placeholder image
 import AuthGuard from '@/app/component/checktoken/AuthGuard';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import Swal from 'sweetalert2';
 
-const formatDate = (dateString: string): string => {
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+function parseJwt(token: string): { studentProfileId?: string } | null {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) =>
+            '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+        ).join(''));
+
+        return JSON.parse(jsonPayload);
+    } catch (error) {
+        console.error('Invalid JWT token', error);
+        return null;
+    }
+}
+
+const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0]; // แปลงเป็น 'yyyy-MM-dd'
 };
 
 const imageUploadUrl = 'http://localhost:8080/api/blogs/upload';
 const cvurl = 'http://localhost:8080/api/blogs/upload';
 const transcripturl = 'http://localhost:8080/api/blogs/upload';
 const url = 'http://localhost:8080/api/students/';
+const uploadFile = async (file: File | string, url: string): Promise<string> => {
+    if (typeof file === 'string') {
+        // If file is already a URL, return it
+        return file;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        const response = await axios.post(url, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        // Assuming the response contains the URL of the uploaded file
+        return response.data.fileUrl; // Adjust this according to your API response
+    } catch (error) {
+        console.error('Error uploading file:', error);
+        throw new Error('File upload failed');
+    }
+};
+
 
 export default function Profile() {
-    const [loading, setLoading] = useState<boolean>(false);
+    const [studentData, setStudentData] = useState<any | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [id, setId] = useState<string | null>(null);
+    const [startDate, setStartDate] = useState<Date | null>(null);
+    const [endDate, setEndDate] = useState<Date | null>(null);
+    const [showHiddenSection, setShowHiddenSection] = useState<boolean>(false);
+    const [showAlternativeSection, setShowAlternativeSection] = useState<boolean>(false);
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -35,11 +83,9 @@ export default function Profile() {
         profileIMG: '',
     });
 
-    const [imgPreview, setImgPreview] = useState<string>('');
-    const [cvPreview, setCvPreview] = useState<string>('');
-    const [transcriptPreview, setTranscriptPreview] = useState<string>('');
-    const [startDate, setStartDate] = useState<Date | null>(null);
-    const [endDate, setEndDate] = useState<Date | null>(null);
+    const [imgPreview, setImgPreview] = useState('');
+    const [cvPreview, setCvPreview] = useState('');
+    const [transcriptPreview, setTranscriptPreview] = useState('');
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { id, value, type, files } = event.target;
@@ -49,7 +95,7 @@ export default function Profile() {
                 ...prevState,
                 [id]: file || ''
             }));
-            
+
             // Generate and set file preview
             if (file) {
                 const reader = new FileReader();
@@ -73,125 +119,154 @@ export default function Profile() {
         }
     };
     
-    
-
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault(); // Prevent the default form submission behavior
+        event.preventDefault();
     
-        const { firstName, lastName, faculty, major, studentID, phoneNumber, profileIMG, cv, transcript } = formData;
-        const internStartDate = startDate ? formatDate(startDate.toISOString()) : '';
-        const internEndDate = endDate ? formatDate(endDate.toISOString()) : '';
+        setLoading(true);
     
-        // Show confirmation popup
-        const result = await Swal.fire({
-            title: 'ต้องการบันทึกข้อมูล',
-            text: 'คุณแน่ใจว่าต้องการบันทึกข้อมูล ?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'ตกลง',
-            cancelButtonText: 'ยกเลิก',
-            reverseButtons: true,
-        });
+        try {
+            const token = localStorage.getItem('token');
+            
+            // Upload files and get URLs
+            const profileIMGUrl = formData.profileIMG ? await uploadFile(formData.profileIMG, imageUploadUrl) : '';
+            const cvUrl = formData.cv ? await uploadFile(formData.cv, cvurl) : '';
+            const transcriptUrl = formData.transcript ? await uploadFile(formData.transcript, transcripturl) : '';
     
-        if (result.isConfirmed) {
-            setLoading(true);
+            // Prepare data to be posted
+            const postData = {
+                person: {
+                    id: id || "", // Use id if available
+                },
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                phoneNumber: formData.phoneNumber,
+                faculty: formData.faculty,
+                major: formData.major,
+                profileIMG: profileIMGUrl,
+                cv: cvUrl,
+                transcript: transcriptUrl,
+                internStartDate: startDate ? formatDate(startDate.toISOString()) : '',
+                internEndDate: endDate ? formatDate(endDate.toISOString()) : '',
+                studentID: formData.studentID,
+            };
     
-            try {
-                // Create formData for image uploads
-                const uploadFiles = async (file: File | null, url: string): Promise<string> => {
-                    if (!file) return '';
-                
-                    const formData = new FormData();
-                    formData.append('file', file);
-                
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        body: formData,
-                    });
-                
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        console.error('File upload error:', response.status, errorText);
-                        throw new Error('Failed to upload file.');
-                    }
-                
-                    const responseData = await response.json();
-                    return responseData.fileUrls[0]; // ปรับตามโครงสร้างของการตอบกลับ
-                };
-                
+            // Post data to server
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`, // Add token to request headers
+                },
+                body: JSON.stringify(postData),
+            });
     
-                // Upload files and get URLs
-                const uploadedProfileIMG = await uploadFiles(profileIMG, imageUploadUrl);
-                const uploadedCV = await uploadFiles(cv, cvurl);
-                const uploadedTranscript = await uploadFiles(transcript, transcripturl);
-    
-                // Prepare final JSON data
-                const postData = {
-                    firstName,
-                    lastName,
-                    faculty,
-                    major,
-                    studentID,
-                    phoneNumber,
-                    internStartDate,
-                    internEndDate,
-                    cv: uploadedCV,
-                    transcript: uploadedTranscript,
-                    profileIMG: uploadedProfileIMG,
-                };
-    
-                // Log final post data
-                console.log('Post Data:', postData);
-    
-                // Send JSON data
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(postData),
+            if (response.ok) {
+                Swal.fire('สำเร็จ', 'บันทึกข้อมูลสำเร็จ!', 'success');
+                setFormData({
+                    profileIMG: '',
+                    firstName: '',
+                    lastName: '',
+                    faculty: '',
+                    major: '',
+                    studentID: '',
+                    phoneNumber: '',
+                    internStartDate: '',
+                    internEndDate: '',
+                    cv: '',
+                    transcript: '',
                 });
-    
-                const responseData = await response.json(); // Parse JSON if the response is JSON
-                console.log('API response:', responseData);
-    
-                if (response.ok) {
-                    Swal.fire('Success', 'Post created successfully!', 'success');
-                    // Reset form fields
-                    setFormData({
-                        profileIMG: '',
-                        firstName: '',
-                        lastName: '',
-                        faculty: '',
-                        major: '',
-                        studentID: '',
-                        phoneNumber: '',
-                        internStartDate: '',
-                        internEndDate: '',
-                        cv: '',
-                        transcript: '',
-                    });
-                    setStartDate(null);
-                    setEndDate(null);
-                    setImgPreview('');
-                    setCvPreview('');
-                    setTranscriptPreview('');
-                    // Redirect or perform any other actions
-                    window.location.href = '/pages/profile-student';
-                } else {
-                    // Handle error response based on the response data format
-                    const errorMessage = responseData.message || 'Failed to create post. Please try again.';
-                    Swal.fire('Error', errorMessage, 'error');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                Swal.fire('Error', 'Failed to create post. Please try again.', 'error');
-            } finally {
-                setLoading(false);
+                setStartDate(null);
+                setEndDate(null);
+                setImgPreview('');
+                setCvPreview('');
+                setTranscriptPreview('');
+                window.location.href = '/pages/profile-student';
+            } else {
+                const responseData = await response.json();
+                const errorMessage = responseData.message || 'ไม่สามารถบันทึกข้อมูลได้ กรุณาลองอีกครั้ง';
+                Swal.fire('ข้อผิดพลาด', errorMessage, 'error');
             }
+        } catch (error) {
+            console.error('Error:', error);
+            Swal.fire('ข้อผิดพลาด', 'ไม่สามารถบันทึกข้อมูลได้ กรุณาลองอีกครั้ง', 'error');
+        } finally {
+            setLoading(false);
         }
     };
-    
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            setError('No token found in localStorage.');
+            setLoading(false);
+            setShowAlternativeSection(true);
+            return;
+        }
+        const decoded = parseJwt(token);
+        console.log(decoded);
+        if (decoded?.studentProfileId) {
+            setId(decoded.studentProfileId);
+        } else {
+            setLoading(false);
+            setShowHiddenSection(false);
+            setShowAlternativeSection(true);
+        }
+    }, []);
+
+
+    useEffect(() => {
+        if (!id) return;
+
+        axios.get(`http://localhost:8080/api/students/${id}`)
+            .then(response => {
+                const data: StudentData = response.data;
+
+                setFormData({
+                    firstName: data.firstName || '',
+                    lastName: data.lastName || '',
+                    faculty: data.faculty || '',
+                    major: data.major || '',
+                    studentID: data.studentID || '',
+                    phoneNumber: data.phoneNumber || '',
+                    internStartDate: data.internStartDate || '',
+                    internEndDate: data.internEndDate || '',
+                    cv: data.cv || '',
+                    transcript: data.transcript || '',
+                    profileIMG: data.profileIMG || '',
+                });
+
+                setStartDate(data.internStartDate ? new Date(data.internStartDate) : null);
+                setEndDate(data.internEndDate ? new Date(data.internEndDate) : null);
+
+                // Set image previews if URLs are available
+                if (data.profileIMG) {
+                    setImgPreview(data.profileIMG);
+                }
+                if (data.cv) {
+                    setCvPreview(data.cv);
+                }
+                if (data.transcript) {
+                    setTranscriptPreview(data.transcript);
+                }
+
+                setLoading(false);
+                setShowHiddenSection(true);
+                setShowAlternativeSection(false);
+            })
+            .catch(err => {
+                setError('Error fetching student data.');
+                console.error('Error fetching student data:', err);
+            })
+            .finally(() => setLoading(false));
+    }, [id]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
 
     return (
         <AuthGuard>
