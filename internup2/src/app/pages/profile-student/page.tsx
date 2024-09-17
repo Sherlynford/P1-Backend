@@ -12,29 +12,46 @@ import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import Swal from 'sweetalert2';
 
-function parseJwt(token: string): { studentProfileId?: string } | null {
+function parseJwt(token: string) {
     try {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) =>
-            '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-        ).join(''));
-
-        return JSON.parse(jsonPayload);
+      const base64Url = token.split(".")[1]; // Extract the payload from JWT
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/"); // Handle Base64 encoding
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map(function (c) {
+            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+          })
+          .join("")
+      );
+  
+      return JSON.parse(jsonPayload); // Convert the result to a JSON object
     } catch (error) {
-        console.error('Invalid JWT token', error);
-        return null;
+      console.error("Invalid JWT token");
+      return null;
     }
-}
+  }
 
 const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toISOString().split('T')[0]; // แปลงเป็น 'yyyy-MM-dd'
+    // Check if dateString is a valid ISO string
+    const isoDate = new Date(dateString);
+    if (!isNaN(isoDate.getTime())) {
+        return isoDate.toISOString().split('T')[0];
+    }
+
+    // Check if dateString is in the format 'yyyy-MM-dd'
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
+    if (regex.test(dateString)) {
+        return dateString;
+    }
+
+
 };
 
-const imageUploadUrl = 'http://localhost:8080/api/blogs/upload';
-const cvurl = 'http://localhost:8080/api/blogs/upload';
-const transcripturl = 'http://localhost:8080/api/blogs/upload';
+
+const imageUploadUrl = 'http://localhost:8080/api/students/upload';
+const cvurl = 'http://localhost:8080/api/students/upload';
+const transcripturl = 'http://localhost:8080/api/students/upload';
 const url = 'http://localhost:8080/api/students/';
 
 export default function Profile() {
@@ -64,7 +81,7 @@ export default function Profile() {
     const [cvPreview, setCvPreview] = useState('');
     const [transcriptPreview, setTranscriptPreview] = useState('');
     const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { id, value, type, files } = event.target;
+        const { id, value, type, files } = event.target as HTMLInputElement;
         if (type === 'file') {
             const file = files ? files[0] : null;
             setFormData(prevState => ({
@@ -97,33 +114,115 @@ export default function Profile() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-    
         setLoading(true);
+    
+        const { firstName, lastName, faculty, major, studentID, phoneNumber, internStartDate, internEndDate, cv, transcript, profileIMG } = formData;
     
         try {
             const token = localStorage.getItem('token');
-            
-            // Upload files and get URLs
-            const profileIMGUrl = formData.profileIMG ? await uploadFile(formData.profileIMG, imageUploadUrl) : '';
-            const cvUrl = formData.cv ? await uploadFile(formData.cv, cvurl) : '';
-            const transcriptUrl = formData.transcript ? await uploadFile(formData.transcript, transcripturl) : '';
+    
+            // Initialize URLs
+            let profileIMGUrl = profileIMG;
+            let cvUrl = cv;
+            let transcriptUrl = transcript;
+    
+            // Upload profile image if present and not a string
+            if (profileIMG) {
+                const imageFormData1 = new FormData();
+                imageFormData1.append('file', profileIMG);
+    
+                try {
+                    const imageResponse1 = await fetch(imageUploadUrl, {
+                        method: 'POST',
+                        body: imageFormData1,
+                    });
+                    const imageResponseData1 = await imageResponse1.json();
+    
+                    if (
+                        imageResponse1.ok &&
+                        imageResponseData1.fileUrls &&
+                        imageResponseData1.fileUrls.length > 0
+                    ) {
+                        profileIMGUrl = imageResponseData1.fileUrls[0];
+                    } else {
+                        throw new Error('Failed to upload profile image');
+                    }
+                } catch (error) {
+                    console.error('Error uploading profile image:', error);
+                }
+            }
+    
+            // Upload CV if present and not a string
+            if (cv) {
+                const imageFormData2 = new FormData();
+                imageFormData2.append('file', cv);
+    
+                try {
+                    const imageResponse2 = await fetch(imageUploadUrl, {
+                        method: 'POST',
+                        body: imageFormData2,
+                    });
+                    const imageResponseData2 = await imageResponse2.json();
+    
+                    if (
+                        imageResponse2.ok &&
+                        imageResponseData2.fileUrls &&
+                        imageResponseData2.fileUrls.length > 0
+                    ) {
+                        cvUrl = imageResponseData2.fileUrls[0];
+                    } else {
+                        throw new Error('Failed to upload CV');
+                    }
+                } catch (error) {
+                    console.error('Error uploading CV:', error);
+                }
+            }
+    
+            // Upload transcript if present and not a string
+            if (transcript) {
+                const imageFormData3 = new FormData();
+                imageFormData3.append('file', transcript);
+    
+                try {
+                    const imageResponse3 = await fetch(imageUploadUrl, {
+                        method: 'POST',
+                        body: imageFormData3,
+                    });
+                    const imageResponseData3 = await imageResponse3.json();
+    
+                    if (
+                        imageResponse3.ok &&
+                        imageResponseData3.fileUrls &&
+                        imageResponseData3.fileUrls.length > 0
+                    ) {
+                        transcriptUrl = imageResponseData3.fileUrls[0];
+                    } else {
+                        throw new Error('Failed to upload transcript');
+                    }
+                } catch (error) {
+                    console.error('Error uploading transcript:', error);
+                }
+            }
+    
+            // Log URLs for debugging
+
     
             // Prepare data to be posted
             const postData = {
                 person: {
                     id: id || "", // Use id if available
                 },
-                firstName: formData.firstName,
-                lastName: formData.lastName,
-                phoneNumber: formData.phoneNumber,
-                faculty: formData.faculty,
-                major: formData.major,
-                profileIMG: profileIMGUrl,
-                cv: cvUrl,
-                transcript: transcriptUrl,
+                firstName: firstName,
+                lastName: lastName,
+                phoneNumber: phoneNumber,
+                faculty: faculty,
+                major: major,
+                profileIMG: profileIMGUrl, // Use uploaded or existing profile image URL
+                cv: cvUrl,                 // Use uploaded or existing CV URL
+                transcript: transcriptUrl,  // Use uploaded or existing transcript URL
                 internStartDate: startDate ? formatDate(startDate.toISOString()) : '',
                 internEndDate: endDate ? formatDate(endDate.toISOString()) : '',
-                studentID: formData.studentID,
+                studentID: studentID,
             };
     
             // Post data to server
@@ -138,6 +237,7 @@ export default function Profile() {
     
             if (response.ok) {
                 Swal.fire('สำเร็จ', 'บันทึกข้อมูลสำเร็จ!', 'success');
+                // Reset form fields
                 setFormData({
                     profileIMG: '',
                     firstName: '',
@@ -156,7 +256,7 @@ export default function Profile() {
                 setImgPreview('');
                 setCvPreview('');
                 setTranscriptPreview('');
-                window.location.href = '/pages/profile-student';
+                // window.location.href = '/pages/profile-student';
             } else {
                 const responseData = await response.json();
                 const errorMessage = responseData.message || 'ไม่สามารถบันทึกข้อมูลได้ กรุณาลองอีกครั้ง';
@@ -169,6 +269,10 @@ export default function Profile() {
             setLoading(false);
         }
     };
+    
+    
+    
+    
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -180,8 +284,8 @@ export default function Profile() {
         }
         const decoded = parseJwt(token);
         console.log(decoded);
-        if (decoded?.studentProfileId) {
-            setId(decoded.studentProfileId);
+        if (decoded) {
+            setId(decoded.id || null);
         } else {
             setLoading(false);
             setShowHiddenSection(false);
@@ -192,13 +296,23 @@ export default function Profile() {
 
     useEffect(() => {
         if (!id) return;
-
-        axios.get(`http://localhost:8080/api/students/${id}`)
+    
+        axios.get(`http://localhost:8080/api/persons/${id}`)
             .then(response => {
+                const studentProfile = response.data.studentProfile;
+    
+                // Log the full response for debugging
                 console.log(response.data);
-                setStudentData(response.data);
-                setShowHiddenSection(true);
-                setShowAlternativeSection(false);
+    
+                // Check if studentProfile exists, and update the states accordingly
+                if (studentProfile) {
+                    setStudentData(response.data);
+                    setShowHiddenSection(true);  // Show the hidden section if studentProfile exists
+                    setShowAlternativeSection(false); // Optionally hide the alternative section
+                } else {
+                    setShowHiddenSection(false); // If no studentProfile, hide the section
+                    setShowAlternativeSection(true); // Show alternative if no studentProfile
+                }
             })
             .catch(err => {
                 setError('Error fetching student data.');
@@ -206,6 +320,7 @@ export default function Profile() {
             })
             .finally(() => setLoading(false));
     }, [id]);
+    
 
     if (loading) {
         return <div>Loading...</div>;
@@ -235,22 +350,22 @@ export default function Profile() {
                                     </div>
                                     <form className='flex flex-col'>
                                         <label htmlFor="firstname" className='title-firstname'>ชื่อ</label>
-                                        <input className='firstname' type="text" value={studentData?.firstName || ''} readOnly />
+                                        <input className='firstname' type="text" value={studentData?.studentProfile?.firstName || ''} readOnly />
 
                                         <label htmlFor="lastname" className='title-lastname'>นามสกุล</label>
-                                        <input className='lastname' type="text" value={studentData?.lastName || ''} readOnly />
+                                        <input className='lastname' type="text" value={studentData?.studentProfile?.lastName || ''} readOnly />
 
                                         <label htmlFor="studentid" className='title-studentid'>รหัสประจำตัวนิสิต</label>
-                                        <input className='studentid' type="text" value={studentData?.studentID || ''} readOnly />
+                                        <input className='studentid' type="text" value={studentData?.studentProfile?.studentID || ''} readOnly />
 
                                         <label htmlFor="number-phone" className='title-numberphone'>เบอร์โทรศัพท์</label>
-                                        <input className='number-phone' type="text" value={studentData?.phoneNumber || ''} readOnly />
+                                        <input className='number-phone' type="text" value={studentData?.studentProfile?.phoneNumber || ''} readOnly />
 
                                         <label htmlFor="faculty" className='title-faculty'>คณะ</label>
-                                        <input className='faculty' type="text" value={studentData?.faculty || ''} readOnly />
+                                        <input className='faculty' type="text" value={studentData?.studentProfile?.faculty || ''} readOnly />
 
                                         <label htmlFor="major" className='title-major'>สาขา</label>
-                                        <input className='major' type="text" value={studentData?.major || ''} readOnly />
+                                        <input className='major' type="text" value={studentData?.studentProfile?.major || ''} readOnly />
 
                                         <label htmlFor="cv" className='title-cv'>CV</label>
                                         <div className='cv'>
@@ -275,10 +390,10 @@ export default function Profile() {
                                         </div>
 
                                         <label htmlFor="start-intern" className='title-start-intern'>วันที่เริ่มฝึกงาน</label>
-                                        <input className='start-intern' type="text" value={formatDate(studentData?.internStartDate || '')} readOnly />
+                                        <input className='start-intern' type="text" value={formatDate(studentData?.studentProfile?.internStartDate || '')} readOnly />
 
                                         <label htmlFor="end-intern" className='title-end-intern'>วันที่เลิกฝึกงาน</label>
-                                        <input className='end-intern' type="text" value={formatDate(studentData?.internEndDate || '')} readOnly />
+                                        <input className='end-intern' type="text" value={formatDate(studentData?.studentProfile?.internEndDate || '')} readOnly />
                                     </form>
                                 </div>
                                 <div className='btn-edit flex justify-center'>
