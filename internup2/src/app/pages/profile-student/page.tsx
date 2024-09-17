@@ -129,11 +129,14 @@ export default function Profile() {
             // Upload profile image if present and not a string
             if (profileIMG) {
                 const imageFormData1 = new FormData();
-                imageFormData1.append('file', profileIMG);
+                imageFormData1.append('files', profileIMG);
     
                 try {
                     const imageResponse1 = await fetch(imageUploadUrl, {
                         method: 'POST',
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
                         body: imageFormData1,
                     });
                     const imageResponseData1 = await imageResponse1.json();
@@ -155,11 +158,14 @@ export default function Profile() {
             // Upload CV if present and not a string
             if (cv) {
                 const imageFormData2 = new FormData();
-                imageFormData2.append('file', cv);
+                imageFormData2.append('files', cv);
     
                 try {
                     const imageResponse2 = await fetch(imageUploadUrl, {
                         method: 'POST',
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
                         body: imageFormData2,
                     });
                     const imageResponseData2 = await imageResponse2.json();
@@ -181,11 +187,14 @@ export default function Profile() {
             // Upload transcript if present and not a string
             if (transcript) {
                 const imageFormData3 = new FormData();
-                imageFormData3.append('file', transcript);
+                imageFormData3.append('files', transcript);
     
                 try {
                     const imageResponse3 = await fetch(imageUploadUrl, {
                         method: 'POST',
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
                         body: imageFormData3,
                     });
                     const imageResponseData3 = await imageResponse3.json();
