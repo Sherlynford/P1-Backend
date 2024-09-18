@@ -80,13 +80,26 @@ export default function Profile() {
     const [imgPreview, setImgPreview] = useState('');
     const [cvPreview, setCvPreview] = useState('');
     const [transcriptPreview, setTranscriptPreview] = useState('');
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { id, value, type, files } = event.target as HTMLInputElement;
+    const handleChange = (event) => {
+        const { id, value, type, files } = event.target;
         if (type === 'file') {
-            const file = files ? files[0] : null;
+            const file = files[0] ;
+            let fieldName: string;
+            if (id === 'imgFile') {
+                fieldName = 'profileIMG';
+            } else if (id === 'cvFile') {
+                fieldName = 'cv';
+            } else if (id === 'transcriptFile') {
+                fieldName = 'transcript';
+            }
+        
             setFormData(prevState => ({
                 ...prevState,
-                [id]: file || ''
+                [fieldName]: file
+            }));
+            setFormData(prevState => ({
+                ...prevState,
+                [id]: file
             }));
 
             // Generate and set file preview
@@ -134,16 +147,13 @@ export default function Profile() {
                 try {
                     const imageResponse1 = await fetch(imageUploadUrl, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        },
                         body: imageFormData1,
                     });
                     const imageResponseData1 = await imageResponse1.json();
     
                     if (
                         imageResponse1.ok &&
-                        imageResponseData1.fileUrls &&
+                        Array.isArray(imageResponseData1.fileUrls) &&
                         imageResponseData1.fileUrls.length > 0
                     ) {
                         profileIMGUrl = imageResponseData1.fileUrls[0];
@@ -163,16 +173,13 @@ export default function Profile() {
                 try {
                     const imageResponse2 = await fetch(imageUploadUrl, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        },
                         body: imageFormData2,
                     });
                     const imageResponseData2 = await imageResponse2.json();
     
                     if (
                         imageResponse2.ok &&
-                        imageResponseData2.fileUrls &&
+                        Array.isArray(imageResponseData2.fileUrls) &&
                         imageResponseData2.fileUrls.length > 0
                     ) {
                         cvUrl = imageResponseData2.fileUrls[0];
@@ -192,16 +199,13 @@ export default function Profile() {
                 try {
                     const imageResponse3 = await fetch(imageUploadUrl, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        },
                         body: imageFormData3,
                     });
                     const imageResponseData3 = await imageResponse3.json();
     
                     if (
                         imageResponse3.ok &&
-                        imageResponseData3.fileUrls &&
+                        Array.isArray(imageResponseData3.fileUrls) &&
                         imageResponseData3.fileUrls.length > 0
                     ) {
                         transcriptUrl = imageResponseData3.fileUrls[0];
@@ -265,7 +269,7 @@ export default function Profile() {
                 setImgPreview('');
                 setCvPreview('');
                 setTranscriptPreview('');
-                // window.location.href = '/pages/profile-student';
+                window.location.href = '/pages/profile-student';
             } else {
                 const responseData = await response.json();
                 const errorMessage = responseData.message || 'ไม่สามารถบันทึกข้อมูลได้ กรุณาลองอีกครั้ง';
@@ -277,11 +281,7 @@ export default function Profile() {
         } finally {
             setLoading(false);
         }
-    };
-    
-    
-    
-    
+    }; 
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -349,12 +349,11 @@ export default function Profile() {
                             <div className='block-profile'>
                                 <div className='content-profile'>
                                     <div className='image-student flex justify-center'>
-                                        <Image
-                                            src={Profilestudent1}
+                                        <img
+                                            src={studentData?.studentProfile?.profileIMG || Profilestudent1}
                                             alt='Profile picture of student'
                                             width={150}
                                             height={150}
-                                            layout='fixed'
                                         />
                                     </div>
                                     <form className='flex flex-col'>
@@ -378,23 +377,21 @@ export default function Profile() {
 
                                         <label htmlFor="cv" className='title-cv'>CV</label>
                                         <div className='cv'>
-                                            <Image
-                                                src={IMGCV}
+                                            <img
+                                                src={studentData?.studentProfile?.cv || IMGCV}
                                                 alt='CV document'
                                                 width={150}
                                                 height={150}
-                                                layout='fixed'
                                             />
                                         </div>
 
                                         <label htmlFor="transcript" className='title-transcript'>Transcript</label>
                                         <div className='transcript'>
-                                            <Image
-                                                src={Transcript}
+                                            <img
+                                                src={studentData?.studentProfile?.transcript || Transcript}
                                                 alt='Transcript document'
                                                 width={150}
                                                 height={150}
-                                                layout='fixed'
                                             />
                                         </div>
 

@@ -172,7 +172,7 @@ export default function Profile() {
           <div className="block-profile">
             <div className="content-profile">
               <div className="image-teacher flex justify-center">
-                <Image
+                <img
                   src={teacherData.teacherProfile?.profileIMG}
                   alt="Profile picture"
                 />
