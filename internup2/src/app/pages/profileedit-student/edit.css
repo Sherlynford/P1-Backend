@@ -16,6 +16,13 @@ body{
     height: 180px;
     border-radius: 100%;
 }
+.change-img img{
+    border-radius: 100%;
+}
+
+.upload-img label{
+    height: 100%;
+}
 .edit-profile label{
     font-size: 24px;
     color: black;

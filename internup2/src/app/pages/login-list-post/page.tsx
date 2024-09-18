@@ -6,14 +6,6 @@ import axios from 'axios';
 import JobCard from '../../component/card/page'; // Adjust the path if necessary
 import { useRouter } from 'next/navigation';
 
-interface Job {
-    topic: string;
-    organizationName: string;
-    dateTime: string;
-    detail: string;
-    location: string;
-    img: string;
-}
 
 export default function Home() {
     const [jobs, setJobs] = useState<Job[]>([]);

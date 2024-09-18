@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../profile-student/profile.css';
-import Image from 'next/image';
 import Navbarstudent from '../../component/navbar-student/page';
 import Profilestudent1 from '../../image/img-student2.png'; // Placeholder image
 import IMGCV from '../../image/img-cv.png'; // Placeholder image
@@ -44,14 +43,9 @@ const formatDate = (dateString: string) => {
     if (regex.test(dateString)) {
         return dateString;
     }
-
-
 };
 
-
 const imageUploadUrl = 'http://localhost:8080/api/students/upload';
-const cvurl = 'http://localhost:8080/api/students/upload';
-const transcripturl = 'http://localhost:8080/api/students/upload';
 const url = 'http://localhost:8080/api/students/';
 
 export default function Profile() {
@@ -218,7 +212,6 @@ export default function Profile() {
             }
     
             // Log URLs for debugging
-
     
             // Prepare data to be posted
             const postData = {
