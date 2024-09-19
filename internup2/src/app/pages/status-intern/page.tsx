@@ -117,11 +117,22 @@ export default function ProfileEdit() {
                                             <td>{application.organizationPhone}</td>
                                             <td>{new Date(application.applicationDate).toLocaleDateString()}</td>
                                             <td>{application.applicationStatus}</td>
-                                            <td>
-                                                <button className='edit'>
-                                                    <Image src={Imgedit} alt='image button edit' onClick={(e) => { e.preventDefault(); window.location.href = '/pages/ManualpostEdit'; }}/>
-                                                </button>
-                                            </td>
+                                         <td>
+    <button className='edit'>
+        <Image 
+            src={Imgedit} 
+            alt='image button edit' 
+            onClick={(e) => {
+                e.preventDefault();
+                // Store the selected application in localStorage
+                localStorage.setItem('selectedApplication', JSON.stringify(application));
+                // Redirect to the edit page
+                window.location.href = '/pages/ManualpostEdit';
+            }}
+        />
+    </button>
+</td>
+
                                         </tr>
                                     ))}
                                 </tbody>

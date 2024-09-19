@@ -74,27 +74,29 @@ export default function Manualpost() {
 
     useEffect(() => {
         if (!id) return;
-        axios.get(`${url}?studentId=${id}`)
-            .then(response => {
-                const application = response.data[0]; // หรือเลือก application ที่ต้องการ
-                if (application) {
-                    setApplicationId(application.id); // เก็บ ID ของการสมัครงานที่ดึงมา
-                    setFormData({
-                        organizationName: application.organizationName,
-                        organizationAddress: application.organizationAddress,
-                        organizationEmail: application.organizationEmail,
-                        organizationPhone: application.organizationPhone,
-                        jobName: application.jobName,
-                        applicationStatus: application.applicationStatus,
-                        applicationDate: new Date(application.applicationDate),
-                    });
-                }
-            })
-            .catch(err => {
-                setError(err.message);
-                console.error("Error fetching job application:", err);
+    
+        // Get the selected application from localStorage
+        const storedApplication = localStorage.getItem('selectedApplication');
+    
+        if (storedApplication) {
+            const application = JSON.parse(storedApplication);
+    
+            // Set the form data using the application stored in localStorage
+            setApplicationId(application.id); // เก็บ ID ของการสมัครงานที่ดึงมา
+            setFormData({
+                organizationName: application.organizationName,
+                organizationAddress: application.organizationAddress,
+                organizationEmail: application.organizationEmail,
+                organizationPhone: application.organizationPhone,
+                jobName: application.jobName,
+                applicationStatus: application.applicationStatus,
+                applicationDate: new Date(application.applicationDate),
             });
+        } else {
+            setError('No application found in local storage');
+        }
     }, [id]);
+    
     
     const handleChange = (event) => {
         const { id, value } = event.target;
