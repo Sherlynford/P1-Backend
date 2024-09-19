@@ -31,6 +31,7 @@ const url = 'http://localhost:8080/api/ManualJobApplications/';
 
 export default function Manualpost() {
     const [studentData, setStudentData] = useState(null);
+    const [studentProfileId, setStudentProfileId] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [id, setId] = useState(null);
@@ -52,9 +53,9 @@ export default function Manualpost() {
             return;
         }
         const decoded = parseJwt(token);
-        console.log(decoded);
         if (decoded) {
             setId(decoded.id || null);
+            setStudentProfileId(decoded.studentProfileId || null);
         } else {
             setLoading(false);
         }
@@ -105,7 +106,7 @@ export default function Manualpost() {
                 ...formData,
                 applicationDate: applicationDate.toISOString().split('T')[0],
                 studentProfile: {
-                    id: id // หรือ ID ของ StudentProfile ที่ถูกต้อง
+                    id: studentProfileId // หรือ ID ของ StudentProfile ที่ถูกต้อง
                 }
             }, {
                 headers: {

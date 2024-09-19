@@ -5,8 +5,37 @@ import Navbarteacher from '../../component/navbar-Teacher/page';
 import Image from 'next/image';
 import Imgedit from '../../image/img-edit.png'
 import AuthGuard from '../../component/checktoken/AuthGuard';
+import { useState } from 'react';
+
+function parseJwt(token: string) {
+    try {
+        const base64Url = token.split(".")[1]; // Extract the payload from JWT
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/"); // Handle Base64 encoding
+        const jsonPayload = decodeURIComponent(
+            atob(base64)
+                .split("")
+                .map(function (c) {
+                    return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+                })
+                .join("")
+        );
+
+        return JSON.parse(jsonPayload); // Convert the result to a JSON object
+    } catch (error) {
+        console.error("Invalid JWT token");
+        return null;
+    }
+}
+
+const url = 'http://localhost:8080/api/ManualJobApplications/';
 
 export default function Status() {
+    const [major, setMajor] = useState([]);
+    const [jobApplications, setJobApplications] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [id, setId] = useState(null);
+    const [searchTerm, setSearchTerm] = useState(''); // State สำหรับเก็บคำค้นหา
 
     return <AuthGuard><><div>
         <Navbarteacher />

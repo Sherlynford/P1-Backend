@@ -87,7 +87,6 @@ export default function ProfileEdit() {
                         phoneNumber: teacherProfile.phoneNumber || '',
                         profileIMG: '',
                     });
-                    console.log(teacherProfile);
                 })
                 .catch(err => {
                     console.error("Error fetching teacher data:", err);

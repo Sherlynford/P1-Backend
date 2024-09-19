@@ -66,7 +66,6 @@ export default function Register() {
         if (isConfirmed) {
             try {
                 const response = await axios.post('http://localhost:8080/api/persons/', user);
-                // console.log('Response:', response.data);
 
                 setUserRole("");
                 setEmail("");

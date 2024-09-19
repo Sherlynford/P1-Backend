@@ -51,7 +51,6 @@ export default function NavberLogin() {
         return;
     }
     const decoded = parseJwt(token);
-    console.log(decoded);
     if (decoded) {
         setId(decoded.id || null);
     } else {
@@ -66,7 +65,6 @@ useEffect(() => {
           const teacherProfile = response.data.teacherProfile;
 
           // Log the full response for debugging
-          console.log(response.data);
 
           // Check if studentProfile exists, and update the states accordingly
           if (teacherProfile) {

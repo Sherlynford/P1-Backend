@@ -285,7 +285,6 @@ export default function Profile() {
             return;
         }
         const decoded = parseJwt(token);
-        console.log(decoded);
         if (decoded) {
             setId(decoded.id || null);
         } else {
@@ -304,7 +303,6 @@ export default function Profile() {
                 const studentProfile = response.data.studentProfile;
     
                 // Log the full response for debugging
-                console.log(response.data);
     
                 // Check if studentProfile exists, and update the states accordingly
                 if (studentProfile) {
