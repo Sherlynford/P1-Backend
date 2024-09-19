@@ -28,21 +28,17 @@ function parseJwt(token: string) {
         return null;
     }
 }
-const formatDate = (dateString: string) => {
-    // Check if dateString is in the format 'DD/MM/YYYY'
-    const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
-    const match = dateString.match(regex);
-
-    if (match) {
-        const day = match[1];
-        const month = match[2];
-        const year = match[3];
-        return `${day}/${month}/${year}`; // Return in the same format
-    }
-
-    // If it's not in the expected format, return an empty string or handle accordingly
-    return '';
+const formatDate = (date: Date | null) => {
+    if (!date) return ''; // หรือ return null ขึ้นอยู่กับที่ API ต้องการ
+    if (!(date instanceof Date)) throw new Error('Invalid date object');
+    
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`; // ส่งในรูปแบบที่ต้องการ
 };
+
+
 
 const imageUploadUrl = 'http://localhost:8080/api/students/upload';
 const cvurl = 'http://localhost:8080/api/students/upload';
@@ -52,8 +48,8 @@ const url = 'http://localhost:8080/api/students/';
 export default function ProfileEdit() {
     const [studentData, setStudentData] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [id, setId] = useState(null);
+    const [studentProfileId, setStudentProfileId] = useState(null);
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [formData, setFormData] = useState<any>({
@@ -68,7 +64,7 @@ export default function ProfileEdit() {
         cv: '',
         transcript: '',
         profileIMG: '',
-    }); 
+    });
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -77,12 +73,12 @@ export default function ProfileEdit() {
             return;
         }
         const decoded = parseJwt(token);
-        console.log("Decoded Token:", decoded);
         if (decoded) {
             setId(decoded.id || null);
+            setStudentProfileId(decoded.studentProfileId || null); // Set studentProfileId
         }
         setLoading(false);
-    }, []);
+    }, [])
 
     useEffect(() => {
         if (studentData) {
@@ -93,24 +89,44 @@ export default function ProfileEdit() {
                 major: studentData.major || '',
                 studentID: studentData.studentID || '',
                 phoneNumber: studentData.phoneNumber || '',
-                internStartDate: studentData.internStartDate || '',
-                internEndDate: studentData.internEndDate || '',
-                cv: '',
-                transcript: '',
-                profileIMG: '',
+                cv: studentData.cv || '', // เก็บ URL ของ CV
+                transcript: studentData.transcript || '', // เก็บ URL ของ Transcript
+                profileIMG: studentData.profileIMG || '', // เก็บ URL ของ Profile Image
             });
+            setImgPreview(studentData.profileIMG);
+            setCvPreview(studentData.cv);
+            setTranscriptPreview(studentData.transcript);
+            setStartDate(studentData.internStartDate ? new Date(studentData.internStartDate) : null);
+            setEndDate(studentData.internEndDate ? new Date(studentData.internEndDate) : null);
         }
     }, [studentData]);
-    
+
     useEffect(() => {
-        if (!id) return;
-        axios.get(`http://localhost:8080/api/persons/${id}`)
-            .then(response => setStudentData(response.data))
-            .catch(err => {
-                setError(err.message);
-                console.error("Error fetching teacher data:", err);
-            })
-            .finally(() => setLoading(false));
+        if (id) {
+            axios.get(`http://localhost:8080/api/persons/${id}`)
+                .then(response => {
+                    const studentProfile = response.data.studentProfile; // ดึง studentProfile
+                    setStudentData(studentProfile);
+                    setFormData({
+                        firstName: studentProfile.firstName || '',
+                        lastName: studentProfile.lastName || '',
+                        faculty: studentProfile.faculty || '',
+                        major: studentProfile.major || '',
+                        studentID: studentProfile.studentID || '',
+                        phoneNumber: studentProfile.phoneNumber || '',
+                        internStartDate: studentProfile.internStartDate || '',
+                        internEndDate: studentProfile.internEndDate || '',
+                        cv: '',
+                        transcript: '',
+                        profileIMG: '',
+                    });
+                    console.log(studentProfile);
+                })
+                .catch(err => {
+                    console.error("Error fetching student data:", err);
+                })
+                .finally(() => setLoading(false));
+        }
     }, [id]);
 
     const [imgPreview, setImgPreview] = useState('');
@@ -123,7 +139,7 @@ export default function ProfileEdit() {
             const files = target.files;
             const file = files[0];
             let fieldName: string;
-    
+
             if (target.id === 'imgFile') {
                 fieldName = 'profileIMG';
                 setImgPreview(URL.createObjectURL(file));
@@ -134,7 +150,7 @@ export default function ProfileEdit() {
                 fieldName = 'transcript';
                 setTranscriptPreview(URL.createObjectURL(file));
             }
-    
+
             if (fieldName) {
                 setFormData((prevState: any) => ({
                     ...prevState,
@@ -148,14 +164,13 @@ export default function ProfileEdit() {
             }));
         }
     };
-    
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault(); // Prevent default form submission
-    
-        const { firstName, lastName, faculty, major, studentID, phoneNumber } = formData;
+        event.preventDefault();
         
-          // Show SweetAlert for confirmation
-          const result = await Swal.fire({
+        const { firstName, lastName, faculty, major, studentID, phoneNumber } = formData;
+    
+        const result = await Swal.fire({
             title: 'ยืนยันการบันทึกข้อมูล?',
             text: "คุณแน่ใจว่าต้องการบันทึกข้อมูลนี้หรือไม่?",
             icon: 'warning',
@@ -163,26 +178,15 @@ export default function ProfileEdit() {
             confirmButtonText: 'ตกลง',
             cancelButtonText: 'ยกเลิก'
         });
-    
-        // Validate required fields
-        if (!firstName || !lastName || !faculty || !major || !studentID || !phoneNumber) {
-            Swal.fire({
-                icon: 'error',
-                title: 'ข้อมูลไม่ครบถ้วน',
-                text: 'กรุณากรอกข้อมูลให้ครบทุกช่องที่จำเป็น!',
-            });
-            return;
-        }
-
+        
         if (result.isConfirmed) {
             setLoading(true);
-    
             const uploadPromises: Promise<any>[] = [];
             let errorMessages: string[] = [];
     
             try {
                 const token = localStorage.getItem('token');
-    
+                
                 // File upload handling
                 const handleFileUpload = async (file: File, url: string) => {
                     const formData = new FormData();
@@ -196,45 +200,45 @@ export default function ProfileEdit() {
                     }
                 };
     
-                // Upload files
-                if (formData.profileIMG) {
-                    uploadPromises.push(handleFileUpload(formData.profileIMG, imageUploadUrl).catch(err => {
+                // Upload files and keep existing URLs if not uploaded
+                const profileImgUrl = formData.profileIMG instanceof File
+                    ? await handleFileUpload(formData.profileIMG, imageUploadUrl).catch(err => {
                         errorMessages.push(err.message);
-                        return '';
-                    }));
-                }
+                        return studentData.profileIMG; // Use existing URL
+                    })
+                    : studentData.profileIMG;
     
-                if (formData.cv) {
-                    uploadPromises.push(handleFileUpload(formData.cv, cvurl).catch(err => {
+                const cvUrl = formData.cv instanceof File
+                    ? await handleFileUpload(formData.cv, cvurl).catch(err => {
                         errorMessages.push(err.message);
-                        return '';
-                    }));
-                }
+                        return studentData.cv; // Use existing URL
+                    })
+                    : studentData.cv;
     
-                if (formData.transcript) {
-                    uploadPromises.push(handleFileUpload(formData.transcript, transcripturl).catch(err => {
+                const transcriptUrl = formData.transcript instanceof File
+                    ? await handleFileUpload(formData.transcript, transcripturl).catch(err => {
                         errorMessages.push(err.message);
-                        return '';
-                    }));
-                }
+                        return studentData.transcript; // Use existing URL
+                    })
+                    : studentData.transcript;
     
-                const fileUrls = await Promise.all(uploadPromises);
                 const putData = {
-                    person: { id: id || "" },
+                    person: { id: studentProfileId || "" },
                     firstName,
                     lastName,
                     phoneNumber,
                     faculty,
                     major,
-                    profileIMG: fileUrls[0] || '',
-                    cv: fileUrls[1] || '',
-                    transcript: fileUrls[2] || '',
-                    internStartDate: startDate ? formatDate(startDate.toISOString()) : '',
-                    internEndDate: endDate ? formatDate(endDate.toISOString()) : '',
+                    profileIMG: profileImgUrl,
+                    cv: cvUrl,
+                    transcript: transcriptUrl,
+                    internStartDate: startDate ? formatDate(startDate) : null,
+                    internEndDate: endDate ? formatDate(endDate) : null,
                     studentID,
                 };
     
-                const response = await fetch(`${url}${id}`, {
+                // Send updated data
+                const response = await fetch(`${url}${studentProfileId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -245,7 +249,7 @@ export default function ProfileEdit() {
     
                 if (response.ok) {
                     Swal.fire('สำเร็จ', 'บันทึกข้อมูลสำเร็จ!', 'success');
-                    resetForm(); // Utility function to reset form
+                    resetForm();
                     window.location.href = '/pages/profile-student';
                 } else {
                     const responseData = await response.json();
@@ -281,139 +285,136 @@ export default function ProfileEdit() {
         });
         setStartDate(null);
         setEndDate(null);
-        setImgPreview('');
-        setCvPreview('');
-        setTranscriptPreview('');
     };
-    
-      
+
     if (loading) {
         return <div>Loading...</div>;
     }
+
     return <AuthGuard><><div>
-    <Navbarstudent />
-</div>
-    <section className='profileedit-student'>
-        <div className='flex items-center justify-center'>
-            <div className='block-profileedit'>
-                <div className='content-profileedit'>
-                    <form className='edit-profile flex flex-col' onSubmit={handleSubmit}>
-                        <div className='image-student flex justify-center'>
-                            <div className="change-img flex items-center justify-center">
-                                <label htmlFor="imgFile" className="change-img flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                        {imgPreview ? (
-                                            <img src={imgPreview} alt="Uploaded preview" className="w-full h-full object-cover object-center border-none backgroung-white rounded-lg" />
-                                        ) : (
-                                            <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                            </svg>
-                                        )}
-                                    </div>
-                                    <input id="imgFile" type="file" className="hidden" onChange={handleChange} />
-                                </label>
+        <Navbarstudent />
+    </div>
+        <section className='profileedit-student'>
+            <div className='flex items-center justify-center'>
+                <div className='block-profileedit'>
+                    <div className='content-profileedit'>
+                        <form className='edit-profile flex flex-col' onSubmit={handleSubmit}>
+                            <div className='image-student flex justify-center'>
+                                <div className="change-img flex items-center justify-center">
+                                    <label htmlFor="imgFile" className="change-img flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                            {imgPreview ? (
+                                                <img src={imgPreview} alt="Uploaded preview" className="w-full h-full object-cover object-center border-none backgroung-white rounded-lg" />
+                                            ) : (
+                                                <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                                </svg>
+                                            )}
+                                        </div>
+                                        <input id="imgFile" type="file" className="hidden" onChange={handleChange} />
+                                    </label>
+                                </div>
                             </div>
-                        </div>
 
-                        <label htmlFor="firstName" className='title-firstname'>ชื่อ</label>
-                        <input id="firstName" className='firstname' type="text" placeholder='กรุณากรอกชื่อ' value={formData.firstName} onChange={handleChange} />
+                            <label htmlFor="firstName" className='title-firstname'>ชื่อ</label>
+                            <input id="firstName" className='firstname' type="text" placeholder='กรุณากรอกชื่อ' value={formData.firstName} onChange={handleChange} />
 
-                        <label htmlFor="lastName" className='title-lastName'>นามสกุล</label>
-                        <input id="lastName" className='lastname' type="text" placeholder='กรุณากรอกนามสกุล' value={formData.lastName} onChange={handleChange} />
+                            <label htmlFor="lastName" className='title-lastName'>นามสกุล</label>
+                            <input id="lastName" className='lastname' type="text" placeholder='กรุณากรอกนามสกุล' value={formData.lastName} onChange={handleChange} />
 
-                        <label htmlFor="studentID" className='title-studentid'>รหัสประจำตัวนิสิต</label>
-                        <input id="studentID" className='studentid' type="text" placeholder='กรุณากรอกรหัสประจำตัวนิสิต' value={formData.studentID} onChange={handleChange} />
+                            <label htmlFor="studentID" className='title-studentid'>รหัสประจำตัวนิสิต</label>
+                            <input id="studentID" className='studentid' type="text" placeholder='กรุณากรอกรหัสประจำตัวนิสิต' value={formData.studentID} onChange={handleChange} />
 
-                        <label htmlFor="phoneNumber" className='title-numberphone'>เบอร์โทรศัพท์</label>
-                        <input id="phoneNumber" className='number-phone' type="text" placeholder='กรุณากรอกเบอร์โทรศัพท์' value={formData.phoneNumber} onChange={handleChange} />
+                            <label htmlFor="phoneNumber" className='title-numberphone'>เบอร์โทรศัพท์</label>
+                            <input id="phoneNumber" className='number-phone' type="text" placeholder='กรุณากรอกเบอร์โทรศัพท์' value={formData.phoneNumber} onChange={handleChange} />
 
-                        <label htmlFor="faculty" className='title-faculty'>คณะ</label>
-                        <select id="faculty" className="faculty" value={formData.faculty} onChange={handleChange}>
-                            <option value="">เลือกคณะ</option>
-                            <option value="คณะเกษตรศาสตร์และทรัพยากรธรรมชาติ">คณะเกษตรศาสตร์และทรัพยากรธรรมชาติ</option>
-                            <option value="คณะเทคโนโลยีสารสนเทศและการสื่อสาร">คณะเทคโนโลยีสารสนเทศและการสื่อสาร</option>
-                            <option value="คณะทันตแพทยศาสตร์">คณะทันตแพทยศาสตร์</option>
-                            <option value="คณะนิติศาสตร์">คณะนิติศาสตร์</option>
-                            <option value="คณะบริหารธุรกิจและนิเทศศาสตร์">คณะบริหารธุรกิจและนิเทศศาสตร์</option>
-                            <option value="คณะพยาบาลศาสตร์">คณะพยาบาลศาสตร์</option>
-                            <option value="คณะพลังงานและสิ่งแวดล้อม">คณะพลังงานและสิ่งแวดล้อม</option>
-                            <option value="คณะแพทยศาสตร์">คณะแพทยศาสตร์</option>
-                            <option value="คณะเภสัชศาสตร์">คณะเภสัชศาสตร์</option>
-                            <option value="คณะรัฐศาสตร์และสังคมศาสตร์">คณะรัฐศาสตร์และสังคมศาสตร์</option>
-                            <option value="คณะวิทยาศาสตร์">คณะวิทยาศาสตร์</option>
-                            <option value="คณะวิทยาศาสตร์การแพทย์">คณะวิทยาศาสตร์การแพทย์</option>
-                            <option value="คณะวิทยาศาสตร์การแพทย์">คณะวิศวกรรมศาสตร์</option>
-                            <option value="คณะสถาปัตยกรรมศาสตร์และศิลปกรรมศาสตร์">คณะสถาปัตยกรรมศาสตร์และศิลปกรรมศาสตร์</option>
-                            <option value="คณะสหเวชศาสตร์">คณะสหเวชศาสตร์</option>
-                            <option value="คณะสาธารณสุขศาสตร์">คณะสาธารณสุขศาสตร์</option>
-                            <option value="คณะศิลปศาสตร์">คณะศิลปศาสตร์</option>
-                            <option value="วิทยาลัยการจัดการ">วิทยาลัยการจัดการ</option>
-                            <option value="วิทยาลัยการศึกษา">วิทยาลัยการศึกษา</option>
-                        </select>
+                            <label htmlFor="faculty" className='title-faculty'>คณะ</label>
+                            <select id="faculty" className="faculty" value={formData.faculty} onChange={handleChange}>
+                                <option value="">เลือกคณะ</option>
+                                <option value="คณะเกษตรศาสตร์และทรัพยากรธรรมชาติ">คณะเกษตรศาสตร์และทรัพยากรธรรมชาติ</option>
+                                <option value="คณะเทคโนโลยีสารสนเทศและการสื่อสาร">คณะเทคโนโลยีสารสนเทศและการสื่อสาร</option>
+                                <option value="คณะทันตแพทยศาสตร์">คณะทันตแพทยศาสตร์</option>
+                                <option value="คณะนิติศาสตร์">คณะนิติศาสตร์</option>
+                                <option value="คณะบริหารธุรกิจและนิเทศศาสตร์">คณะบริหารธุรกิจและนิเทศศาสตร์</option>
+                                <option value="คณะพยาบาลศาสตร์">คณะพยาบาลศาสตร์</option>
+                                <option value="คณะพลังงานและสิ่งแวดล้อม">คณะพลังงานและสิ่งแวดล้อม</option>
+                                <option value="คณะแพทยศาสตร์">คณะแพทยศาสตร์</option>
+                                <option value="คณะเภสัชศาสตร์">คณะเภสัชศาสตร์</option>
+                                <option value="คณะรัฐศาสตร์และสังคมศาสตร์">คณะรัฐศาสตร์และสังคมศาสตร์</option>
+                                <option value="คณะวิทยาศาสตร์">คณะวิทยาศาสตร์</option>
+                                <option value="คณะวิทยาศาสตร์การแพทย์">คณะวิทยาศาสตร์การแพทย์</option>
+                                <option value="คณะวิทยาศาสตร์การแพทย์">คณะวิศวกรรมศาสตร์</option>
+                                <option value="คณะสถาปัตยกรรมศาสตร์และศิลปกรรมศาสตร์">คณะสถาปัตยกรรมศาสตร์และศิลปกรรมศาสตร์</option>
+                                <option value="คณะสหเวชศาสตร์">คณะสหเวชศาสตร์</option>
+                                <option value="คณะสาธารณสุขศาสตร์">คณะสาธารณสุขศาสตร์</option>
+                                <option value="คณะศิลปศาสตร์">คณะศิลปศาสตร์</option>
+                                <option value="วิทยาลัยการจัดการ">วิทยาลัยการจัดการ</option>
+                                <option value="วิทยาลัยการศึกษา">วิทยาลัยการศึกษา</option>
+                            </select>
 
-                        <label htmlFor="major" className='title-major'>สาขา</label>
-                        <input id="major" className='major' type="text" placeholder='กรุณากรอกสาขา' value={formData.major} onChange={handleChange} />
+                            <label htmlFor="major" className='title-major'>สาขา</label>
+                            <input id="major" className='major' type="text" placeholder='กรุณากรอกสาขา' value={formData.major} onChange={handleChange} />
 
-                        <label htmlFor="cv" className='title-cv'>CV</label>
-                        <div className='cv cv-uploading'>
-                            <div className="upload-img flex items-center justify-center">
-                                <label htmlFor="cvFile" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                        {cvPreview ? (
-                                            <img src={cvPreview} alt="Uploaded preview" className="w-full h-full object-cover object-center border-none backgroung-white rounded-lg" />
-                                        ) : (
-                                            <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                            </svg>
-                                        )}
-                                    </div>
-                                    <input id="cvFile" type="file" className="hidden" onChange={handleChange} />
-                                </label>
+                            <label htmlFor="cv" className='title-cv'>CV</label>
+                            <div className='cv cv-uploading'>
+                                <div className="upload-img flex items-center justify-center">
+                                    <label htmlFor="cvFile" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                            {cvPreview ? (
+                                                <img src={cvPreview} alt="Uploaded preview" className="w-full h-full object-cover object-center border-none backgroung-white rounded-lg" />
+                                            ) : (
+                                                <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                                </svg>
+                                            )}
+                                        </div>
+                                        <input id="cvFile" type="file" className="hidden" onChange={handleChange} />
+                                    </label>
+                                </div>
                             </div>
-                        </div>
 
-                        <label htmlFor="transcript" className='title-transcript'>Transcript</label>
-                        <div className='transcript transcript-uploading'>
-                            <div className="upload-img flex items-center justify-center">
-                                <label htmlFor="transcriptFile" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                        {transcriptPreview ? (
-                                            <img src={transcriptPreview} alt="Uploaded preview" className="w-full h-full object-cover object-center border-none backgroung-white rounded-lg" />
-                                        ) : (
-                                            <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                            </svg>
-                                        )}
-                                    </div>
-                                    <input id="transcriptFile" type="file" className="hidden" onChange={handleChange} />
-                                </label>
+                            <label htmlFor="transcript" className='title-transcript'>Transcript</label>
+                            <div className='transcript transcript-uploading'>
+                                <div className="upload-img flex items-center justify-center">
+                                    <label htmlFor="transcriptFile" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                            {transcriptPreview ? (
+                                                <img src={transcriptPreview} alt="Uploaded preview" className="w-full h-full object-cover object-center border-none backgroung-white rounded-lg" />
+                                            ) : (
+                                                <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                                </svg>
+                                            )}
+                                        </div>
+                                        <input id="transcriptFile" type="file" className="hidden" onChange={handleChange} />
+                                    </label>
+                                </div>
                             </div>
-                        </div>
 
-                        <label htmlFor="start-intern" className='title-start-intern'>วันที่เริ่มฝึกงาน</label>
-                        <DatePicker
-                            selected={startDate}
-                            onChange={(date) => setStartDate(date)}
-                            className="start-intern"
-                            placeholderText="กดเลือกวันที่เริ่มฝึกงาน"
-                        />
+                            <label htmlFor="start-intern" className='title-start-intern'>วันที่เริ่มฝึกงาน</label>
+                            <DatePicker
+                                selected={startDate}
+                                onChange={(date) => setStartDate(date)}
+                                className="start-intern"
+                                placeholderText="กดเลือกวันที่เริ่มฝึกงาน"
+                            />
 
-                        <label htmlFor="end-intern" className='title-end-intern'>วันที่เลิกฝึกงาน</label>
-                        <DatePicker
-                            selected={endDate}
-                            onChange={(date) => setEndDate(date)}
-                            className="end-intern"
-                            placeholderText="กดเลือกวันที่เลิกฝึกงาน"
-                        />
-                        <div className='btn-confirm-cancel flex justify-between'>
-                            <button className='confirm'>ตกลง</button>
-                            <button className='cancel' onClick={(e) => {  e.preventDefault(); window.location.href = '/pages/profile-student'; }}>ยกเลิก</button>
-                        </div>
-                    </form>
+                            <label htmlFor="end-intern" className='title-end-intern'>วันที่เลิกฝึกงาน</label>
+                            <DatePicker
+                                selected={endDate}
+                                onChange={(date) => setEndDate(date)}
+                                className="end-intern"
+                                placeholderText="กดเลือกวันที่เลิกฝึกงาน"
+                            />
+                            <div className='btn-confirm-cancel flex justify-between'>
+                                <button className='confirm'>ตกลง</button>
+                                <button className='cancel' onClick={(e) => { e.preventDefault(); window.location.href = '/pages/profile-student'; }}>ยกเลิก</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-</>
-</AuthGuard>
+        </section>
+    </>
+    </AuthGuard>
 }
