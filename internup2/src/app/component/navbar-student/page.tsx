@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import './nav-student.css';
 import Image from 'next/image';
 import Logo from '../../image/UP-Logo.png';
 import Profilestudent from '../../image/img-student.png';
+import axios from 'axios';
 
 function parseJwt(token: string) {
   try {
@@ -32,8 +33,11 @@ const url = 'http://localhost:8080/api/students/';
 export default function NavberLogin() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const router = useRouter();
+  const [id, setId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
-    profileIMG: '',
+    studentProfile: {
+      profileIMG: '',
+    },
   });
 
   
@@ -41,6 +45,36 @@ export default function NavberLogin() {
   const toggleDropdown = () => {
     setIsDropdownOpen(prevState => !prevState);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        return;
+    }
+    const decoded = parseJwt(token);
+    console.log(decoded);
+    if (decoded) {
+        setId(decoded.id || null);
+    } else {
+    }
+}, []);
+
+  useEffect(() => {
+    if (!id) return;
+
+    axios.get(`http://localhost:8080/api/persons/${id}`)
+        .then(response => {
+            const studentProfile = response.data.studentProfile;
+
+            // Log the full response for debugging
+            console.log(response.data);
+
+            // Check if studentProfile exists, and update the states accordingly
+            if (studentProfile) {
+                setFormData(response.data);
+            } 
+        })
+}, [id]);
 
   // Handle Logout
   const handleLogout = () => {
@@ -68,9 +102,9 @@ export default function NavberLogin() {
         </p>
       </div>
       <div className='nav-student-right flex items-center'> 
-        <div className='mr-10'>student</div>
+        <div className='mr-10'>Student</div>
         <button className='profile-student-nav' onClick={toggleDropdown}>
-          <Image id='profileIMG' src={Profilestudent} alt='this is image student' />  
+          <img id='profileIMG' src={formData?.studentProfile?.profileIMG} alt='this is image student' />  
         </button>
         {isDropdownOpen && (
           <div className='dropdown-menu-student'>
