@@ -1,20 +1,79 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter for redirection
 import './nav-teacher.css';
 import Image from 'next/image';
 import Logo from '../../image/UP-Logo.png';
 import Profileteacher from '../../image/img-teacher.png';
+import axios from 'axios';
+
+function parseJwt(token: string) {
+  try {
+    const base64Url = token.split(".")[1]; // Extract the payload from JWT
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/"); // Handle Base64 encoding
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+
+    return JSON.parse(jsonPayload); // Convert the result to a JSON object
+  } catch (error) {
+    console.error("Invalid JWT token");
+    return null;
+  }
+}
+
+const url = 'http://localhost:8080/api/teachers/';
 
 export default function NavberLogin() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const router = useRouter(); // Initialize useRouter for redirection
+  const [id, setId] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    teacherProfile: {
+      profileIMG: '',
+    },
+  });
 
   // Toggle dropdown visibility
   const toggleDropdown = () => {
     setIsDropdownOpen(prevState => !prevState);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        return;
+    }
+    const decoded = parseJwt(token);
+    console.log(decoded);
+    if (decoded) {
+        setId(decoded.id || null);
+    } else {
+    }
+}, []);
+
+useEffect(() => {
+  if (!id) return;
+
+  axios.get(`http://localhost:8080/api/persons/${id}`)
+      .then(response => {
+          const teacherProfile = response.data.teacherProfile;
+
+          // Log the full response for debugging
+          console.log(response.data);
+
+          // Check if studentProfile exists, and update the states accordingly
+          if (teacherProfile) {
+              setFormData(response.data);
+          } 
+      })
+}, [id]);
 
   // Handle Logout
   const handleLogout = () => {
@@ -34,9 +93,9 @@ export default function NavberLogin() {
         <p style={{ marginLeft: "40px" }} onClick={() => router.push('/pages/status-student')}>สถานะนิสิต</p>
       </div>
       <div className='nav-teacher-right flex items-center'>
-      <div className=' mr-10'>student</div>
+      <div className=' mr-10'>Teacher</div>
         <button className='profile-teacher-nav' onClick={toggleDropdown}>
-          <Image src={Profileteacher} alt='this is image teacher' />
+          <img src={formData?.teacherProfile?.profileIMG} alt='this is image teacher' />
         </button>
         {isDropdownOpen && (
           <div className='dropdown-menu'>
