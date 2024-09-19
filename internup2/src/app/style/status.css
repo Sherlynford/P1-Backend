@@ -42,3 +42,20 @@ body{
     padding: 20px 15px;
     text-align: center;
 }
+
+@media screen and (min-width: 1280px) {
+    .status-intern{
+        width: 1200px;
+    }
+    .table-status th{
+        font-size: 20px;
+    }
+}
+@media screen and (min-width: 1440px) {
+    .status-intern{
+        width: 1400px;
+    }
+    .table-status th{
+        font-size: 24px;
+    }
+}

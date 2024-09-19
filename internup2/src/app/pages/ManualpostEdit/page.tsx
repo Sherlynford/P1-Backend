@@ -52,7 +52,6 @@ export default function Manualpost() {
             return;
         }
         const decoded = parseJwt(token);
-        console.log(decoded);
         if (decoded) {
             setId(decoded.id || null);
         } else {
@@ -71,6 +70,32 @@ export default function Manualpost() {
             .finally(() => setLoading(false));
     }, [id]);
 
+    const [applicationId, setApplicationId] = useState(null); // เพิ่มตัวแปรสำหรับเก็บ ID
+
+    useEffect(() => {
+        if (!id) return;
+        axios.get(`${url}?studentId=${id}`)
+            .then(response => {
+                const application = response.data[0]; // หรือเลือก application ที่ต้องการ
+                if (application) {
+                    setApplicationId(application.id); // เก็บ ID ของการสมัครงานที่ดึงมา
+                    setFormData({
+                        organizationName: application.organizationName,
+                        organizationAddress: application.organizationAddress,
+                        organizationEmail: application.organizationEmail,
+                        organizationPhone: application.organizationPhone,
+                        jobName: application.jobName,
+                        applicationStatus: application.applicationStatus,
+                        applicationDate: new Date(application.applicationDate),
+                    });
+                }
+            })
+            .catch(err => {
+                setError(err.message);
+                console.error("Error fetching job application:", err);
+            });
+    }, [id]);
+    
     const handleChange = (event) => {
         const { id, value } = event.target;
         setFormData(prevState => ({
@@ -91,8 +116,7 @@ export default function Manualpost() {
         setLoading(true);
         
         const token = localStorage.getItem('token');
-    
-        // ตรวจสอบว่าฟิลด์ที่จำเป็นถูกกรอกครบหรือไม่
+        
         const { organizationName, organizationAddress, organizationEmail, organizationPhone, jobName, applicationStatus, applicationDate } = formData;
         if (!organizationName || !organizationAddress || !organizationEmail || !organizationPhone || !jobName || !applicationStatus || !applicationDate) {
             Swal.fire('ข้อผิดพลาด', 'กรุณากรอกข้อมูลให้ครบทุกฟิลด์', 'error');
@@ -101,11 +125,12 @@ export default function Manualpost() {
         }
     
         try {
-            const response = await axios.post(url, {
+            // ใช้ applicationId ที่ถูกต้องในการอัปเดต
+            const response = await axios.put(`${url}${applicationId}`, {
                 ...formData,
                 applicationDate: applicationDate.toISOString().split('T')[0],
                 studentProfile: {
-                    id: id // หรือ ID ของ StudentProfile ที่ถูกต้อง
+                    id: id
                 }
             }, {
                 headers: {
@@ -113,18 +138,16 @@ export default function Manualpost() {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-    
-            // แสดง SweetAlert เมื่อสำเร็จ
+            
             Swal.fire({
                 title: 'สำเร็จ!',
-                text: 'การสมัครงานของคุณถูกบันทึกเรียบร้อยแล้ว',
+                text: 'การสมัครงานของคุณถูกอัปเดตเรียบร้อยแล้ว',
                 icon: 'success',
                 confirmButtonText: 'ตกลง'
             }).then(() => {
-                // เปลี่ยนเส้นทางไปยังหน้า mainpage-student
-                window.location.href = '/pages/mainpage-student';
+                window.location.href = '/pages/status-intern';
             });
-    
+        
         } catch (error) {
             if (error.response) {
                 console.error('Error Response:', error.response.data);
