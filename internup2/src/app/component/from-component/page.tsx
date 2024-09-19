@@ -1,7 +1,6 @@
-// components/PdfDownload.tsx
 import { useRef } from 'react';
 import html2pdf from 'html2pdf.js';
-
+import '../../style/form.css';
 const PdfDownload = () => {
     const contentRef = useRef<HTMLDivElement>(null);
 
@@ -9,18 +8,18 @@ const PdfDownload = () => {
         const element = contentRef.current;
 
         if (!element) {
-            console.error("Content element not found!");
+            console.error("ไม่พบเนื้อหาที่จะดาวน์โหลด!");
             return;
         }
 
         const options = {
-            filename: 'GFG.pdf',
+            filename: 'เอกสารของฉัน.pdf',
             margin: 0,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: {
                 scale: 2,
-                useCORS: true, // Enable CORS to handle fonts
-                letterRendering: true, // Improve font rendering
+                useCORS: true,
+                letterRendering: true,
             },
             jsPDF: {
                 unit: 'in',
@@ -30,29 +29,23 @@ const PdfDownload = () => {
         };
 
         html2pdf().set(options).from(element).save().catch((error: any) => {
-            console.error("Error generating PDF: ", error);
+            console.error("เกิดข้อผิดพลาดในการสร้าง PDF: ", error);
         });
     };
 
     return (
         <div>
             <div ref={contentRef} id="content">
-                <h1 style={{ color: 'tomato', fontFamily: 'Noto Sans Thai' }}>
-                    GeeksForGeeks
-                </h1>
-
-                <h2 style={{ fontFamily: 'Noto Sans Thai' }}>Founded by Sandeep Jain</h2>
-
-                <p style={{ fontFamily: 'Noto Sans Thai' }}>A Computer Science portal for geeks.</p>
-
-                <p style={{ fontFamily: 'Noto Sans Thai' }}>
-                    It contains well written, well thought
-                    and well explained computer science
-                    and programming articles.
-                </p>
+                <div className='Form-pdf'>
+                    <div className='flex justify-center'>
+                        <h1>เนื้อหา PDF ของฉัน</h1>
+                        <p>นี่คือเอกสาร PDF ตัวอย่างที่สร้างจากเนื้อหา HTML.</p>
+                    </div>
+                </div>
             </div>
-
-            <button className='pt-5' onClick={downloadPDF}>Download PDF</button>
+            <div className='flex justify-center'>
+                <button className='pt-5' onClick={downloadPDF}>ดาวน์โหลด PDF</button>
+            </div>
         </div>
     );
 };
