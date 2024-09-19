@@ -2,35 +2,44 @@
     width: 100%;
 }
 .form-box{
-    width: 60%;
+    width: 800px;
     height: 100%;
     background: #fff;
     margin: 20px 0;
-    flex-direction: column;
+    flex-direction: column; 
 }
-
+.paragraph span{
+    margin-left: 50px;
+}
 .LogoUP{
     margin-top: 100px;
 }
-.LogoUP img{
+.LogoUP img{    
     display: flex;
     justify-content: center;
-    align-items: center;
+    width: 250px;
+    height: 220px;
 }
 .LogoUP label{
-    font-size: 24px;
     margin-right: 10px;
 }
 .formaddress{
-    height: 50px;
-    width: 200px;
+    height: 30px;
+    width: 150px;
     border-radius: 20px;
 }
 .left-top{
-    margin-top: 150px;
+    margin-left: 50px;
+    margin-top: 100px;
+}
+.right-top{ 
+    margin-right: 20px;
 }
 .formdate{
-    height: 50px;
+    margin-left: 100px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    height: 30px;
     width: 200px;
     border-radius: 20px;
 }
