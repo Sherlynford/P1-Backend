@@ -120,7 +120,6 @@ export default function ProfileEdit() {
                         transcript: '',
                         profileIMG: '',
                     });
-                    console.log(studentProfile);
                 })
                 .catch(err => {
                     console.error("Error fetching student data:", err);

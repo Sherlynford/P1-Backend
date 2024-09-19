@@ -8,11 +8,12 @@ import Imgedit from '../../image/img-edit.png';
 import AuthGuard from '../../component/checktoken/AuthGuard';
 import axios from 'axios';
 
-const url = 'http://localhost:8080/api/ManualJobApplications/';
+const url2 = 'http://localhost:8080/api/students/';
 
 export default function ProfileEdit() {
     const [jobApplications, setJobApplications] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [studentProfileId, setStudentProfileId] = useState(null);
     const [error, setError] = useState(null);
     const [id, setId] = useState(null);
     const [searchTerm, setSearchTerm] = useState(''); // State สำหรับเก็บคำค้นหา
@@ -22,23 +23,26 @@ export default function ProfileEdit() {
         const decoded = parseJwt(token);
         if (decoded) {
             setId(decoded.id || null);
+            setStudentProfileId(decoded.studentProfileId || null);
         } else {
             setLoading(false);
         }
     }, []);
-
     useEffect(() => {
-        if (!id) return;
-
-        // ดึงข้อมูลการสมัครงาน
-        axios.get(`${url}?studentId=${id}`)
-            .then(response => setJobApplications(response.data))
+        if (!studentProfileId) return; // Ensure studentProfileId is available before making the request
+    
+        // Fetch job applications based on studentProfileId
+        axios.get(`${url2}${studentProfileId}`)
+            .then(response => {
+                console.log("Fetched job applications:", response.data.manualJobApplications); // Log the response data directly
+                setJobApplications(response.data.manualJobApplications); // Update state with fetched data
+            })
             .catch(err => {
                 setError(err.message);
                 console.error("Error fetching job applications:", err);
             })
             .finally(() => setLoading(false));
-    }, [id]);
+    }, [studentProfileId]); // Add studentProfileId to the dependency array
 
     const parseJwt = (token) => {
         try {
