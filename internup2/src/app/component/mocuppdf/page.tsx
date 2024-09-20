@@ -1,0 +1,59 @@
+import React from 'react';
+import '../../component/mocuppdf/pdf.css';
+import Image from 'next/image';
+import LogoUp from '../../image/logo.jpg';
+
+const Mocuppdf = () => {
+    return (
+        <div>
+            <div className='Form-pdf flex justify-center'>
+                <div>
+                    <div className='form-box flex'>
+                        <div className='LogoUP flex justify-between'>
+                            <div className='left-top flex items-center'>
+                                <p>ที่ อว ๗๓๑๙ / ว ๐041</p>
+                            </div>
+                            <Image src={LogoUp} alt='Logo UP' />
+                            <p className='right-top'>
+                                คณะเทคโนโลยีสารสนเทศและการสื่อสาร <br />
+                                มหาวิทยาลัยพะเยา <br />
+                                ตำบลแม่กา อำเภอเมือง <br />
+                                จังหวัดพะเยา ๕๖๐๐๐ <br />
+                            </p>
+                        </div>
+                        <div className='Date flex justify-center'>
+                            <p>2 กุมภาพันธ์ ๒๕๖7</p>
+                        </div>
+                        <div className='content-form'>
+                            <p>เรื่อง <span>ขอส่งนิสิตเข้ารับการฝึกประสบกการณ์ทางด้านวิชาชีพ</span></p>
+                            <p>เรียน <span>กรรมการบริษัท ซอฟต์สแควร์ อินเตอร์เนชั่นแนล จำกัด</span></p>
+                            <p className='paragraph'><span>ตามที่ คณะเทคโนโลยีสารสนเทศและการสื่อสาร มหาวิทยาลัยพะเยา ได้รับความอนุเคราะห์</span>
+                                จากสถานประกอบการของท่านในการรับนิสิตเข้าฝึกประสบการณ์ทางด้านวิชาชีพ โดยมีวัตถุประสงค์
+                                เพื่อฝึกทักษะประสบการณ์ทางด้านวิชาชีพร่วมกับสถานประกอบการ ตลอดจนการนำความรู้ที่ได้รับ
+                                จากสถานประกอบการมาประยุกต์ใช้กับการศึกษาของนิสิต และได้พิจารณาคัดเลือกนิสิตเข้าประสบการณ์
+                                ทางด้านวิชาชีพกับสถานประกอบการของท่านเรียบร้อยแล้ว นั้น
+                            </p>
+                            <p className='paragraph'><span>ในการนี้ คณะเทคโนโลยีสารสนเทศและการสื่อสาร จึงขอส่งนิสิตเข้ารับการฝึกประสบการณ์</span>
+                                ทางด้านวิชาชีพ รายละเอียดตามเอกสารแนบ ทั้งนี้ มอบหมายให้ นายเชาวน์ บ่อแก้ว ตำแหน่ง ประธานหลักสูตร
+                                วิศวกรรมศาสตรบัณฑิต สาขาวิชาวิศวกรรมซอฟต์แวร์ เป็นผู้ประสานงาน หมายเลขโทรศัพท์ ๐๘๗-๔๙๘ ๕๑๕๘
+                            </p>
+                            <p className='notice'>จึงเรียนมาเพื่อโปรดทราบ จะขอบคุณยิ่ง</p>
+                            <p className='reason flex justify-center'>ขอแสดงความนับถือ</p>
+                            <div className='name-teacher flex flex-col items-center'>
+                                <p>(ดร.เกวรินทร์ จันทร์ดำ)</p>
+                                <p>รองคณบดีฝ่ายยุทธศาสตร์และพัฒนาองค์กร รักษาการแทน</p>
+                                <p>คณะเทคโนโลยีสารสนเทศและการสื่อสาร</p>
+                            </div>
+                            <div className='low-test'>
+                                <p>งานวิชาการ คณะเทคโนโลยีสารสนเทศและการสื่อสาร</p>
+                                <p>โทร ๐-๕๔๔๖-๖๖๖๖ ต่อ ๒๓๒๓</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Mocuppdf;
