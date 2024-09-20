@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import dynamic from 'next/dynamic';
+import '../../style/form.css';
 
 const PdfDownload = () => {
     const contentRef = useRef();
@@ -17,7 +18,18 @@ const PdfDownload = () => {
     return (
         <div>
             <div ref={contentRef} id="content">
-                {/* Your content here */}
+                <form action="" className='formpdf'>
+                    <label htmlFor=""></label>
+                    <input type="text" />
+                    <label htmlFor=""></label>
+                    <input type="text" />
+                    <label htmlFor=""></label>
+                    <input type="text" />
+                    <label htmlFor=""></label>
+                    <input type="text" />
+                    <label htmlFor=""></label>
+                    <input type="text" />
+                </form>
             </div>
             <div className='buttonpdf flex justify-center'>
                 <button className='pt-5' onClick={downloadPdf}>ดาวน์โหลด PDF</button>
