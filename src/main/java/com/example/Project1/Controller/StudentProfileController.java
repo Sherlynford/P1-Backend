@@ -65,6 +65,12 @@ public class StudentProfileController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/major/{major}")
+    public ResponseEntity<List<StudentProfile>> getStudentProfilesByMajor(@PathVariable String major) {
+        List<StudentProfile> studentProfiles = studentProfileService.getStudentProfilesByMajor(major);
+        return new ResponseEntity<>(studentProfiles, HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<StudentProfile> updateStudentProfile(@PathVariable Long id,
             @RequestBody StudentProfile newStudentProfile) {

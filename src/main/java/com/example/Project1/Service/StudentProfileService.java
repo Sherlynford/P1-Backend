@@ -28,6 +28,10 @@ public class StudentProfileService {
         return studentProfileRepository.findById(id);
     }
 
+    public List<StudentProfile> getStudentProfilesByMajor(String major) {
+        return studentProfileRepository.findByMajor(major);
+    }
+
     public StudentProfile updateStudentProfile(StudentProfile newStudentProfile, Long id) {
         return studentProfileRepository.findById(id)
                 .map(studentProfile -> {

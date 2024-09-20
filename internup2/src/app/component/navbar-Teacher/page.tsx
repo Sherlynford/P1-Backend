@@ -87,8 +87,8 @@ useEffect(() => {
         <Image src={Logo} alt='Logo UP' />
         <h1><a href="/pages/mainpage-teacher">INTERN<strong style={{ color: "#92268F" }}>UP</strong></a></h1>
         <p style={{ marginLeft: "83px" }}> <a href="/pages/createpost-teacher">สร้างโพสต์</a></p>
-        <p style={{ marginLeft: "40px" }} onClick={() => router.push('/pages/confirm-student')}>ยืนยันสถานะนิสิต</p>
-        <p style={{ marginLeft: "40px" }} onClick={() => router.push('/pages/status-student')}>สถานะนิสิต</p>
+        <p style={{ marginLeft: "40px" }}><a href="/pages/confirm-student">ยืนยันสถานะนิสิต</a></p>
+        <p style={{ marginLeft: "40px" }}><a href="/pages/status-student">สถานะนิสิต</a></p>
       </div>
       <div className='nav-teacher-right flex items-center'>
       <div className=' mr-10'>Teacher</div>

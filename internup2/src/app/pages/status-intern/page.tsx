@@ -15,14 +15,12 @@ export default function ProfileEdit() {
     const [loading, setLoading] = useState(true);
     const [studentProfileId, setStudentProfileId] = useState(null);
     const [error, setError] = useState(null);
-    const [id, setId] = useState(null);
     const [searchTerm, setSearchTerm] = useState(''); // State สำหรับเก็บคำค้นหา
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         const decoded = parseJwt(token);
         if (decoded) {
-            setId(decoded.id || null);
             setStudentProfileId(decoded.studentProfileId || null);
         } else {
             setLoading(false);
@@ -34,7 +32,6 @@ export default function ProfileEdit() {
         // Fetch job applications based on studentProfileId
         axios.get(`${url2}${studentProfileId}`)
             .then(response => {
-                console.log("Fetched job applications:", response.data.manualJobApplications); // Log the response data directly
                 setJobApplications(response.data.manualJobApplications); // Update state with fetched data
             })
             .catch(err => {
