@@ -110,9 +110,9 @@ export default function Home() {
           <h1>ประกาศรับสมัครงานล่าสุด</h1>
         </div>
         <div>
-          {error && <p className="error-message">{error}</p>}
+          {error && <p className="error-message flex justify-center">{error}</p>}
           {currentJobs.length === 0 && !error ? (
-            <p>No jobs found</p>
+            <p className='flex justify-center'>ไม่พบข้อมูล</p>
           ) : (
             currentJobs.map((job, index) => (
               <JobCard key={index} job={job} />

@@ -1,60 +1,29 @@
-// components/PdfDownload.tsx
 import { useRef } from 'react';
-import html2pdf from 'html2pdf.js';
+import dynamic from 'next/dynamic';
 
 const PdfDownload = () => {
-    const contentRef = useRef<HTMLDivElement>(null);
+    const contentRef = useRef();
 
-    const downloadPDF = () => {
+    const downloadPdf = async () => {
+        const html2pdf = (await import('html2pdf.js')).default; // นำเข้าในฟังก์ชัน
         const element = contentRef.current;
-
-        if (!element) {
-            console.error("Content element not found!");
-            return;
+        if (element) {
+            html2pdf().from(element).save('sample.pdf');
+        } else {
+            console.error("Element not found");
         }
-
-        const options = {
-            filename: 'GFG.pdf',
-            margin: 0,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: {
-                scale: 2,
-                useCORS: true, // Enable CORS to handle fonts
-                letterRendering: true, // Improve font rendering
-            },
-            jsPDF: {
-                unit: 'in',
-                format: 'letter',
-                orientation: 'portrait'
-            }
-        };
-
-        html2pdf().set(options).from(element).save().catch((error: any) => {
-            console.error("Error generating PDF: ", error);
-        });
     };
 
     return (
         <div>
             <div ref={contentRef} id="content">
-                <h1 style={{ color: 'tomato', fontFamily: 'Noto Sans Thai' }}>
-                    GeeksForGeeks
-                </h1>
-
-                <h2 style={{ fontFamily: 'Noto Sans Thai' }}>Founded by Sandeep Jain</h2>
-
-                <p style={{ fontFamily: 'Noto Sans Thai' }}>A Computer Science portal for geeks.</p>
-
-                <p style={{ fontFamily: 'Noto Sans Thai' }}>
-                    It contains well written, well thought
-                    and well explained computer science
-                    and programming articles.
-                </p>
+                {/* Your content here */}
             </div>
-
-            <button className='pt-5' onClick={downloadPDF}>Download PDF</button>
+            <div className='buttonpdf flex justify-center'>
+                <button className='pt-5' onClick={downloadPdf}>ดาวน์โหลด PDF</button>
+            </div>
         </div>
     );
 };
 
-export default PdfDownload;
+export default dynamic(() => Promise.resolve(PdfDownload), { ssr: false });

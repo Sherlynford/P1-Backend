@@ -8,12 +8,10 @@ import AuthGuard from '../../component/checktoken/AuthGuard';
 
 export default function From() {
 
-    return <AuthGuard><><div>
+    return <AuthGuard>
+      <div>
         <Navbarteacher />
-
-    </div> <div>
-      <h1>Welcome to the PDF Maker App</h1>
-      <PDFMaker />
-    </div></>   
+        <PDFMaker />
+      </div>   
     </AuthGuard>
 }
