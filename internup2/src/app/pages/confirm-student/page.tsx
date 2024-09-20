@@ -192,7 +192,7 @@ export default function ProfileEdit() {
                         console.log("Successfully confirmed student:", response.data);
 
                         // Redirect to the form page after successful API call
-                        window.location.href = '/pages/form';
+                        window.location.href = '/pages/from';
                     })
                     .catch(err => {
                         console.error("Error confirming student:", err);
