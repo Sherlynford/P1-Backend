@@ -52,12 +52,12 @@ public class ManualJobApplicationService {
         return manualJobApplicationRepository.findById(id)
                 .map(manualJobApplication -> {
                     Optional<ManualJobApplication> existingChosenApplication = manualJobApplicationRepository
-                            .findByStudentProfileAndApplicationStatus(manualJobApplication.getStudentProfile(), "Choose");
+                            .findByStudentProfileAndApplicationStatus(manualJobApplication.getStudentProfile(), "เลือก");
                     
                     if (existingChosenApplication.isPresent()) {
                         throw new IllegalStateException("Student has already chosen a job application.");
                     }
-                    manualJobApplication.setApplicationStatus("Choose");
+                    manualJobApplication.setApplicationStatus("เลือก");
                     return manualJobApplicationRepository.save(manualJobApplication);
                 })
                 .orElseThrow(() -> new IllegalStateException("Manual job application not found"));
@@ -68,7 +68,7 @@ public class ManualJobApplicationService {
     public ManualJobApplication confirmManualJobApplication(Long id) {
         return manualJobApplicationRepository.findById(id)
                 .map(manualJobApplication -> {
-                    manualJobApplication.setApplicationStatus("Confirm");
+                    manualJobApplication.setApplicationStatus("ยืนยัน");
                     return manualJobApplicationRepository.save(manualJobApplication);
                 })
                 .orElseThrow(() -> new IllegalStateException("Manual job application not found"));
