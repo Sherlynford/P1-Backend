@@ -53,7 +53,6 @@ export default function ProfileEdit() {
         const decoded = parseJwt(token);
         if (decoded) {
             setId(decoded.id || null);
-            setTeacherProfileId(decoded.teacherProfileId || null); 
         }
         setLoading(false);
     }, [])
@@ -79,6 +78,9 @@ export default function ProfileEdit() {
                 .then(response => {
                     const teacherProfile = response.data.teacherProfile; 
                     setTeacherData(teacherProfile);
+                    if (teacherProfile && teacherProfile.id) {
+                        setTeacherProfileId(teacherProfile.id);
+                    }
                     setFormData({
                         firstName: teacherProfile.firstName || '',
                         lastName: teacherProfile.lastName || '',
