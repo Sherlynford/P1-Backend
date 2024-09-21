@@ -55,7 +55,6 @@ export default function Manualpost() {
         const decoded = parseJwt(token);
         if (decoded) {
             setId(decoded.id || null);
-            setStudentProfileId(decoded.studentProfileId || null);
         } else {
             setLoading(false);
         }

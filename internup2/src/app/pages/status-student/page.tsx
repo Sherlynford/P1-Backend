@@ -26,6 +26,7 @@ function parseJwt(token) {
 
 const url1 = 'http://localhost:8080/api/teachers/';
 const url2 = 'http://localhost:8080/api/students/major/';
+const urlPerson = 'http://localhost:8080/api/persons/';
 
 export default function Status() {
     const [teacherMajor, setTeacherMajor] = useState(null);
@@ -33,19 +34,36 @@ export default function Status() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [teacherProfileId, setTeacherProfileId] = useState(null);
+    const [id, setId] = useState(null); // Holds the 'id' from token
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5; // Set number of items per page
+    const itemsPerPage = 5;
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         const decoded = parseJwt(token);
         if (decoded) {
-            setTeacherProfileId(decoded.teacherProfileId || null);
+            setId(decoded.id || null); // Set the person id from token
         } else {
             setLoading(false);
         }
     }, []);
+
+    useEffect(() => {
+        if (!id) return;
+
+        axios.get(`${urlPerson}${id}`)
+            .then(response => {
+                const teacherProfile = response.data.teacherProfile;
+                if (teacherProfile && teacherProfile.id) {
+                    setTeacherProfileId(teacherProfile.id);
+                }
+            })
+            .catch(err => {
+                setError(err.message);
+                console.error("Error fetching person profile:", err);
+            });
+    }, [id]);
 
     useEffect(() => {
         if (!teacherProfileId) return;
@@ -101,7 +119,6 @@ export default function Status() {
             );
         });
 
-    // Pagination logic
     const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
     const currentItems = filteredApplications.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 

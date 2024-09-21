@@ -29,11 +29,13 @@ function parseJwt(token) {
 
 const url1 = 'http://localhost:8080/api/teachers/';
 const url2 = 'http://localhost:8080/api/students/major/';
+const urlPerson = 'http://localhost:8080/api/persons/';
 
 export default function ProfileEdit() {
     const [teacherMajor, setTeacherMajor] = useState(null);
     const [teacherData, setTeacherData] = useState([]);
     const [jobId, setJobId] = useState(null);
+    const [id,setId] = useState(null);
     const [studentData, setStudentData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -46,11 +48,29 @@ export default function ProfileEdit() {
         const token = localStorage.getItem('token');
         const decoded = parseJwt(token);
         if (decoded) {
-            setTeacherProfileId(decoded.teacherProfileId || null);
+            setId(decoded.id);
         } else {
             setLoading(false);
         }
     }, []);
+
+    
+    useEffect(() => {
+        if (!id) return;
+
+        axios.get(`${urlPerson}${id}`)
+            .then(response => {
+                const teacherProfile = response.data.teacherProfile;
+                if (teacherProfile && teacherProfile.id) {
+                    setTeacherProfileId(teacherProfile.id);
+                }
+            })
+            .catch(err => {
+                setError(err.message);
+                console.error("Error fetching person profile:", err);
+            });
+    }, [id]);
+
 
     useEffect(() => {
         if (!teacherProfileId) return;
