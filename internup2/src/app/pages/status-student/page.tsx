@@ -96,7 +96,8 @@ export default function Status() {
                 application.lastName.toLowerCase().includes(searchLower) ||
                 application.organizationName.toLowerCase().includes(searchLower) ||
                 application.jobName.toLowerCase().includes(searchLower) ||
-                application.applicationStatus.toLowerCase().includes(searchLower)
+                application.applicationStatus.toLowerCase().includes(searchLower)||
+                application.applicationDate.toLowerCase().includes(searchLower)
             );
         });
 
