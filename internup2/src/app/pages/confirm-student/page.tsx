@@ -7,6 +7,7 @@ import Imgedit from '../../image/createFrom.png'
 import AuthGuard from '../../component/checktoken/AuthGuard';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 function parseJwt(token: string) {
     try {
@@ -96,7 +97,7 @@ export default function ProfileEdit() {
     .filter(student => student.manualJobApplications && student.manualJobApplications.length > 0)
     .flatMap(student => 
         student.manualJobApplications
-        .filter(application => application.applicationStatus === "ยอมรับ") // Only include accepted applications
+        .filter(application => application.applicationStatus === "ยอมรับ" || application.applicationStatus === "ยืนยัน") // Only include accepted applications
         .map(application => ({
             studentID: student.studentID,
             firstName: student.firstName,
@@ -165,42 +166,57 @@ export default function ProfileEdit() {
                                         <td>{application.jobName}</td>
                                         <td>{application.applicationDate}</td>
                                         <td>
-    <button className='edit'>
-        <Image 
-            src={Imgedit} 
-            alt='image button edit' 
-            width={50}
-            height={50}
-            onClick={(e) => {
-                e.preventDefault();
+                                        <button className='edit'>
+    <Image 
+        src={Imgedit} 
+        alt='image button edit' 
+        width={50}
+        height={50}
+        onClick={(e) => {
+            e.preventDefault();
 
-                const LocalDateNow = new Date().toLocaleDateString('en-GB'); // Format: DD/MM/YYYY
+            // Show confirmation dialog using SweetAlert2
+            Swal.fire({
+                title: 'ยืนยันการออกใบส่ง?',
+                text: "คุณต้องการจะออกใบส่งตัวใช่หรือไม่?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ยืนยัน',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Get the current date in DD/MM/YYYY format
+                    const LocalDateNow = new Date().toLocaleDateString('en-GB'); 
 
-                // Storing the selected student, teacher, and date in localStorage
-                localStorage.setItem(
-                    'selectedStudent', 
-                    JSON.stringify({
-                        student: application, // Student application data
-                        teacher: teacherData, // Teacher data
-                        dateSelected: LocalDateNow // Current date
-                    })
-                );
+                    // Storing the selected student, teacher, and date in localStorage
+                    localStorage.setItem(
+                        'selectedStudent', 
+                        JSON.stringify({
+                            student: application, // Student application data
+                            teacher: teacherData, // Teacher data
+                            dateSelected: LocalDateNow // Current date
+                        })
+                    );
 
-                // Call the ConfirmStudents API
-                axios.put(`http://localhost:8080/api/ManualJobApplications/${JobId}/confirm`)
-                    .then(response => {
-                        console.log("Successfully confirmed student:", response.data);
+                    // Call the ConfirmStudents API
+                    axios.put(`http://localhost:8080/api/ManualJobApplications/${JobId}/confirm`)
+                        .then(response => {
+                            console.log("Successfully confirmed student:", response.data);
 
-                        // Redirect to the form page after successful API call
-                        window.location.href = '/pages/from';
-                    })
-                    .catch(err => {
-                        console.error("Error confirming student:", err);
-                        alert("Failed to confirm the student. Please try again.");
-                    });
-            }}
-        />
-    </button>
+                            // Redirect to the form page after successful API call
+                            window.location.href = '/pages/from';
+                        })
+                        .catch(err => {
+                            console.error("Error confirming student:", err);
+                            Swal.fire('เกิดข้อผิดพลาด', 'การยืนยันนักศึกษาไม่สำเร็จ กรุณาลองอีกครั้ง', 'error');
+                        });
+                }
+            });
+        }}
+    />
+</button>
 </td>
 
                                     </tr>
