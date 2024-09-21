@@ -63,6 +63,13 @@ body{
     font-size: 20px;
     color: black;
 }
+.location{
+    width: 1000px;
+    height: 60px;
+    border-radius: 10px;
+    font-size: 20px;
+    color: black;
+}
 .upload-img{
     width: 850px;
 }
