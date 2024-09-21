@@ -77,7 +77,7 @@ export default function ProfileEdit() {
                 // Safely find and set the job ID
                 const jobApplication = response.data
                     .flatMap(student => student.manualJobApplications || []) // Handle cases where manualJobApplications is undefined
-                    .find(application => application.applicationStatus === "ยอมรับ");
+                    .find(application => application.applicationStatus === "ยอมรับ" || application.applicationStatus === "ยืนยัน");
     
                 if (jobApplication) {
                     setJobId(jobApplication.id);
@@ -114,7 +114,8 @@ export default function ProfileEdit() {
             application.firstName.toLowerCase().includes(searchLower) ||
             application.lastName.toLowerCase().includes(searchLower) ||
             application.organizationName.toLowerCase().includes(searchLower) ||
-            application.jobName.toLowerCase().includes(searchLower)
+            application.jobName.toLowerCase().includes(searchLower) ||
+            application.applicationDate.toLowerCase().includes(searchLower)
         );
     });
 
@@ -206,7 +207,7 @@ export default function ProfileEdit() {
                             console.log("Successfully confirmed student:", response.data);
 
                             // Redirect to the form page after successful API call
-                            window.location.href = '/pages/from';
+                            window.location.href = '/pages/form';
                         })
                         .catch(err => {
                             console.error("Error confirming student:", err);
