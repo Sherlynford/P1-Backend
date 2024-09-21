@@ -4,3 +4,12 @@
     margin: 100px 0;
     border-radius: 20px;
 }
+.Titleform{
+    font-size: 28px;
+    font-weight: bold;
+    color: black;
+}
+.formpdf label{
+    font-size: 18px;
+    
+}
