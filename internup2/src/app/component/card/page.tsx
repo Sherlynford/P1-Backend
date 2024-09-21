@@ -6,26 +6,40 @@ import '../../style/mainpage.css';
 import organization from '../../image/icon-organization.png';
 import calender from '../../image/iocn-calendar.png';
 import location from '../../image/icon-location.png';
+import { useEffect, useState } from 'react';
 
-// Define the Job interface for consistency
-interface Job {
-  topic: string;
-  organizationName: string;
-  dateTime: string;
-  detail: string;
-  location: string;
-  img: string;
-  id: string; // Ensure you have an ID in the Job interface
+function parseJwt(token: string) {
+  try {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+          atob(base64)
+              .split("")
+              .map(function (c) {
+                  return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+              })
+              .join("")
+      );
+
+      return JSON.parse(jsonPayload);
+  } catch (error) {
+      console.error("Invalid JWT token");
+      return null;
+  }
 }
 
-// Define the props interface for the JobCard component
-interface JobCardProps {
-  job: Job;
-  role: 'student' | 'teacher' | 'login'; // Add a prop to check user role
-}
+const JobCard = ({ job }: { job: Job }) => {
+  const [role, setRole] = useState<'student' | 'teacher' | 'login' | null>(null);
 
-const JobCard = ({ job, role }: JobCardProps) => {
-  // Determine the link based on user role
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const decoded = parseJwt(token);
+    if (decoded) {
+      setRole(decoded.role || null);
+    }
+  }, []);
+
+  // Generate detail link based on user role
   const detailLink =
     role === 'student' ? `/pages/student-detail?id=${job.id}`
     : role === 'teacher' ? `/pages/teacher-detail?id=${job.id}`
