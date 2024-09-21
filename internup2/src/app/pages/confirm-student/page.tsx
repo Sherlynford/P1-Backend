@@ -118,6 +118,7 @@ export default function ProfileEdit() {
                     organizationName: application.organizationName,
                     jobName: application.jobName,
                     applicationDate: application.applicationDate,
+                    applicationStatus: application.applicationStatus
                 }))
         )
         .filter(application => {
@@ -128,7 +129,8 @@ export default function ProfileEdit() {
                 application.lastName.toLowerCase().includes(searchLower) ||
                 application.organizationName.toLowerCase().includes(searchLower) ||
                 application.jobName.toLowerCase().includes(searchLower) ||
-                application.applicationDate.toLowerCase().includes(searchLower)
+                application.applicationDate.toLowerCase().includes(searchLower)||
+                application.applicationStatus.toLowerCase().includes(searchLower)
             );
         });
 
@@ -178,6 +180,7 @@ export default function ProfileEdit() {
                                         <th>ชื่อหน่วยงาน</th>
                                         <th>ชื่อตำแหน่งงาน</th>
                                         <th>วันที่สมัครฝึกงาน</th>
+                                        <th>สถานะฝึกงาน</th>
                                         <th>ออกหนังสือส่งตัว</th>
                                     </tr>
                                 </thead>
@@ -190,6 +193,7 @@ export default function ProfileEdit() {
                                             <td>{application.organizationName}</td>
                                             <td>{application.jobName}</td>
                                             <td>{application.applicationDate}</td>
+                                            <td>{application.applicationStatus}</td>
                                             <td>
                                                 <button className='edit'>
                                                     <Image
@@ -220,7 +224,6 @@ export default function ProfileEdit() {
 
                                                                     axios.put(`http://localhost:8080/api/ManualJobApplications/${jobId}/confirm`)
                                                                         .then(response => {
-                                                                            console.log("Successfully confirmed student:", response.data);
                                                                             window.location.href = '/pages/form';
                                                                         })
                                                                         .catch(err => {

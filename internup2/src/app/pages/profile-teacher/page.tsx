@@ -83,6 +83,15 @@ export default function Profile() {
 };
 const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
   event.preventDefault();
+  const result = await Swal.fire({
+    title: 'ยืนยันการบันทึกข้อมูล?',
+    text: "คุณแน่ใจว่าต้องการบันทึกข้อมูลนี้หรือไม่?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'ตกลง',
+    cancelButtonText: 'ยกเลิก'
+});
+if (result.isConfirmed) {
   setLoading(true);
 
   const { firstName, lastName, faculty, major, phoneNumber, profileIMG } = formData;
@@ -165,6 +174,7 @@ const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
   } finally {
       setLoading(false);
   }
+ }
 }; 
 useEffect(() => {
   const token = localStorage.getItem('token');
@@ -285,7 +295,7 @@ if (error) {
                                         </div>
 
                                         <label htmlFor="firstName" className='title-firstname'>ชื่อ</label>
-                                        <input id="firstName" className='firstname' type="text" placeholder='กรุณากรอกชื่อ' value={formData.firstName} onChange={handleChange} />
+                                        <input id="firstName" className='firstname' type="text" placeholder='กรุณากรอกชื่อพร้อมคำนำหน้า' value={formData.firstName} onChange={handleChange} />
 
                                         <label htmlFor="lastName" className='title-lastName'>นามสกุล</label>
                                         <input id="lastName" className='lastname' type="text" placeholder='กรุณากรอกนามสกุล' value={formData.lastName} onChange={handleChange} />
@@ -317,7 +327,7 @@ if (error) {
                                         </select>
 
                                         <label htmlFor="major" className='title-major'>สาขา</label>
-                                        <input id="major" className='major' type="text" placeholder='กรุณากรอกสาขา' value={formData.major} onChange={handleChange} />
+                                        <input id="major" className='major' type="text" placeholder='กรุณากรอกสาขา ชื่อเต็ม ไม่ย่อ และ ไม่มีการเว้นวรรค' value={formData.major} onChange={handleChange} />
 
 
                                         <div className='btn-edit flex justify-center'>
