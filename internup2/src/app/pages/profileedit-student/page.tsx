@@ -38,12 +38,13 @@ const formatDate = (date: Date | null) => {
     return `${year}-${month}-${day}`; // ส่งในรูปแบบที่ต้องการ
 };
 
-
+//fix
 
 const imageUploadUrl = 'http://localhost:8080/api/students/upload';
 const cvurl = 'http://localhost:8080/api/students/upload';
 const transcripturl = 'http://localhost:8080/api/students/upload';
 const url = 'http://localhost:8080/api/students/';
+
 
 export default function ProfileEdit() {
     const [studentData, setStudentData] = useState<any | null>(null);
@@ -75,7 +76,7 @@ export default function ProfileEdit() {
         const decoded = parseJwt(token);
         if (decoded) {
             setId(decoded.id || null);
-            setStudentProfileId(decoded.studentProfileId || null); // Set studentProfileId
+             // Set studentProfileId
         }
         setLoading(false);
     }, [])
@@ -99,7 +100,7 @@ export default function ProfileEdit() {
             setStartDate(studentData.internStartDate ? new Date(studentData.internStartDate) : null);
             setEndDate(studentData.internEndDate ? new Date(studentData.internEndDate) : null);
         }
-    }, [studentData]);
+    }, [studentData]);  
 
     useEffect(() => {
         if (id) {
@@ -107,6 +108,9 @@ export default function ProfileEdit() {
                 .then(response => {
                     const studentProfile = response.data.studentProfile; // ดึง studentProfile
                     setStudentData(studentProfile);
+                    if (studentProfile && studentProfile.id) {
+                        setStudentProfileId(studentProfile.id); // Set it asynchronously
+                    }
                     setFormData({
                         firstName: studentProfile.firstName || '',
                         lastName: studentProfile.lastName || '',
@@ -222,7 +226,7 @@ export default function ProfileEdit() {
                     : studentData.transcript;
     
                 const putData = {
-                    person: { id: studentProfileId || "" },
+                    person: { id: id || "" },
                     firstName,
                     lastName,
                     phoneNumber,

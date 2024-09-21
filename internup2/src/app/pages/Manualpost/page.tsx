@@ -64,7 +64,7 @@ export default function Manualpost() {
     useEffect(() => {
         if (!id) return;
         axios.get(`http://localhost:8080/api/persons/${id}`)
-            .then(response => setStudentData(response.data))
+            .then(response => setStudentProfileId(response.data.studentProfile.id))
             .catch(err => {
                 setError(err.message);
                 console.error("Error fetching student data:", err);

@@ -167,7 +167,7 @@ export default function ProfileEdit() {
     
     
                 const putData = {
-                    person: { id: teacherProfileId || "" },
+                    person: { id: id || "" },
                     firstName,
                     lastName,
                     phoneNumber,

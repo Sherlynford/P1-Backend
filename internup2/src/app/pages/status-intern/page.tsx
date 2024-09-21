@@ -14,6 +14,7 @@ export default function ProfileEdit() {
     const [jobApplications, setJobApplications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [studentProfileId, setStudentProfileId] = useState(null);
+    const [id, setId] = useState(null);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState(''); // State สำหรับเก็บคำค้นหา
 
@@ -21,24 +22,40 @@ export default function ProfileEdit() {
         const token = localStorage.getItem('token');
         const decoded = parseJwt(token);
         if (decoded) {
-            setStudentProfileId(decoded.studentProfileId || null);
+            setId(decoded.id || null);
         } else {
             setLoading(false);
         }
     }, []);
+
+    useEffect(() => {
+        if (id) {
+            axios.get(`http://localhost:8080/api/persons/${id}`)
+                .then(response => {
+                    const studentProfile = response.data.studentProfile;
+                    if (studentProfile && studentProfile.id) {
+                        setStudentProfileId(studentProfile.id);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching student profile:", error);
+                });
+        }
+    }, [id]);
     useEffect(() => {
         if (!studentProfileId) return; // Ensure studentProfileId is available before making the request
     
         // Fetch job applications based on studentProfileId
         axios.get(`${url2}${studentProfileId}`)
-            .then(response => {
-                setJobApplications(response.data.manualJobApplications); // Update state with fetched data
-            })
-            .catch(err => {
-                setError(err.message);
-                console.error("Error fetching job applications:", err);
-            })
-            .finally(() => setLoading(false));
+        .then(response => {
+            setJobApplications(response.data.manualJobApplications || []); // Ensure it's an array
+        })
+        .catch(err => {
+            setError(err.message);
+            console.error("Error fetching job applications:", err);
+        })
+        .finally(() => setLoading(false));
+    
     }, [studentProfileId]); // Add studentProfileId to the dependency array
 
     const parseJwt = (token) => {
@@ -60,15 +77,16 @@ export default function ProfileEdit() {
     };
 
     // ฟังก์ชันกรองข้อมูลการสมัครงาน
-    const filteredApplications = jobApplications.filter(application => {
-        const searchLower = searchTerm.toLowerCase();
-        return (
-            application.organizationName.toLowerCase().includes(searchLower) ||
-            application.jobName.toLowerCase().includes(searchLower) ||
-            application.applicationStatus.toLowerCase().includes(searchLower)||
-            application.applicationDate.toLowerCase().includes(searchLower)
-        );
-    });
+// ฟังก์ชันกรองข้อมูลการสมัครงาน
+const filteredApplications = (jobApplications || []).filter(application => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+        application.organizationName.toLowerCase().includes(searchLower) ||
+        application.jobName.toLowerCase().includes(searchLower) ||
+        application.applicationStatus.toLowerCase().includes(searchLower) ||
+        application.applicationDate.toLowerCase().includes(searchLower)
+    );
+});
 
     if (loading) {
         return <div>Loading...</div>;
