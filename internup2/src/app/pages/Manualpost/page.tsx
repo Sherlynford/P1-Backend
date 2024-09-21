@@ -55,7 +55,6 @@ export default function Manualpost() {
         const decoded = parseJwt(token);
         if (decoded) {
             setId(decoded.id || null);
-            setStudentProfileId(decoded.studentProfileId || null);
         } else {
             setLoading(false);
         }
@@ -89,6 +88,15 @@ export default function Manualpost() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        const result = await Swal.fire({
+            title: 'ยืนยันการบันทึกข้อมูล?',
+            text: "คุณแน่ใจว่าต้องการบันทึกข้อมูลนี้หรือไม่?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'ตกลง',
+            cancelButtonText: 'ยกเลิก'
+        });
+        if (result.isConfirmed) {
         setLoading(true);
         
         const token = localStorage.getItem('token');
@@ -137,6 +145,7 @@ export default function Manualpost() {
         } finally {
             setLoading(false);
         }
+     }
     };
     
     if (loading) {

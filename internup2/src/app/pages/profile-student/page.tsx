@@ -121,160 +121,163 @@ export default function Profile() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        setLoading(true);
     
-        const { firstName, lastName, faculty, major, studentID, phoneNumber, internStartDate, internEndDate, cv, transcript, profileIMG } = formData;
+        // SweetAlert2 confirmation popup
+        const result = await Swal.fire({
+            title: 'ยืนยันการบันทึกข้อมูล?',
+            text: "คุณแน่ใจว่าต้องการบันทึกข้อมูลนี้หรือไม่?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'ตกลง',
+            cancelButtonText: 'ยกเลิก'
+        });
     
-        try {
-            const token = localStorage.getItem('token');
+        // Proceed only if the user confirms
+        if (result.isConfirmed) {
+            setLoading(true);
     
-            // Initialize URLs
-            let profileIMGUrl = profileIMG;
-            let cvUrl = cv;
-            let transcriptUrl = transcript;
+            const { firstName, lastName, faculty, major, studentID, phoneNumber, internStartDate, internEndDate, cv, transcript, profileIMG } = formData;
     
-            // Upload profile image if present and not a string
-            if (profileIMG) {
-                const imageFormData1 = new FormData();
-                imageFormData1.append('files', profileIMG);
+            try {
+                const token = localStorage.getItem('token');
     
-                try {
-                    const imageResponse1 = await fetch(imageUploadUrl, {
-                        method: 'POST',
-                        body: imageFormData1,
-                    });
-                    const imageResponseData1 = await imageResponse1.json();
+                // Initialize URLs
+                let profileIMGUrl = profileIMG;
+                let cvUrl = cv;
+                let transcriptUrl = transcript;
     
-                    if (
-                        imageResponse1.ok &&
-                        Array.isArray(imageResponseData1.fileUrls) &&
-                        imageResponseData1.fileUrls.length > 0
-                    ) {
-                        profileIMGUrl = imageResponseData1.fileUrls[0];
-                    } else {
-                        throw new Error('Failed to upload profile image');
+                // Upload profile image if present and not a string
+                if (profileIMG) {
+                    const imageFormData1 = new FormData();
+                    imageFormData1.append('files', profileIMG);
+    
+                    try {
+                        const imageResponse1 = await fetch(imageUploadUrl, {
+                            method: 'POST',
+                            body: imageFormData1,
+                        });
+                        const imageResponseData1 = await imageResponse1.json();
+    
+                        if (imageResponse1.ok && Array.isArray(imageResponseData1.fileUrls) && imageResponseData1.fileUrls.length > 0) {
+                            profileIMGUrl = imageResponseData1.fileUrls[0];
+                        } else {
+                            throw new Error('Failed to upload profile image');
+                        }
+                    } catch (error) {
+                        console.error('Error uploading profile image:', error);
                     }
-                } catch (error) {
-                    console.error('Error uploading profile image:', error);
                 }
-            }
     
-            // Upload CV if present and not a string
-            if (cv) {
-                const imageFormData2 = new FormData();
-                imageFormData2.append('files', cv);
+                // Upload CV if present and not a string
+                if (cv) {
+                    const imageFormData2 = new FormData();
+                    imageFormData2.append('files', cv);
     
-                try {
-                    const imageResponse2 = await fetch(imageUploadUrl, {
-                        method: 'POST',
-                        body: imageFormData2,
-                    });
-                    const imageResponseData2 = await imageResponse2.json();
+                    try {
+                        const imageResponse2 = await fetch(imageUploadUrl, {
+                            method: 'POST',
+                            body: imageFormData2,
+                        });
+                        const imageResponseData2 = await imageResponse2.json();
     
-                    if (
-                        imageResponse2.ok &&
-                        Array.isArray(imageResponseData2.fileUrls) &&
-                        imageResponseData2.fileUrls.length > 0
-                    ) {
-                        cvUrl = imageResponseData2.fileUrls[0];
-                    } else {
-                        throw new Error('Failed to upload CV');
+                        if (imageResponse2.ok && Array.isArray(imageResponseData2.fileUrls) && imageResponseData2.fileUrls.length > 0) {
+                            cvUrl = imageResponseData2.fileUrls[0];
+                        } else {
+                            throw new Error('Failed to upload CV');
+                        }
+                    } catch (error) {
+                        console.error('Error uploading CV:', error);
                     }
-                } catch (error) {
-                    console.error('Error uploading CV:', error);
                 }
-            }
     
-            // Upload transcript if present and not a string
-            if (transcript) {
-                const imageFormData3 = new FormData();
-                imageFormData3.append('files', transcript);
+                // Upload transcript if present and not a string
+                if (transcript) {
+                    const imageFormData3 = new FormData();
+                    imageFormData3.append('files', transcript);
     
-                try {
-                    const imageResponse3 = await fetch(imageUploadUrl, {
-                        method: 'POST',
-                        body: imageFormData3,
-                    });
-                    const imageResponseData3 = await imageResponse3.json();
+                    try {
+                        const imageResponse3 = await fetch(imageUploadUrl, {
+                            method: 'POST',
+                            body: imageFormData3,
+                        });
+                        const imageResponseData3 = await imageResponse3.json();
     
-                    if (
-                        imageResponse3.ok &&
-                        Array.isArray(imageResponseData3.fileUrls) &&
-                        imageResponseData3.fileUrls.length > 0
-                    ) {
-                        transcriptUrl = imageResponseData3.fileUrls[0];
-                    } else {
-                        throw new Error('Failed to upload transcript');
+                        if (imageResponse3.ok && Array.isArray(imageResponseData3.fileUrls) && imageResponseData3.fileUrls.length > 0) {
+                            transcriptUrl = imageResponseData3.fileUrls[0];
+                        } else {
+                            throw new Error('Failed to upload transcript');
+                        }
+                    } catch (error) {
+                        console.error('Error uploading transcript:', error);
                     }
-                } catch (error) {
-                    console.error('Error uploading transcript:', error);
                 }
-            }
     
-            // Log URLs for debugging
+                // Log URLs for debugging
     
-            // Prepare data to be posted
-            const postData = {
-                person: {
-                    id: id || "", // Use id if available
-                },
-                firstName: firstName,
-                lastName: lastName,
-                phoneNumber: phoneNumber,
-                faculty: faculty,
-                major: major,
-                profileIMG: profileIMGUrl, // Use uploaded or existing profile image URL
-                cv: cvUrl,                 // Use uploaded or existing CV URL
-                transcript: transcriptUrl,  // Use uploaded or existing transcript URL
-                internStartDate: startDate ? formatDate(startDate.toISOString()) : '',
-                internEndDate: endDate ? formatDate(endDate.toISOString()) : '',
-                studentID: studentID,
-            };
+                // Prepare data to be posted
+                const postData = {
+                    person: {
+                        id: id || "", // Use id if available
+                    },
+                    firstName: firstName,
+                    lastName: lastName,
+                    phoneNumber: phoneNumber,
+                    faculty: faculty,
+                    major: major,
+                    profileIMG: profileIMGUrl, // Use uploaded or existing profile image URL
+                    cv: cvUrl,                 // Use uploaded or existing CV URL
+                    transcript: transcriptUrl,  // Use uploaded or existing transcript URL
+                    internStartDate: startDate ? formatDate(startDate.toISOString()) : '',
+                    internEndDate: endDate ? formatDate(endDate.toISOString()) : '',
+                    studentID: studentID,
+                };
     
-            // Post data to server
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`, // Add token to request headers
-                },
-                body: JSON.stringify(postData),
-            });
-    
-            if (response.ok) {
-                Swal.fire('สำเร็จ', 'บันทึกข้อมูลสำเร็จ!', 'success');
-                // Reset form fields
-                setFormData({
-                    profileIMG: '',
-                    firstName: '',
-                    lastName: '',
-                    faculty: '',
-                    major: '',
-                    studentID: '',
-                    phoneNumber: '',
-                    internStartDate: '',
-                    internEndDate: '',
-                    cv: '',
-                    transcript: '',
+                // Post data to server
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`, // Add token to request headers
+                    },
+                    body: JSON.stringify(postData),
                 });
-                setStartDate(null);
-                setEndDate(null);
-                setImgPreview('');
-                setCvPreview('');
-                setTranscriptPreview('');
-                window.location.href = '/pages/profile-student';
-            } else {
-                const responseData = await response.json();
-                const errorMessage = responseData.message || 'ไม่สามารถบันทึกข้อมูลได้ กรุณาลองอีกครั้ง';
-                Swal.fire('ข้อผิดพลาด', errorMessage, 'error');
+    
+                if (response.ok) {
+                    Swal.fire('สำเร็จ', 'บันทึกข้อมูลสำเร็จ!', 'success');
+                    // Reset form fields
+                    setFormData({
+                        profileIMG: '',
+                        firstName: '',
+                        lastName: '',
+                        faculty: '',
+                        major: '',
+                        studentID: '',
+                        phoneNumber: '',
+                        internStartDate: '',
+                        internEndDate: '',
+                        cv: '',
+                        transcript: '',
+                    });
+                    setStartDate(null);
+                    setEndDate(null);
+                    setImgPreview('');
+                    setCvPreview('');
+                    setTranscriptPreview('');
+                    window.location.href = '/pages/profile-student';
+                } else {
+                    const responseData = await response.json();
+                    const errorMessage = responseData.message || 'ไม่สามารถบันทึกข้อมูลได้ กรุณาลองอีกครั้ง';
+                    Swal.fire('ข้อผิดพลาด', errorMessage, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire('ข้อผิดพลาด', 'ไม่สามารถบันทึกข้อมูลได้ กรุณาลองอีกครั้ง', 'error');
+            } finally {
+                setLoading(false);
             }
-        } catch (error) {
-            console.error('Error:', error);
-            Swal.fire('ข้อผิดพลาด', 'ไม่สามารถบันทึกข้อมูลได้ กรุณาลองอีกครั้ง', 'error');
-        } finally {
-            setLoading(false);
         }
-    }; 
+    };
+    
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -425,7 +428,7 @@ export default function Profile() {
                                         </div>
 
                                         <label htmlFor="firstName" className='title-firstname'>ชื่อ</label>
-                                        <input id="firstName" className='firstname' type="text" placeholder='กรุณากรอกชื่อ' value={formData.firstName} onChange={handleChange} />
+                                        <input id="firstName" className='firstname' type="text" placeholder='กรุณากรอกชื่อพร้อมคำนำหน้า' value={formData.firstName} onChange={handleChange} />
 
                                         <label htmlFor="lastName" className='title-lastName'>นามสกุล</label>
                                         <input id="lastName" className='lastname' type="text" placeholder='กรุณากรอกนามสกุล' value={formData.lastName} onChange={handleChange} />
@@ -461,7 +464,7 @@ export default function Profile() {
                                         </select>
 
                                         <label htmlFor="major" className='title-major'>สาขา</label>
-                                        <input id="major" className='major' type="text" placeholder='กรุณากรอกสาขา' value={formData.major} onChange={handleChange} />
+                                        <input id="major" className='major' type="text" placeholder='กรุณากรอกสาขา ชื่อเต็ม ไม่ย่อ และ ไม่มีการเว้นวรรค' value={formData.major} onChange={handleChange} />
 
                                         <label htmlFor="cv" className='title-cv'>CV</label>
                                         <div className='cv cv-uploading'>

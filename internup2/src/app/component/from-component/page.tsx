@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import '../../style/form.css';
+import Swal from 'sweetalert2';
 
 const PdfDownload = () => {
     const contentRef = useRef<HTMLDivElement>(null);
@@ -19,12 +20,21 @@ const PdfDownload = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const result = await Swal.fire({
+            title: 'ยืนยันการบันทึกข้อมูล?',
+            text: "คุณแน่ใจว่าต้องการบันทึกข้อมูลนี้หรือไม่?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'ตกลง',
+            cancelButtonText: 'ยกเลิก'
+        });
+        if (result.isConfirmed) {
         localStorage.setItem('formData', JSON.stringify(formData)); // เก็บข้อมูลใน localStorage
-        console.log('Data saved to localStorage:', formData);
         // นำทางไปยังหน้าถัดไป (ถ้าต้องการ)
-        router.push(`/pages/FilePDF`);
+        router.push(`/component/mocuppdf`);
+        }
     };
 
     return (

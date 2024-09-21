@@ -53,7 +53,6 @@ export default function ProfileEdit() {
         const decoded = parseJwt(token);
         if (decoded) {
             setId(decoded.id || null);
-            setTeacherProfileId(decoded.teacherProfileId || null); 
         }
         setLoading(false);
     }, [])
@@ -79,6 +78,9 @@ export default function ProfileEdit() {
                 .then(response => {
                     const teacherProfile = response.data.teacherProfile; 
                     setTeacherData(teacherProfile);
+                    if (teacherProfile && teacherProfile.id) {
+                        setTeacherProfileId(teacherProfile.id);
+                    }
                     setFormData({
                         firstName: teacherProfile.firstName || '',
                         lastName: teacherProfile.lastName || '',
@@ -251,7 +253,7 @@ export default function ProfileEdit() {
                             </div>
 
                             <label htmlFor="firstName" className='title-firstname'>ชื่อ</label>
-                            <input id="firstName" className='firstname' type="text" placeholder='กรุณากรอกชื่อ' value={formData.firstName} onChange={handleChange} />
+                            <input id="firstName" className='firstname' type="text" placeholder='กรุณากรอกชื่อพร้อมคำนำหน้า' value={formData.firstName} onChange={handleChange} />
 
                             <label htmlFor="lastName" className='title-lastName'>นามสกุล</label>
                             <input id="lastName" className='lastname' type="text" placeholder='กรุณากรอกนามสกุล' value={formData.lastName} onChange={handleChange} />
@@ -284,7 +286,7 @@ export default function ProfileEdit() {
                             </select>
 
                             <label htmlFor="major" className='title-major'>สาขา</label>
-                            <input id="major" className='major' type="text" placeholder='กรุณากรอกสาขา' value={formData.major} onChange={handleChange} />
+                            <input id="major" className='major' type="text" placeholder='กรุณากรอกสาขา ชื่อเต็ม ไม่ย่อ และ ไม่มีการเว้นวรรค' value={formData.major} onChange={handleChange} />
 
                             <div className='btn-confirm-cancel flex justify-between'>
                                 <button className='confirm'>ตกลง</button>
