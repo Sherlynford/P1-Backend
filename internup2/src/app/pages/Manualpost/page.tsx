@@ -190,7 +190,7 @@ export default function Manualpost() {
                                             <option value="ยกเลิก">ยกเลิก</option>
                                         </select>
 
-                                        <label htmlFor="applicationDate">วันที่สมัครงาน</label>
+                                        <label htmlFor="applicationDate">วันที่ยืนสมัครฝึกงาน</label>
                                         <DatePicker
                                             selected={formData.applicationDate}
                                             onChange={handleDateChange}

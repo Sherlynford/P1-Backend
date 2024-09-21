@@ -10,6 +10,8 @@
 }
 .paragraph{
     margin: 20px 0;
+    text-align: justify;
+    word-spacing: -0.2em;
 }
 .paragraph span{
     margin-left: 50px;
@@ -18,8 +20,7 @@
     margin-top: 100px;
 }
 .LogoUP img{    
-    display: flex;
-    justify-content: center;
+    margin-left: 100px;
     width: 180px;
     height: 140px;
 }

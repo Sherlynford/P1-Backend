@@ -182,9 +182,73 @@ export default function Createpost() {
                                 <label htmlFor="link" className='title-Link'>ลิงค์ที่เกียวข้อง</label>
                                 <input id="link" className='Link' type="text" placeholder='กรุณากรอก ลิงค์ที่เกียวข้อง....' aria-label="ลิงค์ที่เกี่ยวข้อง" value={formData.link} onChange={handleChange} />
 
-                                <label htmlFor="location" className='title-location'>สถานที่อยู่</label>
-                                <input id="location" className='location' type="text" placeholder="กรุณากรอก สถานที่อยู่..." aria-label="สถานที่อยู่" value={formData.location} onChange={handleChange} />
-
+                                <label htmlFor="location" className='title-location'>จังหวัด</label>
+                                <select id="location" className="location" value={formData.location} onChange={handleChange}>
+                                    <option value="">เลือกจังหวัด</option>
+                                    <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
+                                    <option value="กาญจนบุรี">กาญจนบุรี</option>
+                                    <option value="กาฬสินธุ์">กาฬสินธุ์</option>
+                                    <option value="การจนบุรี">การจนบุรี</option>
+                                    <option value="ขอนแก่น">ขอนแก่น</option>
+                                    <option value="ชลบุรี">ชลบุรี</option>
+                                    <option value="ชัยนาท">ชัยนาท</option>
+                                    <option value="ชัยภูมิ">ชัยภูมิ</option>
+                                    <option value="ชุมพร">ชุมพร</option>
+                                    <option value="ตรัง">ตรัง</option>
+                                    <option value="ตาก">ตาก</option>
+                                    <option value="นครนายก">นครนายก</option>
+                                    <option value="นครปฐม">นครปฐม</option>
+                                    <option value="นครพนม">นครพนม</option>
+                                    <option value="นครราชสีมา">นครราชสีมา</option>
+                                    <option value="นครศรีธรรมราช">นครศรีธรรมราช</option>
+                                    <option value="นนทบุรี">นนทบุรี</option>
+                                    <option value="นราธิวาส">นราธิวาส</option>
+                                    <option value="น่าน">น่าน</option>
+                                    <option value="บึงกาฬ">บึงกาฬ</option>
+                                    <option value="บุรีรัมย์">บุรีรัมย์</option>
+                                    <option value="ปทุมธานี">ปทุมธานี</option>
+                                    <option value="ประจวบคีรีขันธ์">ประจวบคีรีขันธ์</option>
+                                    <option value="ปราจีนบุรี">ปราจีนบุรี</option>
+                                    <option value="ปัตตานี">ปัตตานี</option>
+                                    <option value="พะเยา">พะเยา</option>
+                                    <option value="พังงา">พังงา</option>
+                                    <option value="พัทลุง">พัทลุง</option>
+                                    <option value="พิจิตร">พิจิตร</option>
+                                    <option value="พิษณุโลก">พิษณุโลก</option>
+                                    <option value="ภูเก็ต">ภูเก็ต</option>
+                                    <option value="มหาสารคาม">มหาสารคาม</option>
+                                    <option value="ยโสธร">ยโสธร</option>
+                                    <option value="ระนอง">ระนอง</option>
+                                    <option value="ระยอง">ระยอง</option>
+                                    <option value="ราชบุรี">ราชบุรี</option>
+                                    <option value="ร้อยเอ็ด">ร้อยเอ็ด</option>
+                                    <option value="ลพบุรี">ลพบุรี</option>
+                                    <option value="ลำปาง">ลำปาง</option>
+                                    <option value="ลำพูน">ลำพูน</option>
+                                    <option value="เลย">เลย</option>
+                                    <option value="ศรีสะเกษ">ศรีสะเกษ</option>
+                                    <option value="สกลนคร">สกลนคร</option>
+                                    <option value="สงขลา">สงขลา</option>
+                                    <option value="สมุทรปราการ">สมุทรปราการ</option>
+                                    <option value="สมุทรสงคราม">สมุทรสงคราม</option>
+                                    <option value="สมุทรสาคร">สมุทรสาคร</option>
+                                    <option value="สระแก้ว">สระแก้ว</option>
+                                    <option value="สระบุรี">สระบุรี</option>
+                                    <option value="สิงห์บุรี">สิงห์บุรี</option>
+                                    <option value="สุโขทัย">สุโขทัย</option>
+                                    <option value="สุพรรณบุรี">สุพรรณบุรี</option>
+                                    <option value="สุราษฎร์ธานี">สุราษฎร์ธานี</option>
+                                    <option value="สุรินทร์">สุรินทร์</option>
+                                    <option value="อ่างทอง">อ่างทอง</option>
+                                    <option value="อำนาจเจริญ">อำนาจเจริญ</option>
+                                    <option value="อุดรธานี">อุดรธานี</option>
+                                    <option value="อุตรดิตถ์">อุตรดิตถ์</option>
+                                    <option value="อุบลราชธานี">อุบลราชธานี</option>
+                                    <option value="เชียงใหม่">เชียงใหม่</option>
+                                    <option value="เชียงราย">เชียงราย</option>
+                                    <option value="ตราด">ตราด</option>
+                                    <option value="นครสวรรค์">นครสวรรค์</option>
+                                </select>
                                 <div className='btn-confirm-cancel flex justify-between mt-4'>
                                     <button type="submit" className='confirm'>ตกลง</button>
                                     <button type="button" className='cancel' onClick={handleCancel}>ยกเลิก</button>

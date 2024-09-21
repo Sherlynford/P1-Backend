@@ -44,7 +44,7 @@ export default function ProfileEdit() {
     }, [id]);
     useEffect(() => {
         if (!studentProfileId) return; // Ensure studentProfileId is available before making the request
-    
+
         // Fetch job applications based on studentProfileId
         axios.get(`${url2}${studentProfileId}`)
         .then(response => {
@@ -105,10 +105,10 @@ const filteredApplications = (jobApplications || []).filter(application => {
                 <div className='Status-student'>
                     <div className='search-intern flex justify-end'>
                         <label htmlFor="search" className='hidden'></label>
-                        <input 
-                            type="search" 
-                            name="search" 
-                            id="search" 
+                        <input
+                            type="search"
+                            name="search"
+                            id="search"
                             placeholder='ค้นหาชื่อหน่วยงาน, ชื่อตำแหน่ง, สถานะ'
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)} // อัปเดต state เมื่อมีการพิมพ์
@@ -137,21 +137,21 @@ const filteredApplications = (jobApplications || []).filter(application => {
                                             <td>{application.organizationPhone}</td>
                                             <td>{new Date(application.applicationDate).toLocaleDateString()}</td>
                                             <td>{application.applicationStatus}</td>
-                                         <td>
-    <button className='edit'>
-        <Image 
-            src={Imgedit} 
-            alt='image button edit' 
-            onClick={(e) => {
-                e.preventDefault();
-                // Store the selected application in localStorage
-                localStorage.setItem('selectedApplication', JSON.stringify(application));
-                // Redirect to the edit page
-                window.location.href = '/pages/ManualpostEdit';
-            }}
-        />
-    </button>
-</td>
+                                            <td>
+                                                <button className='edit'>
+                                                    <Image
+                                                        src={Imgedit}
+                                                        alt='image button edit'
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            // Store the selected application in localStorage
+                                                            localStorage.setItem('selectedApplication', JSON.stringify(application));
+                                                            // Redirect to the edit page
+                                                            window.location.href = '/pages/ManualpostEdit';
+                                                        }}
+                                                    />
+                                                </button>
+                                            </td>
 
                                         </tr>
                                     ))}

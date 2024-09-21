@@ -296,25 +296,24 @@ if (error) {
                                         <label htmlFor="faculty" className='title-faculty'>คณะ</label>
                                         <select id="faculty" className="faculty" value={formData.faculty} onChange={handleChange}>
                                             <option value="">เลือกคณะ</option>
-                                            <option value="faculty1">คณะเกษตรศาสตร์และทรัพยากรธรรมชาติ</option>
-                                            <option value="faculty2">คณะเทคโนโลยีสารสนเทศและการสื่อสาร</option>
-                                            <option value="faculty3">คณะทันตแพทยศาสตร์</option>
-                                            <option value="faculty4">คณะนิติศาสตร์</option>
-                                            <option value="faculty5">คณะบริหารธุรกิจและนิเทศศาสตร์</option>
-                                            <option value="faculty6">คณะพยาบาลศาสตร์</option>
-                                            <option value="faculty7">คณะพลังงานและสิ่งแวดล้อม</option>
-                                            <option value="faculty8">คณะแพทยศาสตร์</option>
-                                            <option value="faculty9">คณะเภสัชศาสตร์</option>
-                                            <option value="faculty10">คณะรัฐศาสตร์และสังคมศาสตร์</option>
-                                            <option value="faculty11">คณะวิทยาศาสตร์</option>
-                                            <option value="faculty12">คณะวิทยาศาสตร์การแพทย์</option>
-                                            <option value="faculty13">คณะวิศวกรรมศาสตร์</option>
-                                            <option value="faculty14">คณะสถาปัตยกรรมศาสตร์และศิลปกรรมศาสตร์</option>
-                                            <option value="faculty15">คณะสหเวชศาสตร์</option>
-                                            <option value="faculty16">คณะสาธารณสุขศาสตร์</option>
-                                            <option value="faculty17">คณะศิลปศาสตร์</option>
-                                            <option value="faculty18">วิทยาลัยการจัดการ</option>
-                                            <option value="faculty19">วิทยาลัยการศึกษา</option>
+                                            <option value="คณะเกษตรศาสตร์และทรัพยากรธรรมชาติ">คณะเกษตรศาสตร์และทรัพยากรธรรมชาติ</option>
+                                            <option value="คณะเทคโนโลยีสารสนเทศและการสื่อสาร">คณะเทคโนโลยีสารสนเทศและการสื่อสาร</option>
+                                            <option value="คณะทันตแพทยศาสตร์">คณะทันตแพทยศาสตร์</option>
+                                            <option value="คณะนิติศาสตร์">คณะนิติศาสตร์</option>
+                                            <option value="คณะบริหารธุรกิจและนิเทศศาสตร์">คณะบริหารธุรกิจและนิเทศศาสตร์</option>
+                                            <option value="คณะพยาบาลศาสตร์">คณะพยาบาลศาสตร์</option>
+                                            <option value="คณะพลังงานและสิ่งแวดล้อม">คณะพลังงานและสิ่งแวดล้อม</option>
+                                            <option value="คณะแพทยศาสตร์">คณะแพทยศาสตร์</option>
+                                            <option value="คณะเภสัชศาสตร์">คณะเภสัชศาสตร์</option>
+                                            <option value="คณะรัฐศาสตร์และสังคมศาสตร์">คณะรัฐศาสตร์และสังคมศาสตร์</option>
+                                            <option value="คณะวิทยาศาสตร์">คณะวิทยาศาสตร์</option>
+                                            <option value="คณะวิศวกรรมศาสตร์">คณะวิศวกรรมศาสตร์</option>
+                                            <option value="คณะสถาปัตยกรรมศาสตร์และศิลปกรรมศาสตร์">คณะสถาปัตยกรรมศาสตร์และศิลปกรรมศาสตร์</option>
+                                            <option value="คณะสหเวชศาสตร์">คณะสหเวชศาสตร์</option>
+                                            <option value="คณะสาธารณสุขศาสตร์">คณะสาธารณสุขศาสตร์</option>
+                                            <option value="คณะศิลปศาสตร์">คณะศิลปศาสตร์</option>
+                                            <option value="วิทยาลัยการจัดการ">วิทยาลัยการจัดการ</option>
+                                            <option value="วิทยาลัยการศึกษา">วิทยาลัยการศึกษา</option>
                                         </select>
 
                                         <label htmlFor="major" className='title-major'>สาขา</label>
