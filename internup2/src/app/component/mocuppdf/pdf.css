@@ -5,8 +5,8 @@
     height: 100%;
     width: 800px;
     background: #fff;
-    margin: 20px 0;
     flex-direction: column; 
+    padding: 0 60px;
 }
 .paragraph{
     margin: 20px 0;
@@ -20,7 +20,6 @@
     margin-top: 100px;
 }
 .LogoUP img{    
-    margin-left: 100px;
     width: 180px;
     height: 140px;
 }
