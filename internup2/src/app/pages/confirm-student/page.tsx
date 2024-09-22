@@ -107,32 +107,28 @@ export default function ProfileEdit() {
     }, [teacherMajor]);
 
     const filteredApplications = studentData
-        .filter(student => student.manualJobApplications && student.manualJobApplications.length > 0)
-        .flatMap(student =>
-            student.manualJobApplications
-                .filter(application => application.applicationStatus === "ยอมรับ" || application.applicationStatus === "ยืนยัน")
-                .map(application => ({
-                    studentID: student.studentID,
-                    firstName: student.firstName,
-                    lastName: student.lastName,
-                    organizationName: application.organizationName,
-                    jobName: application.jobName,
-                    applicationDate: application.applicationDate,
-                    applicationStatus: application.applicationStatus
-                }))
-        )
-        .filter(application => {
-            const searchLower = searchTerm.toLowerCase();
-            return (
-                application.studentID.toLowerCase().includes(searchLower) ||
-                application.firstName.toLowerCase().includes(searchLower) ||
-                application.lastName.toLowerCase().includes(searchLower) ||
-                application.organizationName.toLowerCase().includes(searchLower) ||
-                application.jobName.toLowerCase().includes(searchLower) ||
-                application.applicationDate.toLowerCase().includes(searchLower)||
-                application.applicationStatus.toLowerCase().includes(searchLower)
-            );
-        });
+    .filter(student => student.manualJobApplications && student.manualJobApplications.length > 0)
+    .flatMap(student =>
+        student.manualJobApplications
+            .filter(application => application.applicationStatus === "ยอมรับ" || application.applicationStatus === "ยืนยัน")
+            .map(application => ({
+                ...student,  // Spread all student data
+                ...application  // Spread all application data
+            }))
+    )
+    .filter(application => {
+        const searchLower = searchTerm.toLowerCase();
+        return (
+            application.studentID.toLowerCase().includes(searchLower) ||
+            application.firstName.toLowerCase().includes(searchLower) ||
+            application.lastName.toLowerCase().includes(searchLower) ||
+            application.organizationName.toLowerCase().includes(searchLower) ||
+            application.jobName.toLowerCase().includes(searchLower) ||
+            application.applicationDate.toLowerCase().includes(searchLower) ||
+            application.applicationStatus.toLowerCase().includes(searchLower)
+        );
+    });
+
 
     // Calculate pagination
     const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
