@@ -41,8 +41,7 @@ public class ManualJobApplication {
     @Column(nullable = false)  
     private String jobName;
 
-    @NotBlank(message = "cannot be null or empty")
-    @Column(nullable = false,name = "applicationStatus")  
+    @Column(name = "applicationStatus")  
     private String applicationStatus;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")

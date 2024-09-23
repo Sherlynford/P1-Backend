@@ -18,7 +18,7 @@ public class Person {
 
     @NotBlank(message = "Password cannot be null or empty")
     @Size(min = 8, message = "Password must be at least 8 characters long")
-    @Column(nullable = false, unique = true)   
+    @Column(nullable = false)   
     private String password;
 
     @NotBlank(message = "cannot be null or empty")

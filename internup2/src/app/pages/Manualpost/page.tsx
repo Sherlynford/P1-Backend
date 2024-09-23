@@ -102,8 +102,8 @@ export default function Manualpost() {
         const token = localStorage.getItem('token');
     
         // ตรวจสอบว่าฟิลด์ที่จำเป็นถูกกรอกครบหรือไม่
-        const { organizationName, organizationAddress, organizationEmail, organizationPhone, jobName, applicationStatus, applicationDate } = formData;
-        if (!organizationName || !organizationAddress || !organizationEmail || !organizationPhone || !jobName || !applicationStatus || !applicationDate) {
+        const { organizationName, organizationAddress, organizationEmail, organizationPhone, jobName, applicationDate } = formData;
+        if (!organizationName || !organizationAddress || !organizationEmail || !organizationPhone || !jobName  || !applicationDate) {
             Swal.fire('ข้อผิดพลาด', 'กรุณากรอกข้อมูลให้ครบทุกฟิลด์', 'error');
             setLoading(false);
             return;

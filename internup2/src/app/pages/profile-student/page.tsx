@@ -344,7 +344,7 @@ export default function Profile() {
                                 <div className='content-profile'>
                                     <div className='image-student flex justify-center'>
                                         <img
-                                            src={studentData?.studentProfile?.profileIMG || Profilestudent1}
+                                            src={studentData?.studentProfile?.profileIMG || ''}
                                             alt='Profile picture of student'
                                             width={150}
                                             height={150}
@@ -372,7 +372,7 @@ export default function Profile() {
                                         <label htmlFor="cv" className='title-cv'>CV</label>
                                         <div className='cv'>
                                             <img
-                                                src={studentData?.studentProfile?.cv || IMGCV}
+                                                src={studentData?.studentProfile?.cv || ''}
                                                 alt='CV document'
                                                 width={150}
                                                 height={150}
@@ -382,7 +382,7 @@ export default function Profile() {
                                         <label htmlFor="transcript" className='title-transcript'>Transcript</label>
                                         <div className='transcript'>
                                             <img
-                                                src={studentData?.studentProfile?.transcript || Transcript}
+                                                src={studentData?.studentProfile?.transcript || ''}
                                                 alt='Transcript document'
                                                 width={150}
                                                 height={150}
