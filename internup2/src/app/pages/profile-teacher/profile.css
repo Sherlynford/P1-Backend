@@ -1,6 +1,9 @@
+
+
 body{
     background: #EEEBF8;
-}
+    font-family: 'Roboto Flex', sans-serif;
+} 
 .proflie-teacher{
     height: 100vh;
 }

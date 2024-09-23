@@ -1,0 +1,40 @@
+
+body{
+    font-family: 'Roboto Flex', sans-serif;
+    background: #EEEBF8;
+}
+.Data-content{
+    width: 1000px;
+    height: 100%;
+    background: #fff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); /* สร้างเงา */
+    padding: 0 100px;
+}
+.Data-title{
+    font-size: 32px;
+    font-weight: bold;
+    color: black;
+    margin: 20px 0;
+    text-align: center;
+}
+.Data-teacher{
+    padding: 20px 0;
+}
+.Data-teacher h1{
+    font-size: 24px;
+    color: black;
+    margin: 20px 0;
+}
+.Data-student {
+    padding: 20px 0;
+}
+.Data-student h1{
+    font-size: 24px;
+    color: black;
+    margin: 20px 0;
+}
+.Data-Dateofreferral h1{
+    font-size: 24px;
+    color: black;
+    margin: 20px 0;
+}

@@ -1,6 +1,9 @@
+
+
 body{
     background: #EEEBF8;
-}
+    font-family: 'Roboto Flex', sans-serif;
+} 
 .block-manualpost{
     width: 1000px;
     height: 100%;

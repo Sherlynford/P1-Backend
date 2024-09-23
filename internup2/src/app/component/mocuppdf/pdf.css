@@ -1,3 +1,7 @@
+
+body{
+    font-family: 'Roboto Flex', sans-serif;
+}
 .Form-pdf{
     width: 100%;
 }
@@ -72,9 +76,21 @@
 }
 .reason{
     margin-left: 150px;
-    margin-bottom: 100px;
+    margin-bottom: 80px;
 }
 .name-teacher{
     margin-left: 165px;
-    margin-bottom: 100px;
+    margin-bottom: 80px;
+}
+
+.download{
+    margin-top: 50px;
+}
+.download button{
+    margin: 0 10px;
+    padding: 5px ;
+    font-size: 20px;
+    background: #A865FF;
+    border-radius: 20px;
+    color: #fff;
 }

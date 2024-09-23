@@ -1,0 +1,140 @@
+'use client';
+import React, { useEffect, useState } from 'react';
+import '../../component/dataall/data.css';
+import Image from 'next/image';
+import LogoUp from '../../image/logo.jpg';
+
+const Mocuppdf = () => {
+    const [formData, setFormData] = useState({
+        documentNumber: '',
+        fullname: '',
+        position: '',
+        telephone: '',
+    });
+
+    const [selectedStudent, setSelectedStudent] = useState({
+        student: {
+            studentID: '',
+            firstName: '',
+            lastName: '',
+            organizationName: '',
+            jobName: '',
+            applicationDate: '',
+        },
+        teacher: {
+            firstName: '',
+            lastName: '',
+            phoneNumber: '',
+            faculty: '',
+            major: '',
+        },
+        dateSelected: '',
+    });
+
+    const formatThaiDate = (dateString) => {
+        const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Bangkok', locale: 'th-TH' };
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const month = date.toLocaleString('th-TH', { month: 'long' });
+        const year = date.getFullYear() + 543; // เพิ่ม 543 เพื่อแปลงเป็นปีไทย
+        return `${day} ${month} ${year}`;
+    };
+    
+    const parseDateFromToken = (dateString: string) => {
+        const [day, month, year] = dateString.split('/'); // แยกวัน เดือน ปี
+        return new Date(year, month - 1, day); // สร้าง Date Object
+    };
+
+    // ฟังก์ชันเพื่อแสดงวันที่เป็นภาษาไทย
+    const formatDateThai = (date: Date) => {
+        const monthNamesThai = [
+            "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน",
+            "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม",
+            "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+        ];
+
+        const day = date.getDate();
+        const month = monthNamesThai[date.getMonth()]; // ดึงชื่อเดือน
+        const year = date.getFullYear() + 543; // เพิ่ม 543 เพื่อแสดงปีพุทธศักราช
+
+        return `${day} ${month} ${year}`; // ตัวอย่าง: 21 กันยายน 2567
+    };
+
+    useEffect(() => {
+        const storedSelectedStudent = localStorage.getItem('selectedStudent');
+        if (storedSelectedStudent) {
+            const student = JSON.parse(storedSelectedStudent);
+            console.log(student); // ตรวจสอบค่าที่ถูกโหลด
+            setSelectedStudent(JSON.parse(storedSelectedStudent));
+        } else {
+            setSelectedStudent({
+                student: {
+                    studentID: '',
+                    firstName: '',
+                    lastName: '',
+                    organizationName: '',
+                    jobName: '',
+                    applicationDate: '',
+                },
+                teacher: {
+                    firstName: '',
+                    lastName: '',
+                    phoneNumber: '',
+                    faculty: '',
+                    major: '',
+                },
+                dateSelected: '',
+            });
+        }
+    }, [])
+    useEffect(() => {
+        const storedFormData = localStorage.getItem('formData');
+        if (storedFormData) {
+            const application = JSON.parse(storedFormData);
+            setFormData({
+                documentNumber: application.documentNumber,
+                fullname: application.fullname,
+                position: application.position,
+                telephone: application.telephone,
+            });
+        }
+    }, []);
+
+    return (
+        <div>
+            <div className='Form-Data mt-10 mb-10 flex justify-center'>
+                <div>
+                    <div className='Data-content flex flex-col justify-center'>
+                        <div className='Data-title'>
+                            <h1>รายละเอียดข้อมูลอาจารย์</h1>
+                        </div>
+                        <div className='Data-teacher'>
+                           <h1>คณะ {selectedStudent.teacher.faculty}</h1> 
+                           <h1>สาขาวิชา {selectedStudent.teacher.major}</h1>
+                           <h1>ชื่อ {selectedStudent.teacher.firstName} {selectedStudent.teacher.lastName}</h1>
+                           <h1>เบอร์โทรศัพท์ {selectedStudent.teacher.phoneNumber}</h1>
+                        </div>
+                        <div className='Data-title'>
+                            <h1>รายละเอียดข้อมูลนักศึกษา</h1>
+                        </div>
+                        <div className='Data-student'>
+                            <h1>รหัสนักศึกษา {selectedStudent.student.studentID}</h1>
+                            <h1>ชื่อ {selectedStudent.student.firstName} {selectedStudent.student.lastName}</h1>
+                            <h1>สังกัด {selectedStudent.student.organizationName}</h1>
+                            <h1>ตําแหน่ง {selectedStudent.student.jobName}</h1>
+                            <h1>วันที่สมัคร {formatThaiDate(selectedStudent.student.applicationDate)}</h1>
+                        </div>
+                        <div className='Data-title'>
+                            <h1>รายละเอียดข้อมูลอนุมัติ</h1>
+                        </div>
+                        <div className='Data-Dateofreferral'>
+                            <h1>วันที่อนุมัติ {formatDateThai(new Date())}</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Mocuppdf;

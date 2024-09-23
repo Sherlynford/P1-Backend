@@ -33,7 +33,7 @@ const PdfDownload = () => {
         if (result.isConfirmed) {
         localStorage.setItem('formData', JSON.stringify(formData)); // เก็บข้อมูลใน localStorage
         // นำทางไปยังหน้าถัดไป (ถ้าต้องการ)
-        router.push(`/component/mocuppdf`);
+        router.push(`/pages/FilePDF`);
         }
     };
 
