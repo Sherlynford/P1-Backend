@@ -99,7 +99,7 @@ const Mocuppdf = () => {
                             </p>
                         </div>
                         <div className='Date flex justify-center'>
-                            <p>{formatThaiDate(selectedStudent.student.applicationDate)}</p>
+                            <p>{formatThaiDate(selectedStudent.dateSelected)}</p>
                         </div>
                         <div className='content-form'>
                             <p>เรื่อง <span>ขอส่งนิสิตเข้ารับการฝึกประสบการณ์ทางด้านวิชาชีพ</span></p>
@@ -111,8 +111,8 @@ const Mocuppdf = () => {
                                 จากสถานประกอบการมาประยุกต์ใช้กับการศึกษาของนิสิต
                             </p>
                             <p className='paragraph'>
-                                <span>ในการนี้ {selectedStudent.teacher.faculty} {selectedStudent.student.firstName} {selectedStudent.student.lastName} นิสิตสาขา{selectedStudent.teacher.major} {selectedStudent.teacher.faculty} เข้าฝึกประสบการณ์ด้านวิชาชีพ ระยะเวลาการฝึกปฏิบัติ
-                                    1 เมษายน 2567 ถึง 31 พฤษภาคม 2567 </span>
+                                <span>ในการนี้ {selectedStudent.teacher.faculty} จึงขอส่ง {selectedStudent.student.firstName} {selectedStudent.student.lastName} นิสิตสาขา{selectedStudent.teacher.major} {selectedStudent.teacher.faculty} เข้าฝึกประสบการณ์ด้านวิชาชีพ ระยะเวลาการฝึกปฏิบัติ
+                                <span>{formatThaiDate(selectedStudent.student.internStartDate)}</span> ถึง <span>{formatThaiDate(selectedStudent.student.internEndDate)}</span> </span>
                                 ทั้งนี้ มอบหมายให้ {formData.fullname} ตำแหน่ง {formData.position}
                                 เป็นผู้ประสานงาน หมายเลขโทรศัพท์ {selectedStudent.teacher.phoneNumber}
                             </p>

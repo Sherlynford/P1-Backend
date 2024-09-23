@@ -210,7 +210,7 @@ export default function ProfileEdit() {
                                                                 cancelButtonText: 'ยกเลิก'
                                                             }).then((result) => {
                                                                 if (result.isConfirmed) {
-                                                                    const LocalDateNow = new Date().toLocaleDateString('en-GB');
+                                                                    const LocalDateNow = new Date().toISOString().split('T')[0];
 
                                                                     localStorage.setItem('selectedStudent', JSON.stringify({
                                                                         student: application,
