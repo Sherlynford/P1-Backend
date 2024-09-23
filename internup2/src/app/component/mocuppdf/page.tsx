@@ -112,7 +112,7 @@ const Mocuppdf = () => {
                             </p>
                             <p className='paragraph'>
                                 <span>ในการนี้ {selectedStudent.teacher.faculty} จึงขอส่ง {selectedStudent.student.firstName} {selectedStudent.student.lastName} นิสิตสาขา{selectedStudent.teacher.major} {selectedStudent.teacher.faculty} เข้าฝึกประสบการณ์ด้านวิชาชีพ ระยะเวลาการฝึกปฏิบัติ
-                                <span>{formatThaiDate(selectedStudent.student.internStartDate)}</span> ถึง <span>{formatThaiDate(selectedStudent.student.internEndDate)}</span> </span>
+                                {formatThaiDate(selectedStudent.student.internStartDate)} ถึง {formatThaiDate(selectedStudent.student.internEndDate)} </span>
                                 ทั้งนี้ มอบหมายให้ {formData.fullname} ตำแหน่ง {formData.position}
                                 เป็นผู้ประสานงาน หมายเลขโทรศัพท์ {selectedStudent.teacher.phoneNumber}
                             </p>
