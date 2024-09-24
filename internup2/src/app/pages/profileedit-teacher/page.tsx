@@ -285,8 +285,152 @@ export default function ProfileEdit() {
                                 <option value="วิทยาลัยการศึกษา">วิทยาลัยการศึกษา</option>
                             </select>
 
-                            <label htmlFor="major" className='title-major'>สาขา</label>
-                            <input id="major" className='major' type="text" placeholder='กรุณากรอกสาขา ชื่อเต็ม ไม่ย่อ และ ไม่มีการเว้นวรรค' value={formData.major} onChange={handleChange} />
+                            <label htmlFor="major" className="title-major">
+                      สาขา
+                    </label>
+                    <select
+                      id="major"
+                      className="major"
+                      value={formData.major}
+                      onChange={handleChange}
+                    >
+                      <option value="">กรุณาเลือกสาขา</option>
+                      <option value="เกษตรศาสตร์">เกษตรศาสตร์</option>
+                      <option value="เทคโนโลยีนวัตกรรมการประมง">
+                        เทคโนโลยีนวัตกรรมการประมง
+                      </option>
+                      <option value="ความปลอดภัยทางอาหาร">
+                        ความปลอดภัยทางอาหาร
+                      </option>
+                      <option value="วิทยาศาสตร์และเทคโนโลยีการอาหาร">
+                        วิทยาศาสตร์และเทคโนโลยีการอาหาร
+                      </option>
+                      <option value="สัตวศาสตร์">สัตวศาสตร์</option>
+                      <option value="เทคโนโลยีการเกษตร">
+                        เทคโนโลยีการเกษตร
+                      </option>
+                      <option value="ทันตแพทยศาสตรบัณฑิต">
+                        ทันตแพทยศาสตรบัณฑิต
+                      </option>
+                      <option value="คอมพิวเตอร์กราฟิกและมัลติมีเดีย">
+                        คอมพิวเตอร์กราฟิกและมัลติมีเดีย
+                      </option>
+                      <option value="ธุรกิจดิจิทัล">ธุรกิจดิจิทัล</option>
+                      <option value="เทคโนโลยีสารสนเทศ">
+                        เทคโนโลยีสารสนเทศ
+                      </option>
+                      <option value="ภูมิสารสนเทศศาสตร์">
+                        ภูมิสารสนเทศศาสตร์
+                      </option>
+                      <option value="วิทยาการข้อมูลและการประยุกต์">
+                        วิทยาการข้อมูลและการประยุกต์
+                      </option>
+                      <option value="วิทยาการคอมพิวเตอร์">
+                        วิทยาการคอมพิวเตอร์
+                      </option>
+                      <option value="วิศวกรรมคอมพิวเตอร์">
+                        วิศวกรรมคอมพิวเตอร์
+                      </option>
+                      <option value="วิศวกรรมซอฟต์แวร์">
+                        วิศวกรรมซอฟต์แวร์
+                      </option>
+                      <option value="นิติศาสตรบัณฑิต">นิติศาสตรบัณฑิต</option>
+                      <option value="เศรษฐศาสตรบัณฑิต">เศรษฐศาสตรบัณฑิต</option>
+                      <option value="การจัดการการสื่อสาร">
+                        การจัดการการสื่อสาร
+                      </option>
+                      <option value="การสื่อสารสื่อใหม่">
+                        การสื่อสารสื่อใหม่
+                      </option>
+                      <option value="การเงินและการลงทุน">
+                        การเงินและการลงทุน
+                      </option>
+                      <option value="การจัดการธุรกิจ">การจัดการธุรกิจ</option>
+                      <option value="การตลาดดิจิทัล">การตลาดดิจิทัล</option>
+                      <option value="บัญชีบัณฑิต">บัญชีบัณฑิต</option>
+                      <option value="การท่องเที่ยวและการโรงแรม">
+                        การท่องเที่ยวและการโรงแรม
+                      </option>
+                      <option value="พยาบาลศาสตรบัณฑิต">
+                        พยาบาลศาสตรบัณฑิต
+                      </option>
+                      <option value="วิศวกรรมสิ่งแวดล้อม">
+                        วิศวกรรมสิ่งแวดล้อม
+                      </option>
+                      <option value="การจัดการพลังงานและสิ่งแวดล้อม">
+                        การจัดการพลังงานและสิ่งแวดล้อม
+                      </option>
+                      <option value="แพทยศาสตรบัณฑิต">แพทยศาสตรบัณฑิต</option>
+                      <option value="ปฏิบัติการฉุกเฉินการแพทย์">
+                        ปฏิบัติการฉุกเฉินการแพทย์
+                      </option>
+                      <option value="บริบาลทางเภสัชกรรม">
+                        บริบาลทางเภสัชกรรม
+                      </option>
+                      <option value="วิทยาศาสตร์เครื่องสำอาง">
+                        วิทยาศาสตร์เครื่องสำอาง
+                      </option>
+                      <option value="การจัดการนวัตกรรมสาธารณะ">
+                        การจัดการนวัตกรรมสาธารณะ
+                      </option>
+                      <option value="รัฐศาสตรบัณฑิต">รัฐศาสตรบัณฑิต</option>
+                      <option value="พัฒนาสังคม">พัฒนาสังคม</option>
+                      <option value="เคมี">เคมี</option>
+                      <option value="คณิตศาสตร์">คณิตศาสตร์</option>
+                      <option value="ชีววิทยา">ชีววิทยา</option>
+                      <option value="ฟิสิกส์">ฟิสิกส์</option>
+                      <option value="วิทยาศาสตร์การออกกำลังกายและการกีฬา">
+                        วิทยาศาสตร์การออกกำลังกายและการกีฬา
+                      </option>
+                      <option value="สถิติประยุกต์และการจัดการข้อมูล">
+                        สถิติประยุกต์และการจัดการข้อมูล
+                      </option>
+                      <option value="วิศวกรรมเครื่องกล">
+                        วิศวกรรมเครื่องกล
+                      </option>
+                      <option value="วิศวกรรมโยธา">วิศวกรรมโยธา</option>
+                      <option value="วิศวกรรมไฟฟ้า">วิศวกรรมไฟฟ้า</option>
+                      <option value="วิศวกรรมอุตสาหการ">
+                        วิศวกรรมอุตสาหการ
+                      </option>
+                      <option value="ดนตรีและนาฏศิลป์">ดนตรีและนาฏศิลป์</option>
+                      <option value="ศิลปะและการออกแบบ">
+                        ศิลปะและการออกแบบ
+                      </option>
+                      <option value="สถาปัตยกรรม">สถาปัตยกรรม</option>
+                      <option value="สถาปัตยกรรมภายใน">สถาปัตยกรรมภายใน</option>
+                      <option value="กายภาพบำบัดบัณฑิต">
+                        กายภาพบำบัดบัณฑิต
+                      </option>
+                      <option value="เทคนิคการแพทย์">เทคนิคการแพทย์</option>
+                      <option value="การแพทย์แผนจีนบัณฑิต">
+                        การแพทย์แผนจีนบัณฑิต
+                      </option>
+                      <option value="การแพทย์แผนไทยประยุกต์บัณฑิต">
+                        การแพทย์แผนไทยประยุกต์บัณฑิต
+                      </option>
+                      <option value="การส่งเสริมสุขภาพ">
+                        การส่งเสริมสุขภาพ
+                      </option>
+                      <option value="อนามัยสิ่งแวดล้อม">
+                        อนามัยสิ่งแวดล้อม
+                      </option>
+                      <option value="อาชีวอนามัยและความปลอดภัย">
+                        อาชีวอนามัยและความปลอดภัย
+                      </option>
+                      <option value="อนามัยชุมชน">อนามัยชุมชน</option>
+                      <option value="โภชนาการและการกำหนดอาหาร">
+                        โภชนาการและการกำหนดอาหาร
+                      </option>
+                      <option value="จุลชีววิทยา">จุลชีววิทยา</option>
+                      <option value="ชีวเคมี">ชีวเคมี</option>
+                      <option value="ภาษาไทย">ภาษาไทย</option>
+                      <option value="ภาษาจีน">ภาษาจีน</option>
+                      <option value="ภาษาญี่ปุ่น">ภาษาญี่ปุ่น</option>
+                      <option value="ภาษาฝรั่งเศส">ภาษาฝรั่งเศส</option>
+                      <option value="ภาษาอังกฤษ">ภาษาอังกฤษ</option>
+                      <option value="การศึกษา">การศึกษา</option>
+                    </select>
 
                             <div className='btn-confirm-cancel flex justify-between'>
                                 <button className='confirm'>ตกลง</button>

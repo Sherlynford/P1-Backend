@@ -97,6 +97,15 @@ body{
     border-radius: 10px;
     margin-bottom: 20px
 }
+.major{
+    font-size: 20px;
+    color: black;
+    width: 850px;
+    height: 60px;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 20px
+}
 .email{
     font-size: 20px;
     color: black;
