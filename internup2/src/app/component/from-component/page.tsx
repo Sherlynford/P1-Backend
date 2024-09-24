@@ -32,7 +32,6 @@ const PdfDownload = () => {
         });
         if (result.isConfirmed) {
         localStorage.setItem('formData', JSON.stringify(formData)); // เก็บข้อมูลใน localStorage
-        console.log('Data saved to localStorage:', formData);
         // นำทางไปยังหน้าถัดไป (ถ้าต้องการ)
         router.push(`/pages/FilePDF`);
         }

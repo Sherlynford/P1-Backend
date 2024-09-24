@@ -45,7 +45,6 @@ const Mocuppdf = () => {
         const storedSelectedStudent = localStorage.getItem('selectedStudent');
         if (storedSelectedStudent) {
             const student = JSON.parse(storedSelectedStudent);
-            console.log(student); // ตรวจสอบค่าที่ถูกโหลด
             setSelectedStudent(JSON.parse(storedSelectedStudent));
         } else {
             setSelectedStudent({
