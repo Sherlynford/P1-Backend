@@ -8,6 +8,7 @@ const Mocuppdf = () => {
     const [formData, setFormData] = useState({
         documentNumber: '',
         fullname: '',
+        dateout: '',
         position: '',
         telephone: '',
     });
@@ -74,6 +75,7 @@ const Mocuppdf = () => {
             setFormData({
                 documentNumber: application.documentNumber,
                 fullname: application.fullname,
+                dateout: application.dateout,
                 position: application.position,
                 telephone: application.telephone,
             });
@@ -85,20 +87,24 @@ const Mocuppdf = () => {
             <div className='Form-pdf flex justify-center'>
                 <div>
                     <div className='form-box flex'>
-                        <div className='LogoUP flex justify-between'>
+                        <div className='LogoUP flex'>
                             <div className='left-top flex items-center'>
-                                <p id='documentnumber'>{formData.documentNumber}</p>
+                                <p id='documentnumber'>ที่ อว {formData.documentNumber}</p>
                             </div>
-                            <Image src={LogoUp} alt='Logo UP' />
-                            <p className='right-top'>
+                            <div className=' flex justify-between flex-1'>
+                            <div><Image src={LogoUp} alt='Logo UP' /></div>
+                           <div>
+                           <p className='right-top'>
                                 <span>{selectedStudent.teacher.faculty}</span> <br />
                                 มหาวิทยาลัยพะเยา <br />
                                 ตำบลแม่กา อำเภอเมือง <br />
                                 จังหวัดพะเยา 56000 <br />
                             </p>
+                           </div>
+                            </div>
                         </div>
                         <div className='Date flex justify-center'>
-                            <p>{formatThaiDate(selectedStudent.dateSelected)}</p>
+                            <p>{formData.dateout}</p>
                         </div>
                         <div className='content-form'>
                             <p>เรื่อง <span>ขอส่งนิสิตเข้ารับการฝึกประสบการณ์ทางด้านวิชาชีพ</span></p>
@@ -111,7 +117,7 @@ const Mocuppdf = () => {
                             </p>
                             <p className='paragraph'>
                                 <span>ในการนี้ {selectedStudent.teacher.faculty} จึงขอส่ง {selectedStudent.student.firstName} {selectedStudent.student.lastName} นิสิตสาขา{selectedStudent.teacher.major} {selectedStudent.teacher.faculty} เข้าฝึกประสบการณ์ด้านวิชาชีพ ระยะเวลาการฝึกปฏิบัติ
-                                {formatThaiDate(selectedStudent.student.internStartDate)} ถึง {formatThaiDate(selectedStudent.student.internEndDate)} </span>
+                                วันที่ {formatThaiDate(selectedStudent.student.internStartDate)} ถึง {formatThaiDate(selectedStudent.student.internEndDate)} </span>
                                 ทั้งนี้ มอบหมายให้ {formData.fullname} ตำแหน่ง {formData.position}
                                 เป็นผู้ประสานงาน หมายเลขโทรศัพท์ {selectedStudent.teacher.phoneNumber}
                             </p>
@@ -125,6 +131,7 @@ const Mocuppdf = () => {
                             <div className='low-test'>
                                 <p>งานวิชาการ <span>{selectedStudent.teacher.faculty}</span></p>
                                 <p>โทร 054 466 6666 ต่อ <span id='telephone'>{formData.telephone}</span></p>
+                                <p className='dot'>.</p>
                             </div>
                         </div>
                     </div>

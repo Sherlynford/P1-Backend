@@ -8,6 +8,7 @@ const Mocuppdf = () => {
     const [formData, setFormData] = useState({
         documentNumber: '',
         fullname: '',
+        dateout: '',
         position: '',
         telephone: '',
     });
@@ -38,26 +39,6 @@ const Mocuppdf = () => {
         const month = date.toLocaleString('th-TH', { month: 'long' });
         const year = date.getFullYear() + 543; // เพิ่ม 543 เพื่อแปลงเป็นปีไทย
         return `${day} ${month} ${year}`;
-    };
-    
-    const parseDateFromToken = (dateString: string) => {
-        const [day, month, year] = dateString.split('/'); // แยกวัน เดือน ปี
-        return new Date(year, month - 1, day); // สร้าง Date Object
-    };
-
-    // ฟังก์ชันเพื่อแสดงวันที่เป็นภาษาไทย
-    const formatDateThai = (date: Date) => {
-        const monthNamesThai = [
-            "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน",
-            "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม",
-            "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
-        ];
-
-        const day = date.getDate();
-        const month = monthNamesThai[date.getMonth()]; // ดึงชื่อเดือน
-        const year = date.getFullYear() + 543; // เพิ่ม 543 เพื่อแสดงปีพุทธศักราช
-
-        return `${day} ${month} ${year}`; // ตัวอย่าง: 21 กันยายน 2567
     };
 
     useEffect(() => {
@@ -93,6 +74,7 @@ const Mocuppdf = () => {
             setFormData({
                 documentNumber: application.documentNumber,
                 fullname: application.fullname,
+                dateout: application.dateout,
                 position: application.position,
                 telephone: application.telephone,
             });
@@ -105,13 +87,14 @@ const Mocuppdf = () => {
                 <div>
                     <div className='Data-content flex flex-col justify-center'>
                         <div className='Data-title'>
-                            <h1>รายละเอียดข้อมูลอาจารย์</h1>
+                            <h1>รายะลเอียดข้อมูลที่กรอก</h1>
                         </div>
-                        <div className='Data-teacher'>
-                           <h1>คณะ {selectedStudent.teacher.faculty}</h1> 
-                           <h1>สาขาวิชา {selectedStudent.teacher.major}</h1>
-                           <h1>ชื่อ {selectedStudent.teacher.firstName} {selectedStudent.teacher.lastName}</h1>
-                           <h1>เบอร์โทรศัพท์ {selectedStudent.teacher.phoneNumber}</h1>
+                        <div className='Data-form'>
+                            <h1>หมายเลขเอกสาร {formData.documentNumber}</h1>
+                            <h1>ชื่อ {formData.fullname}</h1>
+                            <h1>วันที่ {formData.dateout}</h1>
+                            <h1>ตําแหน่ง {formData.position}</h1>
+                            <h1>เบอร์โทรศัพท์ {formData.telephone}</h1>
                         </div>
                         <div className='Data-title'>
                             <h1>รายละเอียดข้อมูลนักศึกษา</h1>
@@ -124,10 +107,19 @@ const Mocuppdf = () => {
                             <h1>วันที่สมัคร {formatThaiDate(selectedStudent.student.applicationDate)}</h1>
                         </div>
                         <div className='Data-title'>
+                            <h1>รายละเอียดข้อมูลอาจารย์</h1>
+                        </div>
+                        <div className='Data-teacher'>
+                            <h1>คณะ {selectedStudent.teacher.faculty}</h1>
+                            <h1>สาขาวิชา {selectedStudent.teacher.major}</h1>
+                            <h1>ชื่อ {selectedStudent.teacher.firstName} {selectedStudent.teacher.lastName}</h1>
+                            <h1>เบอร์โทรศัพท์ {selectedStudent.teacher.phoneNumber}</h1>
+                        </div>
+                        <div className='Data-title'>
                             <h1>รายละเอียดข้อมูลอนุมัติ</h1>
                         </div>
                         <div className='Data-Dateofreferral'>
-                            <h1>วันที่อนุมัติ {formatDateThai(new Date())}</h1>
+                            <h1>วันที่อนุมัติ {formData.dateout}</h1>
                         </div>
                     </div>
                 </div>

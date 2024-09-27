@@ -212,12 +212,10 @@ export default function ProfileEdit() {
                             onClick={(e) => {
                               e.preventDefault();
                               Swal.fire({
-                                title: "ยืนยันการออกใบส่ง?",
+                                title: "ยืนยันการออกใบส่งตัว?",
                                 text: "คุณต้องการจะออกใบส่งตัวใช่หรือไม่?",
                                 icon: "warning",
                                 showCancelButton: true,
-                                confirmButtonColor: "#3085d6",
-                                cancelButtonColor: "#d33",
                                 confirmButtonText: "ยืนยัน",
                                 cancelButtonText: "ยกเลิก",
                               }).then((result) => {

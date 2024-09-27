@@ -26,6 +26,7 @@ body{
 .LogoUP img{    
     width: 180px;
     height: 140px;
+    margin-left: 100px;
 }
 .left-top label{
     margin-right: 10px;
@@ -41,7 +42,7 @@ body{
 }
 .right-top{ 
     margin-top: 100px;
-    margin-right: 20px;
+    padding-left: 50px;
 }
 .Date{
     margin: 20px 100px;
@@ -80,7 +81,7 @@ body{
 }
 .name-teacher{
     margin-left: 165px;
-    margin-bottom: 80px;
+    margin-bottom: 50px;
 }
 
 .download{
@@ -92,5 +93,8 @@ body{
     font-size: 20px;
     background: #A865FF;
     border-radius: 20px;
+    color: #fff;
+}
+.dot{
     color: #fff;
 }

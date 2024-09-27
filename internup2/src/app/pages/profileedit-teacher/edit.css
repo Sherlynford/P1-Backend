@@ -20,7 +20,12 @@ body{
     border-radius: 100%;
 }
 .change-img img{
+    width: 180px;
     height: 180px;
+    border-radius: 100%;
+}
+.change-img label{
+    height: 180px;  
     border-radius: 100%;
 }
 .edit-profile label{
