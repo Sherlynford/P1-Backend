@@ -91,15 +91,15 @@ useEffect(() => {
         <p style={{ marginLeft: "40px" }}><a href="/pages/status-student">สถานะนิสิต</a></p>
       </div>
       <div className='nav-teacher-right flex items-center'>
-      <div className=' mr-10'>Teacher</div>
+      <div className=' mr-10'>อาจารย์</div>
         <button className='profile-teacher-nav' onClick={toggleDropdown}>
           <img src={formData?.teacherProfile?.profileIMG} alt='this is image teacher' />
         </button>
         {isDropdownOpen && (
           <div className='dropdown-menu'>
             <ul>
-              <li><a href="/pages/profile-teacher" className='flex items-center justify-center'>Profile</a></li>
-              <li><a href="#" onClick={handleLogout} className='flex items-center justify-center'>Logout</a></li> {/* Call handleLogout on click */}
+              <li><a href="/pages/profile-teacher" className='flex items-center justify-center'>โปรไฟล์</a></li>
+              <li><a href="#" onClick={handleLogout} className='flex items-center justify-center'>ออกจากระบบ</a></li> {/* Call handleLogout on click */}
             </ul>
           </div>
         )}

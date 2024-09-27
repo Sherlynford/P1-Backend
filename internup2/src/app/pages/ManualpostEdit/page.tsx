@@ -178,7 +178,7 @@ export default function Manualpost() {
     }
 
     if (error) {
-        return <div>{error}</div>;
+        return <div>กรุณาใส่ข้อมูลโปรไฟล์ก่อน</div>;
     }
 
     return (

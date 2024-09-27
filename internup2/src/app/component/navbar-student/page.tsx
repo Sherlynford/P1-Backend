@@ -100,7 +100,7 @@ export default function NavberLogin() {
         </p>
       </div>
       <div className='nav-student-right flex items-center'> 
-        <div className='mr-10'>Student</div>
+        <div className='mr-10'>นิสิต</div>
         <button className='profile-student-nav' onClick={toggleDropdown}>
           <img id='profileIMG' src={formData?.studentProfile?.profileIMG} alt='this is image student' />  
         </button>
@@ -108,10 +108,10 @@ export default function NavberLogin() {
           <div className='dropdown-menu-student'>
             <ul>
               <li>
-                <a href="/pages/profile-student" className='flex items-center justify-center'>Profile</a>
+                <a href="/pages/profile-student" className='flex items-center justify-center'>โปรไฟล์</a>
               </li>
               <li>
-                <a href="#" onClick={handleLogout} className='flex items-center justify-center'>Logout</a>
+                <a href="#" onClick={handleLogout} className='flex items-center justify-center'>ออกจากระบบ</a>
               </li>
             </ul>
           </div>

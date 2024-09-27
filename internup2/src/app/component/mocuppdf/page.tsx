@@ -104,7 +104,7 @@ const Mocuppdf = () => {
                             </div>
                         </div>
                         <div className='Date flex justify-center'>
-                            <p>{formData.dateout}</p>
+                            <p>{formatThaiDate(formData.dateout)}</p>
                         </div>
                         <div className='content-form'>
                             <p>เรื่อง <span>ขอส่งนิสิตเข้ารับการฝึกประสบการณ์ทางด้านวิชาชีพ</span></p>

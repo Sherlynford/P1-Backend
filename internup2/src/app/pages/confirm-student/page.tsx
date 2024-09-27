@@ -148,7 +148,7 @@ export default function ProfileEdit() {
   );
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>กรุณาใส่ข้อมูลโปรไฟล์ก่อน</div>;
   }
 
   if (error) {

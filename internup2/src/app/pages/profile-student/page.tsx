@@ -594,9 +594,6 @@ export default function Profile() {
                       onChange={handleChange}
                     />
 
-                    <label htmlFor="faculty" className="title-faculty">
-                      คณะ
-                    </label>
                     <label htmlFor="faculty" className='title-faculty'>คณะ</label>
                             <select id="faculty" className="faculty" value={formData.faculty} onChange={handleChange}>
                                 <option value="">เลือกคณะ</option>

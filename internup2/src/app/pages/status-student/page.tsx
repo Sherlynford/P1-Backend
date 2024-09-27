@@ -123,7 +123,7 @@ export default function Status() {
     const currentItems = filteredApplications.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div>กรุณาใส่ข้อมูลโปรไฟล์ก่อน.</div>;
     }
 
     if (error) {

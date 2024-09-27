@@ -49,7 +49,7 @@ export default function Register() {
         }
 
         const user = {
-            role: 'student',
+            role: 'teacher',
             email,
             password
         };
