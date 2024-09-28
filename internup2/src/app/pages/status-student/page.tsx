@@ -202,6 +202,7 @@ export default function Status() {
                         href={application.cv}
                         target="_blank"
                         rel="noopener noreferrer"
+                        style={{ color: "blue" }}
                       >
                         CV
                       </a>
@@ -211,6 +212,7 @@ export default function Status() {
                         href={application.transcript}
                         target="_blank"
                         rel="noopener noreferrer"
+                        style={{ color: "blue" }}
                       >
                         Transcript
                       </a>

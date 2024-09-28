@@ -221,6 +221,7 @@ export default function ProfileEdit() {
                           href={application.cv}
                           target="_blank"
                           rel="noopener noreferrer"
+                          style={{ color: "blue" }}
                         >
                           CV
                         </a>
@@ -230,6 +231,7 @@ export default function ProfileEdit() {
                           href={application.transcript}
                           target="_blank"
                           rel="noopener noreferrer"
+                          style={{ color: "blue" }}
                         >
                           Transcript
                         </a>
