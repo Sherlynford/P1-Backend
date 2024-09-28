@@ -133,7 +133,7 @@ export default function Register() {
                             </div>
                             <div className='btn-register mt-5 flex justify-between'>
                                 <button type='submit' className='register'onClick={() => {}}>ลงทะเบียน</button>
-                                <button type='button' className='cancel'><a href="/pages/login">ยกเลิก</a></button>
+                                <a href="/pages/login"> <button type='button' className='cancel'>ยกเลิก</button></a>
                             </div>
                         </form>
                     </div>
