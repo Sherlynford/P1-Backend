@@ -101,7 +101,7 @@ export default function Register() {
                         <h1>ลงทะเบียน</h1>
                         <form onSubmit={handleSubmit}>
                             <div className='flex flex-col'>
-                            <label htmlFor="email" className='title-email'>อีเมล (สามารถใส่อีเมลอะไรก็ได้)</label>
+                            <label htmlFor="email" className='title-email'>อีเมล </label>
                                 <input
                                     id="email"
                                     className='email'
