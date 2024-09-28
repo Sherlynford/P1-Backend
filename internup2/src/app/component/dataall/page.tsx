@@ -119,7 +119,7 @@ const Mocuppdf = () => {
                             <h1>รายละเอียดข้อมูลอนุมัติ</h1>
                         </div>
                         <div className='Data-Dateofreferral'>
-                            <h1>วันที่อนุมัติ {formData.dateout}</h1>
+                            <h1>วันที่อนุมัติ {formatThaiDate(formData.dateout)}</h1>
                         </div>
                     </div>
                 </div>

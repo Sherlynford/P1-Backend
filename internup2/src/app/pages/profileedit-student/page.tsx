@@ -691,13 +691,13 @@ export default function ProfileEdit() {
                   />
 
                   <label htmlFor="end-intern" className="title-end-intern">
-                    วันที่เลิกฝึกงาน
+                    วันที่สิ้นสุดการฝึกงาน
                   </label>
                   <DatePicker
                     selected={endDate}
                     onChange={(date) => setEndDate(date)}
                     className="end-intern"
-                    placeholderText="กดเลือกวันที่เลิกฝึกงาน"
+                    placeholderText="กดเลือกวันที่สิ้นสุดการฝึกงาน"
                   />
                   <div className="btn-confirm-cancel flex justify-between">
                     <button className="confirm">ตกลง</button>

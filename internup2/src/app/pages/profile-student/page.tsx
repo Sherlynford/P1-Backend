@@ -479,7 +479,7 @@ export default function Profile() {
                     />
 
                     <label htmlFor="end-intern" className="title-end-intern">
-                      วันที่เลิกฝึกงาน
+                      วันที่สิ้นสุดการฝึกงาน
                     </label>
                     <input
                       className="end-intern"
@@ -492,9 +492,9 @@ export default function Profile() {
                   </form>
                 </div>
                 <div className="btn-edit flex justify-center">
-                  <button className="edit">
-                    <a href="/pages/profileedit-student">แก้ไข</a>
-                  </button>
+                <a href="/pages/profileedit-student"><button className="edit">
+                    แก้ไข
+                  </button></a>
                 </div>
               </div>
             </div>
@@ -796,13 +796,13 @@ export default function Profile() {
                     />
 
                     <label htmlFor="end-intern" className="title-end-intern">
-                      วันที่เลิกฝึกงาน
+                      วันที่สิ้นสุดการฝึกงาน
                     </label>
                     <DatePicker
                       selected={endDate}
                       onChange={(date) => setEndDate(date)}
                       className="end-intern"
-                      placeholderText="กดเลือกวันที่เลิกฝึกงาน"
+                      placeholderText="กดเลือกวันที่สิ้นสุดการฝึกงาน"
                     />
 
                     <div className="btn-edit flex justify-center">
