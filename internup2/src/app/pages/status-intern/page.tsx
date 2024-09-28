@@ -88,7 +88,7 @@ const filteredApplications = (jobApplications || []).filter(application => {
         application.applicationStatus.toLowerCase().includes(searchLower) ||
         application.applicationDate.toLowerCase().includes(searchLower)
     );
-});
+}).sort((a, b) => new Date(b.applicationDate) - new Date(a.applicationDate))
 
 const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
 const currentItems = filteredApplications.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);

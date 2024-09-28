@@ -137,7 +137,8 @@ export default function ProfileEdit() {
         application.applicationDate.toLowerCase().includes(searchLower) ||
         application.applicationStatus.toLowerCase().includes(searchLower)
       );
-    });
+    })
+    .sort((a, b) => new Date(b.applicationDate) - new Date(a.applicationDate));
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
@@ -148,13 +149,19 @@ export default function ProfileEdit() {
   );
 
   const formatThaiDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Bangkok', locale: 'th-TH' };
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      timeZone: "Asia/Bangkok",
+      locale: "th-TH",
+    };
     const date = new Date(dateString);
     const day = date.getDate();
-    const month = date.toLocaleString('th-TH', { month: 'long' });
+    const month = date.toLocaleString("th-TH", { month: "long" });
     const year = date.getFullYear() + 543; // แปลงเป็นปีไทย
     return `${day} ${month} ${year}`;
-};
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -194,6 +201,8 @@ export default function ProfileEdit() {
                     <th>รหัสประจำตัวนิสิต</th>
                     <th>ชื่อจริง</th>
                     <th>นามสกุล</th>
+                    <th>CV</th>
+                    <th>Transcript</th>
                     <th>ชื่อหน่วยงาน</th>
                     <th>ชื่อตำแหน่งงาน</th>
                     <th>วันที่สมัครฝึกงาน</th>
@@ -207,6 +216,24 @@ export default function ProfileEdit() {
                       <td>{application.studentID}</td>
                       <td>{application.firstName}</td>
                       <td>{application.lastName}</td>
+                      <td>
+                        <a
+                          href={application.cv}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          CV
+                        </a>
+                      </td>
+                      <td>
+                        <a
+                          href={application.transcript}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Transcript
+                        </a>
+                      </td>
                       <td>{application.organizationName}</td>
                       <td>{application.jobName}</td>
                       <td>{formatThaiDate(application.applicationDate)}</td>
@@ -304,7 +331,7 @@ export default function ProfileEdit() {
                       </a>
                     </li>
                     {[...Array(totalPages)].map((_, i) => (
-                      <li key={i} style={{ marginRight: '10px' }}>
+                      <li key={i} style={{ marginRight: "10px" }}>
                         <a
                           href="#"
                           aria-current={

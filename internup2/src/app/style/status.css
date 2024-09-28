@@ -1,23 +1,25 @@
-
-
-body{
+body {
     background: #EEEBF8;
     font-family: 'Roboto Flex', sans-serif;
-}   
-.Status-student{
+}
+
+.Status-student {
     height: 100vh;
 }
-.search-intern{
+
+.search-intern {
     margin: 50px 150px;
 }
-.search-intern input{
+
+.search-intern input {
     width: 500px;
     height: 60px;
     border-radius: 20px;
     font-size: 20px;
     color: black;
 }
-.status-intern{
+
+.status-intern {
     width: 1500px;
     height: 100%;
     background: #FFFFFF;
@@ -25,29 +27,37 @@ body{
     border-radius: 20px;
     overflow: hidden;
 }
+
+/* Table styling */
 .table-status {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: collapse; /* Ensure no gaps between table borders */
 }
-.table-status thead{
-    border-radius: 20px;
+
+.table-status thead {
     background-color: #B540FD;
 }
-.table-status th{
+
+.table-status th, .table-status td {
+    font-size: 20px;
+    padding: 20px 15px;
+    text-align: center;
+    border: 1px solid black; /* Add borders around table cells */
+}
+
+.table-status th {
     font-size: 24px;
     font-weight: bold;
     color: #FFFFFF;
     padding: 20px 0;
-    text-align: center;
 }
-.table-status td {
-    font-size: 20px;
-    padding: 20px 15px;
-    text-align: center;
-}
-.pagination-job{
+
+/* Pagination */
+.pagination-job {
     margin: 20px 0;
 }
+
+/* Active page styling */
 .page-job.active {
     display: flex;
     justify-content: center;
@@ -60,19 +70,21 @@ body{
     width: 35px;
 }
 
+/* Adjustments for different screen sizes */
 @media screen and (min-width: 1280px) {
-    .status-intern{
+    .status-intern {
         width: 1200px;
     }
-    .table-status th{
+    .table-status th {
         font-size: 20px;
     }
 }
+
 @media screen and (min-width: 1440px) {
-    .status-intern{
+    .status-intern {
         width: 1400px;
     }
-    .table-status th{
+    .table-status th {
         font-size: 24px;
     }
 }
