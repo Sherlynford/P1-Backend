@@ -147,12 +147,21 @@ export default function ProfileEdit() {
     startIndex + itemsPerPage
   );
 
+  const formatThaiDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Bangkok', locale: 'th-TH' };
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.toLocaleString('th-TH', { month: 'long' });
+    const year = date.getFullYear() + 543; // แปลงเป็นปีไทย
+    return `${day} ${month} ${year}`;
+};
+
   if (loading) {
-    return <div>กรุณาใส่ข้อมูลโปรไฟล์ก่อน</div>;
+    return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div>กรุณาใส่ข้อมูลโปรไฟล์ก่อน.</div>;
   }
 
   const handlePageChange = (page) => {
@@ -200,7 +209,7 @@ export default function ProfileEdit() {
                       <td>{application.lastName}</td>
                       <td>{application.organizationName}</td>
                       <td>{application.jobName}</td>
-                      <td>{application.applicationDate}</td>
+                      <td>{formatThaiDate(application.applicationDate)}</td>
                       <td>{application.applicationStatus}</td>
                       <td>
                         <button className="edit">
@@ -295,7 +304,7 @@ export default function ProfileEdit() {
                       </a>
                     </li>
                     {[...Array(totalPages)].map((_, i) => (
-                      <li key={i}>
+                      <li key={i} style={{ marginRight: '10px' }}>
                         <a
                           href="#"
                           aria-current={

@@ -10,8 +10,8 @@ export default function NavberLogin() {
             <p style={{marginLeft:"83px"}}><a href="/pages/createpost-login">สร้างโพสต์</a></p>
         </div>
         <div className='nav-login-right'>
-            <button className='login'><a href="/pages/login">เข้าสู่ระบบ</a></button>
-            <button className='rigister'><a href="/pages/register">ลงทะเบียน</a></button>
+        <a href="/pages/login"><button className='login'>เข้าสู่ระบบ</button></a>
+            <a href="/pages/register"><button className='rigister'>ลงทะเบียน</button></a>
         </div>
     </div>;
 

@@ -75,6 +75,7 @@ export default function Profile() {
   const [imgPreview, setImgPreview] = useState("");
   const [cvPreview, setCvPreview] = useState("");
   const [transcriptPreview, setTranscriptPreview] = useState("");
+
   const handleChange = (event) => {
     const { id, value, type, files } = event.target;
     if (type === "file") {
@@ -100,14 +101,15 @@ export default function Profile() {
       // Generate and set file preview
       if (file) {
         const reader = new FileReader();
+        const file = event.target.files[0];
         reader.onloadend = () => {
           const result = reader.result as string;
           if (id === "imgFile") {
             setImgPreview(result);
           } else if (id === "cvFile") {
-            setCvPreview(result);
+            setCvPreview(file ? file.name : "");
           } else if (id === "transcriptFile") {
-            setTranscriptPreview(result);
+            setTranscriptPreview(file ? file.name : "");
           }
         };
         reader.readAsDataURL(file);
@@ -442,26 +444,37 @@ export default function Profile() {
                     <label htmlFor="cv" className="title-cv">
                       CV
                     </label>
-                    <div className="cv">
-                      <img
-                        src={studentData?.studentProfile?.cv || ""}
-                        alt="CV document"
-                        width={150}
-                        height={150}
-                      />
-                    </div>
+                    <input
+                      className="major"
+                      type="text"
+                      value={studentData?.studentProfile?.cv || ""}
+                      readOnly
+                      onClick={() => {
+                        if (studentData?.studentProfile?.cv) {
+                          window.open(studentData.studentProfile.cv, "_blank"); // Opens the CV link in a new tab
+                        }
+                      }}
+                      style={{ cursor: "pointer" }} // Changes the cursor to indicate it's clickable
+                    />
 
                     <label htmlFor="transcript" className="title-transcript">
                       Transcript
                     </label>
-                    <div className="transcript">
-                      <img
-                        src={studentData?.studentProfile?.transcript || ""}
-                        alt="Transcript document"
-                        width={150}
-                        height={150}
-                      />
-                    </div>
+                    <input
+                      className="major"
+                      type="text"
+                      value={studentData?.studentProfile?.transcript || ""}
+                      readOnly
+                      onClick={() => {
+                        if (studentData?.studentProfile?.transcript) {
+                          window.open(
+                            studentData.studentProfile.transcript,
+                            "_blank"
+                          ); // Opens the Transcript link in a new tab
+                        }
+                      }}
+                      style={{ cursor: "pointer" }} // Changes the cursor to indicate it's clickable
+                    />
 
                     <label
                       htmlFor="start-intern"
@@ -492,9 +505,9 @@ export default function Profile() {
                   </form>
                 </div>
                 <div className="btn-edit flex justify-center">
-                <a href="/pages/profileedit-student"><button className="edit">
-                    แก้ไข
-                  </button></a>
+                  <a href="/pages/profileedit-student">
+                    <button className="edit">แก้ไข</button>
+                  </a>
                 </div>
               </div>
             </div>
@@ -594,28 +607,55 @@ export default function Profile() {
                       onChange={handleChange}
                     />
 
-                    <label htmlFor="faculty" className='title-faculty'>คณะ</label>
-                            <select id="faculty" className="faculty" value={formData.faculty} onChange={handleChange}>
-                                <option value="">เลือกคณะ</option>
-                                <option value="คณะเกษตรศาสตร์และทรัพยากรธรรมชาติ">คณะเกษตรศาสตร์และทรัพยากรธรรมชาติ</option>
-                                <option value="คณะเทคโนโลยีสารสนเทศและการสื่อสาร">คณะเทคโนโลยีสารสนเทศและการสื่อสาร</option>
-                                <option value="คณะทันตแพทยศาสตร์">คณะทันตแพทยศาสตร์</option>
-                                <option value="คณะนิติศาสตร์">คณะนิติศาสตร์</option>
-                                <option value="คณะบริหารธุรกิจและนิเทศศาสตร์">คณะบริหารธุรกิจและนิเทศศาสตร์</option>
-                                <option value="คณะพยาบาลศาสตร์">คณะพยาบาลศาสตร์</option>
-                                <option value="คณะพลังงานและสิ่งแวดล้อม">คณะพลังงานและสิ่งแวดล้อม</option>
-                                <option value="คณะแพทยศาสตร์">คณะแพทยศาสตร์</option>
-                                <option value="คณะเภสัชศาสตร์">คณะเภสัชศาสตร์</option>
-                                <option value="คณะรัฐศาสตร์และสังคมศาสตร์">คณะรัฐศาสตร์และสังคมศาสตร์</option>
-                                <option value="คณะวิทยาศาสตร์">คณะวิทยาศาสตร์</option>
-                                <option value="คณะวิทยาศาสตร์การแพทย์">คณะวิทยาศาสตร์การแพทย์</option>
-                                <option value="คณะวิทยาศาสตร์การแพทย์">คณะวิศวกรรมศาสตร์</option>
-                                <option value="คณะสถาปัตยกรรมศาสตร์และศิลปกรรมศาสตร์">คณะสถาปัตยกรรมศาสตร์และศิลปกรรมศาสตร์</option>
-                                <option value="คณะสหเวชศาสตร์">คณะสหเวชศาสตร์</option>
-                                <option value="คณะสาธารณสุขศาสตร์">คณะสาธารณสุขศาสตร์</option>
-                                <option value="คณะศิลปศาสตร์">คณะศิลปศาสตร์</option>
-                                <option value="วิทยาลัยการศึกษา">วิทยาลัยการศึกษา</option>
-                            </select>
+                    <label htmlFor="faculty" className="title-faculty">
+                      คณะ
+                    </label>
+                    <select
+                      id="faculty"
+                      className="faculty"
+                      value={formData.faculty}
+                      onChange={handleChange}
+                    >
+                      <option value="">เลือกคณะ</option>
+                      <option value="คณะเกษตรศาสตร์และทรัพยากรธรรมชาติ">
+                        คณะเกษตรศาสตร์และทรัพยากรธรรมชาติ
+                      </option>
+                      <option value="คณะเทคโนโลยีสารสนเทศและการสื่อสาร">
+                        คณะเทคโนโลยีสารสนเทศและการสื่อสาร
+                      </option>
+                      <option value="คณะทันตแพทยศาสตร์">
+                        คณะทันตแพทยศาสตร์
+                      </option>
+                      <option value="คณะนิติศาสตร์">คณะนิติศาสตร์</option>
+                      <option value="คณะบริหารธุรกิจและนิเทศศาสตร์">
+                        คณะบริหารธุรกิจและนิเทศศาสตร์
+                      </option>
+                      <option value="คณะพยาบาลศาสตร์">คณะพยาบาลศาสตร์</option>
+                      <option value="คณะพลังงานและสิ่งแวดล้อม">
+                        คณะพลังงานและสิ่งแวดล้อม
+                      </option>
+                      <option value="คณะแพทยศาสตร์">คณะแพทยศาสตร์</option>
+                      <option value="คณะเภสัชศาสตร์">คณะเภสัชศาสตร์</option>
+                      <option value="คณะรัฐศาสตร์และสังคมศาสตร์">
+                        คณะรัฐศาสตร์และสังคมศาสตร์
+                      </option>
+                      <option value="คณะวิทยาศาสตร์">คณะวิทยาศาสตร์</option>
+                      <option value="คณะวิทยาศาสตร์การแพทย์">
+                        คณะวิทยาศาสตร์การแพทย์
+                      </option>
+                      <option value="คณะวิทยาศาสตร์การแพทย์">
+                        คณะวิศวกรรมศาสตร์
+                      </option>
+                      <option value="คณะสถาปัตยกรรมศาสตร์และศิลปกรรมศาสตร์">
+                        คณะสถาปัตยกรรมศาสตร์และศิลปกรรมศาสตร์
+                      </option>
+                      <option value="คณะสหเวชศาสตร์">คณะสหเวชศาสตร์</option>
+                      <option value="คณะสาธารณสุขศาสตร์">
+                        คณะสาธารณสุขศาสตร์
+                      </option>
+                      <option value="คณะศิลปศาสตร์">คณะศิลปศาสตร์</option>
+                      <option value="วิทยาลัยการศึกษา">วิทยาลัยการศึกษา</option>
+                    </select>
 
                     <label htmlFor="major" className="title-major">
                       สาขา
@@ -628,62 +668,133 @@ export default function Profile() {
                     >
                       <option value="">เลือกสาขา</option>
                       <option value="เกษตรศาสตร์">เกษตรศาสตร์</option>
-                      <option value="เทคโนโลยีนวัตกรรมการประมง">เทคโนโลยีนวัตกรรมการประมง</option>
-                      <option value="ความปลอดภัยทางอาหาร">ความปลอดภัยทางอาหาร</option>
-                      <option value="วิทยาศาสตร์และเทคโนโลยีการอาหาร">วิทยาศาสตร์และเทคโนโลยีการอาหาร</option>
+                      <option value="เทคโนโลยีนวัตกรรมการประมง">
+                        เทคโนโลยีนวัตกรรมการประมง
+                      </option>
+                      <option value="ความปลอดภัยทางอาหาร">
+                        ความปลอดภัยทางอาหาร
+                      </option>
+                      <option value="วิทยาศาสตร์และเทคโนโลยีการอาหาร">
+                        วิทยาศาสตร์และเทคโนโลยีการอาหาร
+                      </option>
                       <option value="สัตวศาสตร์">สัตวศาสตร์</option>
-                      <option value="เทคโนโลยีการเกษตร">เทคโนโลยีการเกษตร</option>
-                      <option value="ทันตแพทยศาสตรบัณฑิต">ทันตแพทยศาสตรบัณฑิต</option>
-                      <option value="คอมพิวเตอร์กราฟิกและมัลติมีเดีย">คอมพิวเตอร์กราฟิกและมัลติมีเดีย </option>
+                      <option value="เทคโนโลยีการเกษตร">
+                        เทคโนโลยีการเกษตร
+                      </option>
+                      <option value="ทันตแพทยศาสตรบัณฑิต">
+                        ทันตแพทยศาสตรบัณฑิต
+                      </option>
+                      <option value="คอมพิวเตอร์กราฟิกและมัลติมีเดีย">
+                        คอมพิวเตอร์กราฟิกและมัลติมีเดีย{" "}
+                      </option>
                       <option value="ธุรกิจดิจิทัล">ธุรกิจดิจิทัล</option>
-                      <option value="เทคโนโลยีสารสนเทศ">เทคโนโลยีสารสนเทศ</option>
-                      <option value="ภูมิสารสนเทศศาสตร์">ภูมิสารสนเทศศาสตร์ </option>
-                      <option value="วิทยาการข้อมูลและการประยุกต์">วิทยาการข้อมูลและการประยุกต์ </option>
-                      <option value="วิทยาการคอมพิวเตอร์">วิทยาการคอมพิวเตอร์</option>
-                      <option value="วิศวกรรมคอมพิวเตอร์">วิศวกรรมคอมพิวเตอร์</option>
-                      <option value="วิศวกรรมซอฟต์แวร์">วิศวกรรมซอฟต์แวร์</option>
+                      <option value="เทคโนโลยีสารสนเทศ">
+                        เทคโนโลยีสารสนเทศ
+                      </option>
+                      <option value="ภูมิสารสนเทศศาสตร์">
+                        ภูมิสารสนเทศศาสตร์{" "}
+                      </option>
+                      <option value="วิทยาการข้อมูลและการประยุกต์">
+                        วิทยาการข้อมูลและการประยุกต์{" "}
+                      </option>
+                      <option value="วิทยาการคอมพิวเตอร์">
+                        วิทยาการคอมพิวเตอร์
+                      </option>
+                      <option value="วิศวกรรมคอมพิวเตอร์">
+                        วิศวกรรมคอมพิวเตอร์
+                      </option>
+                      <option value="วิศวกรรมซอฟต์แวร์">
+                        วิศวกรรมซอฟต์แวร์
+                      </option>
                       <option value="นิติศาสตรบัณฑิต">นิติศาสตรบัณฑิต</option>
                       <option value="เศรษฐศาสตรบัณฑิต">เศรษฐศาสตรบัณฑิต</option>
-                      <option value="การจัดการการสื่อสาร">การจัดการการสื่อสาร</option>
-                      <option value="การสื่อสารสื่อใหม่">การสื่อสารสื่อใหม่</option>
-                      <option value="การเงินและการลงทุน">การเงินและการลงทุน</option>
+                      <option value="การจัดการการสื่อสาร">
+                        การจัดการการสื่อสาร
+                      </option>
+                      <option value="การสื่อสารสื่อใหม่">
+                        การสื่อสารสื่อใหม่
+                      </option>
+                      <option value="การเงินและการลงทุน">
+                        การเงินและการลงทุน
+                      </option>
                       <option value="การจัดการธุรกิจ">การจัดการธุรกิจ</option>
                       <option value="การตลาดดิจิทัล">การตลาดดิจิทัล</option>
                       <option value="บัญชีบัณฑิต">บัญชีบัณฑิต</option>
-                      <option value="การท่องเที่ยวและการโรงแรม">การท่องเที่ยวและการโรงแรม</option>
-                      <option value="พยาบาลศาสตรบัณฑิต">พยาบาลศาสตรบัณฑิต</option>
-                      <option value="วิศวกรรมสิ่งแวดล้อม">วิศวกรรมสิ่งแวดล้อม</option>
-                      <option value="การจัดการพลังงานและสิ่งแวดล้อม">การจัดการพลังงานและสิ่งแวดล้อม</option>
+                      <option value="การท่องเที่ยวและการโรงแรม">
+                        การท่องเที่ยวและการโรงแรม
+                      </option>
+                      <option value="พยาบาลศาสตรบัณฑิต">
+                        พยาบาลศาสตรบัณฑิต
+                      </option>
+                      <option value="วิศวกรรมสิ่งแวดล้อม">
+                        วิศวกรรมสิ่งแวดล้อม
+                      </option>
+                      <option value="การจัดการพลังงานและสิ่งแวดล้อม">
+                        การจัดการพลังงานและสิ่งแวดล้อม
+                      </option>
                       <option value="แพทยศาสตรบัณฑิต">แพทยศาสตรบัณฑิต</option>
-                      <option value="ปฏิบัติการฉุกเฉินการแพทย์">ปฏิบัติการฉุกเฉินการแพทย์</option>
-                      <option value="บริบาลทางเภสัชกรรม">บริบาลทางเภสัชกรรม</option>
-                      <option value="วิทยาศาสตร์เครื่องสำอาง">วิทยาศาสตร์เครื่องสำอาง</option>
-                      <option value="การจัดการนวัตกรรมสาธารณะ">การจัดการนวัตกรรมสาธารณะ</option>
+                      <option value="ปฏิบัติการฉุกเฉินการแพทย์">
+                        ปฏิบัติการฉุกเฉินการแพทย์
+                      </option>
+                      <option value="บริบาลทางเภสัชกรรม">
+                        บริบาลทางเภสัชกรรม
+                      </option>
+                      <option value="วิทยาศาสตร์เครื่องสำอาง">
+                        วิทยาศาสตร์เครื่องสำอาง
+                      </option>
+                      <option value="การจัดการนวัตกรรมสาธารณะ">
+                        การจัดการนวัตกรรมสาธารณะ
+                      </option>
                       <option value="รัฐศาสตรบัณฑิต">รัฐศาสตรบัณฑิต</option>
                       <option value="พัฒนาสังคม">พัฒนาสังคม</option>
                       <option value="เคมี">เคมี</option>
                       <option value="คณิตศาสตร์">คณิตศาสตร์</option>
                       <option value="ชีววิทยา">ชีววิทยา</option>
                       <option value="ฟิสิกส์">ฟิสิกส์</option>
-                      <option value="วิทยาศาสตร์การออกกำลังกายและการกีฬา">วิทยาศาสตร์การออกกำลังกายและการกีฬา</option>
-                      <option value="สถิติประยุกต์และการจัดการข้อมูล">สถิติประยุกต์และการจัดการข้อมูล </option>
-                      <option value="วิศวกรรมเครื่องกล">วิศวกรรมเครื่องกล</option>
+                      <option value="วิทยาศาสตร์การออกกำลังกายและการกีฬา">
+                        วิทยาศาสตร์การออกกำลังกายและการกีฬา
+                      </option>
+                      <option value="สถิติประยุกต์และการจัดการข้อมูล">
+                        สถิติประยุกต์และการจัดการข้อมูล{" "}
+                      </option>
+                      <option value="วิศวกรรมเครื่องกล">
+                        วิศวกรรมเครื่องกล
+                      </option>
                       <option value="วิศวกรรมโยธา">วิศวกรรมโยธา</option>
                       <option value="วิศวกรรมไฟฟ้า">วิศวกรรมไฟฟ้า</option>
-                      <option value="วิศวกรรมอุตสาหการ">วิศวกรรมอุตสาหการ</option>
+                      <option value="วิศวกรรมอุตสาหการ">
+                        วิศวกรรมอุตสาหการ
+                      </option>
                       <option value="ดนตรีและนาฏศิลป์">ดนตรีและนาฏศิลป์</option>
-                      <option value="ศิลปะและการออกแบบ">ศิลปะและการออกแบบ</option>
+                      <option value="ศิลปะและการออกแบบ">
+                        ศิลปะและการออกแบบ
+                      </option>
                       <option value="สถาปัตยกรรม">สถาปัตยกรรม</option>
                       <option value="สถาปัตยกรรมภายใน">สถาปัตยกรรมภายใน</option>
-                      <option value="กายภาพบำบัดบัณฑิต">กายภาพบำบัดบัณฑิต</option>
+                      <option value="กายภาพบำบัดบัณฑิต">
+                        กายภาพบำบัดบัณฑิต
+                      </option>
                       <option value="เทคนิคการแพทย์">เทคนิคการแพทย์</option>
-                      <option value="การแพทย์แผนจีนบัณฑิต">การแพทย์แผนจีนบัณฑิต </option>
-                      <option value="การแพทย์แผนไทยประยุกต์บัณฑิต">การแพทย์แผนไทยประยุกต์บัณฑิต</option>
-                      <option value="การส่งเสริมสุขภาพ">การส่งเสริมสุขภาพ</option>
-                      <option value="อนามัยสิ่งแวดล้อม"> อนามัยสิ่งแวดล้อม</option>
-                      <option value="อาชีวอนามัยและความปลอดภัย">อาชีวอนามัยและความปลอดภัย</option>
+                      <option value="การแพทย์แผนจีนบัณฑิต">
+                        การแพทย์แผนจีนบัณฑิต{" "}
+                      </option>
+                      <option value="การแพทย์แผนไทยประยุกต์บัณฑิต">
+                        การแพทย์แผนไทยประยุกต์บัณฑิต
+                      </option>
+                      <option value="การส่งเสริมสุขภาพ">
+                        การส่งเสริมสุขภาพ
+                      </option>
+                      <option value="อนามัยสิ่งแวดล้อม">
+                        {" "}
+                        อนามัยสิ่งแวดล้อม
+                      </option>
+                      <option value="อาชีวอนามัยและความปลอดภัย">
+                        อาชีวอนามัยและความปลอดภัย
+                      </option>
                       <option value="อนามัยชุมชน">อนามัยชุมชน</option>
-                      <option value="โภชนาการและการกำหนดอาหาร">โภชนาการและการกำหนดอาหาร</option>
+                      <option value="โภชนาการและการกำหนดอาหาร">
+                        โภชนาการและการกำหนดอาหาร
+                      </option>
                       <option value="จุลชีววิทยา">จุลชีววิทยา</option>
                       <option value="ชีวเคมี">ชีวเคมี</option>
                       <option value="ภาษาไทย">ภาษาไทย</option>
@@ -705,11 +816,7 @@ export default function Profile() {
                         >
                           <div className="flex flex-col items-center justify-center pt-5 pb-6">
                             {cvPreview ? (
-                              <img
-                                src={cvPreview}
-                                alt="Uploaded preview"
-                                className="w-full h-full object-cover object-center border-none backgroung-white rounded-lg"
-                              />
+                              <span className="text-gray-700">{cvPreview}</span> // Show file name
                             ) : (
                               <svg
                                 className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
@@ -749,11 +856,9 @@ export default function Profile() {
                         >
                           <div className="flex flex-col items-center justify-center pt-5 pb-6">
                             {transcriptPreview ? (
-                              <img
-                                src={transcriptPreview}
-                                alt="Uploaded preview"
-                                className="w-full h-full object-cover object-center border-none backgroung-white rounded-lg"
-                              />
+                              <span className="text-gray-700">
+                                {transcriptPreview}
+                              </span> // Show file name
                             ) : (
                               <svg
                                 className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"

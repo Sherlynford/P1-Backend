@@ -17,6 +17,8 @@ export default function ProfileEdit() {
     const [id, setId] = useState(null);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState(''); // State สำหรับเก็บคำค้นหา
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -88,12 +90,24 @@ const filteredApplications = (jobApplications || []).filter(application => {
     );
 });
 
+const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
+const currentItems = filteredApplications.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+const formatThaiDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Bangkok', locale: 'th-TH' };
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.toLocaleString('th-TH', { month: 'long' });
+    const year = date.getFullYear() + 543; // แปลงเป็นปีไทย
+    return `${day} ${month} ${year}`;
+};
+
     if (loading) {
-        return <div>กรุณาใส่ข้อมูลโปรไฟล์ก่อน</div>;
+        return <div>Loading...</div>;
     }
 
     if (error) {
-        return <div>{error}</div>;
+        return <div>กรุณาใส่ข้อมูลโปรไฟล์ก่อน</div>;
     }
 
     return (
@@ -129,13 +143,13 @@ const filteredApplications = (jobApplications || []).filter(application => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {filteredApplications.map(application => (
+                                    {currentItems.map(application => (
                                         <tr key={application.id}>
                                             <td>{application.organizationName}</td>
                                             <td>{application.jobName}</td>
                                             <td>{application.organizationEmail}</td>
                                             <td>{application.organizationPhone}</td>
-                                            <td>{new Date(application.applicationDate).toLocaleDateString()}</td>
+                                            <td>{formatThaiDate(application.applicationDate)}</td>
                                             <td>{application.applicationStatus}</td>
                                             <td>
                                                 <button className='edit'>
@@ -157,6 +171,48 @@ const filteredApplications = (jobApplications || []).filter(application => {
                                     ))}
                                 </tbody>
                             </table>
+                            <div className="pagination-job flex justify-center">
+                            <nav aria-label="Page navigation">
+                                <ul className="flex items-center -space-x-px h-10 text-base">
+                                    <li>
+                                        <a
+                                            href="#"
+                                            className={`flex items-center justify-center ${currentPage === 1 ? 'disabled' : ''}`}
+                                            onClick={(e) => { e.preventDefault(); currentPage > 1 && setCurrentPage(currentPage - 1); }}
+                                        >
+                                            <span className="sr-only">Previous</span>
+                                            <svg className="w-5 h-5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 1 1 5l4 4" />
+                                            </svg>
+                                        </a>
+                                    </li>
+                                    {[...Array(totalPages)].map((_, i) => (
+                                        <li key={i} style={{ marginRight: '10px' }}>
+                                            <a
+                                                href="#"
+                                                aria-current={currentPage === i + 1 ? "page" : undefined}
+                                                className={`page-job ${currentPage === i + 1 ? 'active' : ''}`}
+                                                onClick={(e) => { e.preventDefault(); setCurrentPage(i + 1); }}
+                                            >
+                                                {i + 1}
+                                            </a>
+                                        </li>
+                                    ))}
+                                    <li>
+                                        <a
+                                            href="#"
+                                            className={`flex items-center justify-center ${currentPage === totalPages ? 'disabled' : ''}`}
+                                            onClick={(e) => { e.preventDefault(); currentPage < totalPages && setCurrentPage(currentPage + 1); }}
+                                        >
+                                            <span className="sr-only">Next</span>
+                                            <svg className="w-5 h-5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />
+                                            </svg>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
                         </div>
                     </div>
                 </div>

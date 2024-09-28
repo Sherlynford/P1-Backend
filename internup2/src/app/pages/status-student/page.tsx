@@ -1,5 +1,5 @@
 'use client';
-
+// f
 import '../../style/status.css';
 import Navbarteacher from '../../component/navbar-Teacher/page';
 import AuthGuard from '../../component/checktoken/AuthGuard';
@@ -122,12 +122,21 @@ export default function Status() {
     const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
     const currentItems = filteredApplications.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
+    const formatThaiDate = (dateString) => {
+        const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Bangkok', locale: 'th-TH' };
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const month = date.toLocaleString('th-TH', { month: 'long' });
+        const year = date.getFullYear() + 543; // แปลงเป็นปีไทย
+        return `${day} ${month} ${year}`;
+    };
+
     if (loading) {
-        return <div>กรุณาใส่ข้อมูลโปรไฟล์ก่อน.</div>;
+        return <div>Loading...</div>;
     }
 
     if (error) {
-        return <div>{error}</div>;
+        return <div>กรุณาใส่ข้อมูลโปรไฟล์ก่อน.</div>;
     }
 
     return (
@@ -168,7 +177,7 @@ export default function Status() {
                                         <td>{application.lastName}</td>
                                         <td>{application.organizationName}</td>
                                         <td>{application.jobName}</td>
-                                        <td>{application.applicationDate}</td>
+                                        <td>{formatThaiDate(application.applicationDate)}</td>
                                         <td>{application.applicationStatus}</td>
                                     </tr>
                                 ))}
@@ -190,7 +199,7 @@ export default function Status() {
                                         </a>
                                     </li>
                                     {[...Array(totalPages)].map((_, i) => (
-                                        <li key={i}>
+                                        <li key={i} style={{ marginRight: '10px' }}>
                                             <a
                                                 href="#"
                                                 aria-current={currentPage === i + 1 ? "page" : undefined}

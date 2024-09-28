@@ -150,18 +150,15 @@ export default function ProfileEdit() {
       const files = target.files;
       const file = files[0];
       let fieldName: string;
-
-      if (target.id === "imgFile") {
-        fieldName = "profileIMG";
-        setImgPreview(URL.createObjectURL(file));
-      } else if (target.id === "cvFile") {
+  
+      if (target.id === "cvFile") {
         fieldName = "cv";
-        setCvPreview(URL.createObjectURL(file));
+        setCvPreview(file ? file.name : ""); // Set preview to file name
       } else if (target.id === "transcriptFile") {
         fieldName = "transcript";
-        setTranscriptPreview(URL.createObjectURL(file));
+        setTranscriptPreview(file ? file.name : ""); // Set preview to file name
       }
-
+  
       if (fieldName) {
         setFormData((prevState: any) => ({
           ...prevState,
@@ -175,6 +172,7 @@ export default function ProfileEdit() {
       }));
     }
   };
+  
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -593,92 +591,85 @@ export default function ProfileEdit() {
                   </select>
 
                   <label htmlFor="cv" className="title-cv">
-                    CV
-                  </label>
-                  <div className="cv cv-uploading">
-                    <div className="upload-img flex items-center justify-center">
-                      <label
-                        htmlFor="cvFile"
-                        className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-                      >
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                          {cvPreview ? (
-                            <img
-                              src={cvPreview}
-                              alt="Uploaded preview"
-                              className="w-full h-full object-cover object-center border-none backgroung-white rounded-lg"
-                            />
-                          ) : (
-                            <svg
-                              className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 20 16"
-                            >
-                              <path
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                              />
-                            </svg>
-                          )}
-                        </div>
-                        <input
-                          id="cvFile"
-                          type="file"
-                          className="hidden"
-                          onChange={handleChange}
-                        />
-                      </label>
-                    </div>
-                  </div>
+  CV
+</label>
+<div className="cv cv-uploading">
+  <div className="upload-img flex items-center justify-center">
+    <label
+      htmlFor="cvFile"
+      className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+    >
+      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+        {cvPreview ? (
+          <span className="text-gray-700">{cvPreview}</span> // Show file name
+        ) : (
+          <svg
+            className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 16"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+            />
+          </svg>
+        )}
+      </div>
+      <input
+        id="cvFile"
+        type="file"
+        className="hidden"
+        onChange={handleChange}
+      />
+    </label>
+  </div>
+</div>
 
-                  <label htmlFor="transcript" className="title-transcript">
-                    Transcript
-                  </label>
-                  <div className="transcript transcript-uploading">
-                    <div className="upload-img flex items-center justify-center">
-                      <label
-                        htmlFor="transcriptFile"
-                        className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-                      >
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                          {transcriptPreview ? (
-                            <img
-                              src={transcriptPreview}
-                              alt="Uploaded preview"
-                              className="w-full h-full object-cover object-center border-none backgroung-white rounded-lg"
-                            />
-                          ) : (
-                            <svg
-                              className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 20 16"
-                            >
-                              <path
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                              />
-                            </svg>
-                          )}
-                        </div>
-                        <input
-                          id="transcriptFile"
-                          type="file"
-                          className="hidden"
-                          onChange={handleChange}
-                        />
-                      </label>
-                    </div>
-                  </div>
+<label htmlFor="transcript" className="title-transcript">
+  Transcript
+</label>
+<div className="transcript transcript-uploading">
+  <div className="upload-img flex items-center justify-center">
+    <label
+      htmlFor="transcriptFile"
+      className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+    >
+      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+        {transcriptPreview ? (
+          <span className="text-gray-700">{transcriptPreview}</span> // Show file name
+        ) : (
+          <svg
+            className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 16"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+            />
+          </svg>
+        )}
+      </div>
+      <input
+        id="transcriptFile"
+        type="file"
+        className="hidden"
+        onChange={handleChange}
+      />
+    </label>
+  </div>
+</div>
+
 
                   <label htmlFor="start-intern" className="title-start-intern">
                     วันที่เริ่มฝึกงาน

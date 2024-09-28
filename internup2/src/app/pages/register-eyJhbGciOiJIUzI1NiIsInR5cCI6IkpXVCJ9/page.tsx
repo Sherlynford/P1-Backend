@@ -101,32 +101,32 @@ export default function Register() {
                         <h1>ลงทะเบียน</h1>
                         <form onSubmit={handleSubmit}>
                             <div className='flex flex-col'>
-                            <label htmlFor="email" className='title-email'>อีเมล (สามารถใส่อีเมลอะไรก็ได้)</label>
+                            <label htmlFor="email" className='title-email'>อีเมล</label>
                                 <input
                                     id="email"
                                     className='email'
                                     type="email"
-                                    placeholder='กรุณากรอก อีเมล....'
+                                    placeholder='กรุณากรอก อีเมล(สามารถใส่อีเมลอะไรก็ได้)'
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                             </div>
                             <div className='flex flex-col'>
-                                <label htmlFor="password" className='title-password'>รหัสผ่าน (8 ตัวอักษรขึ้นไป)</label>
+                                <label htmlFor="password" className='title-password'>รหัสผ่าน</label>
                                 <input
                                     id="password"
                                     className='password'
                                     type="password"
-                                    placeholder='กรุณากรอก รหัสผ่าน....'
+                                    placeholder='กรุณากรอก รหัสผ่าน(8 ตัวอักษรขึ้นไป)'
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
-                                <label htmlFor="confirm-password" className='title-confirm-password'>ยืนยันรหัสผ่าน (8 ตัวอักษรขึ้นไป)</label>
+                                <label htmlFor="confirm-password" className='title-confirm-password'>ยืนยันรหัสผ่าน</label>
                                 <input
                                     id="confirm-password"
                                     className='password'
                                     type="password"
-                                    placeholder='กรุณากรอก ยืนยันรหัสผ่าน....'
+                                    placeholder='กรุณากรอก ยืนยันรหัสผ่าน(8 ตัวอักษรขึ้นไป)'
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                 />

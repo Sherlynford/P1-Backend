@@ -111,9 +111,7 @@ const Mocuppdf = () => {
                             <p>เรียน <span>กรรมการบริษัท {selectedStudent.student.organizationName}</span></p>
                             <p className='paragraph'>
                                 <span>ตามที่ {selectedStudent.teacher.faculty} มหาวิทยาลัยพะเยา ได้รับความอนุเคราะห์</span>
-                                จากสถานประกอบการของท่านในการรับนิสิตเข้าฝึกประสบการณ์ทางด้านวิชาชีพ โดยมีวัตถุประสงค์
-                                เพื่อฝึกทักษะประสบการณ์ทางด้านวิชาชีพร่วมกับสถานประกอบการ ตลอดจนการนำความรู้ที่ได้รับ
-                                จากสถานประกอบการมาประยุกต์ใช้กับการศึกษาของนิสิต
+                                จากสถานประกอบการของท่านในการรับนิสิตเข้าฝึกประสบการณ์ทางด้านวิชาชีพ โดยมีวัตถุประสงค์เพื่อฝึกทักษะประสบการณ์ทางด้านวิชาชีพร่วมกับสถานประกอบการ ตลอดจนการนำความรู้ที่ได้รับจากสถานประกอบการมาประยุกต์ใช้กับการศึกษาของนิสิต
                             </p>
                             <p className='paragraph'>
                                 <span>ในการนี้ {selectedStudent.teacher.faculty} จึงขอส่ง {selectedStudent.student.firstName} {selectedStudent.student.lastName} นิสิตสาขา{selectedStudent.teacher.major} {selectedStudent.teacher.faculty} เข้าฝึกประสบการณ์ด้านวิชาชีพ ระยะเวลาการฝึกปฏิบัติ

@@ -46,7 +46,7 @@ body{
     text-align: center;
 }
 .pagination-job{
-    margin: 50px 0;
+    margin: 20px 0;
 }
 .page-job.active {
     display: flex;
