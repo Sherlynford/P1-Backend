@@ -170,7 +170,7 @@ export default function Status() {
             type="search"
             name="search"
             id="search"
-            placeholder="ค้นหาชื่อหน่วยงาน, ชื่อตำแหน่ง, สถานะ,รหัสนิสิต,ชื่อจริง,นามสกุล"
+            placeholder="ค้นหาชื่อหน่วยงาน,ชื่อตำแหน่ง,สถานะ,รหัสนิสิต,ชื่อนิสิต"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />

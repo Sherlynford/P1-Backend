@@ -188,7 +188,7 @@ export default function ProfileEdit() {
               type="search"
               name="search"
               id="search"
-              placeholder="ค้นหาชื่อหน่วยงาน, ชื่อตำแหน่ง, รหัสนิสิต, ชื่อจริง, นามสกุล"
+              placeholder="ค้นหาชื่อหน่วยงาน,ชื่อตำแหน่ง,รหัสนิสิต,ชื่อนิสิต,สถานะ"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
