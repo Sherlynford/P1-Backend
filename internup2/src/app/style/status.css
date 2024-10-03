@@ -23,7 +23,6 @@ body {
     width: 1600px;
     height: 100%;
     background: #FFFFFF;
-    border: 1px solid black;
     border-radius: 20px;
     overflow: hidden;
 }
@@ -42,9 +41,13 @@ body {
     font-size: 20px;
     padding: 20px 15px;
     text-align: center;
-    border: 1px solid black; /* Add borders around table cells */
+    border: 1px solid #9ca3af; 
 }
 
+.table-status td a:hover {
+    color: blue;
+    text-decoration: underline;
+}
 .table-status th {
     font-size: 24px;
     font-weight: bold;
@@ -70,7 +73,6 @@ body {
     width: 35px;
 }
 
-/* Adjustments for different screen sizes */
 @media screen and (min-width: 1280px) {
     .status-intern {
         width: 1300px;
@@ -82,7 +84,7 @@ body {
 
 @media screen and (min-width: 1440px) {
     .status-intern {
-        width: 1500px;
+        width: 1440px;
     }
     .table-status th {
         font-size: 24px;

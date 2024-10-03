@@ -49,15 +49,15 @@ export default function ProfileEdit() {
 
         // Fetch job applications based on studentProfileId
         axios.get(`${url2}${studentProfileId}`)
-        .then(response => {
-            setJobApplications(response.data.manualJobApplications || []); // Ensure it's an array
-        })
-        .catch(err => {
-            setError(err.message);
-            console.error("Error fetching job applications:", err);
-        })
-        .finally(() => setLoading(false));
-    
+            .then(response => {
+                setJobApplications(response.data.manualJobApplications || []); // Ensure it's an array
+            })
+            .catch(err => {
+                setError(err.message);
+                console.error("Error fetching job applications:", err);
+            })
+            .finally(() => setLoading(false));
+
     }, [studentProfileId]); // Add studentProfileId to the dependency array
 
     const parseJwt = (token) => {
@@ -79,28 +79,28 @@ export default function ProfileEdit() {
     };
 
     // ฟังก์ชันกรองข้อมูลการสมัครงาน
-// ฟังก์ชันกรองข้อมูลการสมัครงาน
-const filteredApplications = (jobApplications || []).filter(application => {
-    const searchLower = searchTerm.toLowerCase();
-    return (
-        application.organizationName.toLowerCase().includes(searchLower) ||
-        application.jobName.toLowerCase().includes(searchLower) ||
-        application.applicationStatus.toLowerCase().includes(searchLower) ||
-        application.applicationDate.toLowerCase().includes(searchLower)
-    );
-}).sort((a, b) => new Date(b.applicationDate) - new Date(a.applicationDate))
+    // ฟังก์ชันกรองข้อมูลการสมัครงาน
+    const filteredApplications = (jobApplications || []).filter(application => {
+        const searchLower = searchTerm.toLowerCase();
+        return (
+            application.organizationName.toLowerCase().includes(searchLower) ||
+            application.jobName.toLowerCase().includes(searchLower) ||
+            application.applicationStatus.toLowerCase().includes(searchLower) ||
+            application.applicationDate.toLowerCase().includes(searchLower)
+        );
+    }).sort((a, b) => new Date(b.applicationDate) - new Date(a.applicationDate))
 
-const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
-const currentItems = filteredApplications.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
+    const currentItems = filteredApplications.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-const formatThaiDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Bangkok', locale: 'th-TH' };
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const month = date.toLocaleString('th-TH', { month: 'long' });
-    const year = date.getFullYear() + 543; // แปลงเป็นปีไทย
-    return `${day} ${month} ${year}`;
-};
+    const formatThaiDate = (dateString) => {
+        const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Bangkok', locale: 'th-TH' };
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const month = date.toLocaleString('th-TH', { month: 'long' });
+        const year = date.getFullYear() + 543; // แปลงเป็นปีไทย
+        return `${day} ${month} ${year}`;
+    };
 
     if (loading) {
         return <div>Loading...</div>;
@@ -172,47 +172,86 @@ const formatThaiDate = (dateString) => {
                                 </tbody>
                             </table>
                             <div className="pagination-job flex justify-center">
-                            <nav aria-label="Page navigation">
-                                <ul className="flex items-center -space-x-px h-10 text-base">
-                                    <li>
-                                        <a
-                                            href="#"
-                                            className={`flex items-center justify-center ${currentPage === 1 ? 'disabled' : ''}`}
-                                            onClick={(e) => { e.preventDefault(); currentPage > 1 && setCurrentPage(currentPage - 1); }}
-                                        >
-                                            <span className="sr-only">Previous</span>
-                                            <svg className="w-5 h-5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 1 1 5l4 4" />
-                                            </svg>
-                                        </a>
-                                    </li>
-                                    {[...Array(totalPages)].map((_, i) => (
-                                        <li key={i} style={{ marginRight: '10px' }}>
-                                            <a
-                                                href="#"
-                                                aria-current={currentPage === i + 1 ? "page" : undefined}
-                                                className={`page-job ${currentPage === i + 1 ? 'active' : ''}`}
-                                                onClick={(e) => { e.preventDefault(); setCurrentPage(i + 1); }}
-                                            >
-                                                {i + 1}
-                                            </a>
-                                        </li>
-                                    ))}
-                                    <li>
-                                        <a
-                                            href="#"
-                                            className={`flex items-center justify-center ${currentPage === totalPages ? 'disabled' : ''}`}
-                                            onClick={(e) => { e.preventDefault(); currentPage < totalPages && setCurrentPage(currentPage + 1); }}
-                                        >
-                                            <span className="sr-only">Next</span>
-                                            <svg className="w-5 h-5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />
-                                            </svg>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
+                                <nav aria-label="Page navigation">
+                                    <ul className="flex items-center -space-x-px h-10 text-base">
+                                        {currentPage > 1 && (
+                                            <li>
+                                                <a
+                                                    href="#"
+                                                    className="flex items-center justify-center"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        setCurrentPage(currentPage - 1);
+                                                    }}
+                                                >
+                                                    <span className="sr-only">Previous</span>
+                                                    <svg
+                                                        className="w-5 h-5 rtl:rotate-180"
+                                                        aria-hidden="true"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        fill="none"
+                                                        viewBox="0 0 6 10"
+                                                    >
+                                                        <path
+                                                            stroke="currentColor"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="M5 1 1 5l4 4"
+                                                        />
+                                                    </svg>
+                                                </a>
+                                            </li>
+                                        )}
+
+                                        {[...Array(totalPages)].map((_, i) => (
+                                            <li key={i} style={{ marginRight: '10px' }}>
+                                                <a
+                                                    href="#"
+                                                    aria-current={currentPage === i + 1 ? "page" : undefined}
+                                                    className={`page-job ${currentPage === i + 1 ? 'active' : ''}`}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        setCurrentPage(i + 1);
+                                                    }}
+                                                >
+                                                    {i + 1}
+                                                </a>
+                                            </li>
+                                        ))}
+
+                                        {currentPage < totalPages && (
+                                            <li>
+                                                <a
+                                                    href="#"
+                                                    className="flex items-center justify-center"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        setCurrentPage(currentPage + 1);
+                                                    }}
+                                                >
+                                                    <span className="sr-only">Next</span>
+                                                    <svg
+                                                        className="w-5 h-5 rtl:rotate-180"
+                                                        aria-hidden="true"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        fill="none"
+                                                        viewBox="0 0 6 10"
+                                                    >
+                                                        <path
+                                                            stroke="currentColor"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="m1 9 4-4-4-4"
+                                                        />
+                                                    </svg>
+                                                </a>
+                                            </li>
+                                        )}
+                                    </ul>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                 </div>

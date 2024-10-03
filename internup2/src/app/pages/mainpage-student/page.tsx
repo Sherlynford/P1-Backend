@@ -88,6 +88,7 @@ export default function Home() {
             <div className="block-inside">
               <div className="block-content">
                 <h1>ค้นหา ที่ฝึกงานสำหรับนักศึกษา ม.พะเยา</h1>
+                <div className='flex justify-center'>
                 <input
                   id="search1"
                   type="search"
@@ -95,6 +96,7 @@ export default function Home() {
                   value={searchQuery}
                   onChange={handleSearchChange}
                 />
+                </div>
                 <p>
                   <a href="/">
                     INTERN <strong style={{ color: "#92268F" }}>UP</strong> เว็บหาที่ฝึกงาน หางานในเครือและหน่วยงานนอก สำหรับนิสิตนักศึกษา <strong style={{ color: "#92268F" }}>มหาวิทยาลัยพะเยา</strong>
@@ -120,13 +122,14 @@ export default function Home() {
           )}
         </div>
         <div className="pagination-job flex justify-center">
-          <nav aria-label="Page navigation">
-            <ul className="flex items-center -space-x-px h-10 text-base">
+        <nav aria-label="Page navigation">
+          <ul className="flex items-center -space-x-px h-10 text-base">
+            {currentPage > 1 && (
               <li>
                 <a
                   href="#"
-                  className={`flex items-center justify-center ${currentPage === 1 ? 'disabled' : ''}`}
-                  onClick={(e) => { e.preventDefault(); currentPage > 1 && handlePageChange(currentPage - 1); }}
+                  className="flex items-center justify-center"
+                  onClick={(e) => { e.preventDefault(); handlePageChange(currentPage - 1); }}
                 >
                   <span className="sr-only">Previous</span>
                   <svg className="w-5 h-5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
@@ -134,23 +137,25 @@ export default function Home() {
                   </svg>
                 </a>
               </li>
-              {[...Array(totalPages)].map((_, i) => (
-                <li key={i}>
-                  <a
-                    href="#"
-                    aria-current={currentPage === i + 1 ? "page" : undefined}
-                    className={`page-job ${currentPage === i + 1 ? 'active' : ''}`}
-                    onClick={(e) => { e.preventDefault(); handlePageChange(i + 1); }}
-                  >
-                    {i + 1}
-                  </a>
-                </li>
-              ))}
+            )}
+            {[...Array(totalPages)].map((_, i) => (
+              <li key={i}>
+                <a
+                  href="#"
+                  aria-current={currentPage === i + 1 ? "page" : undefined}
+                  className={`page-job ${currentPage === i + 1 ? 'active' : ''}`}
+                  onClick={(e) => { e.preventDefault(); handlePageChange(i + 1); }}
+                >
+                  {i + 1}
+                </a>
+              </li>
+            ))}
+            {currentPage < totalPages && (
               <li>
                 <a
                   href="#"
-                  className={`flex items-center justify-center ${currentPage === totalPages ? 'disabled' : ''}`}
-                  onClick={(e) => { e.preventDefault(); currentPage < totalPages && handlePageChange(currentPage + 1); }}
+                  className="flex items-center justify-center"
+                  onClick={(e) => { e.preventDefault(); handlePageChange(currentPage + 1); }}
                 >
                   <span className="sr-only">Next</span>
                   <svg className="w-5 h-5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
@@ -158,8 +163,9 @@ export default function Home() {
                   </svg>
                 </a>
               </li>
-            </ul>
-          </nav>
+            )}
+          </ul>
+        </nav>
         </div>
       </div>
     </>

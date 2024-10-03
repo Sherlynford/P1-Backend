@@ -221,7 +221,6 @@ export default function ProfileEdit() {
                           href={application.cv}
                           target="_blank"
                           rel="noopener noreferrer"
-                          style={{ color: "blue" }}
                         >
                           CV
                         </a>
@@ -231,7 +230,6 @@ export default function ProfileEdit() {
                           href={application.transcript}
                           target="_blank"
                           rel="noopener noreferrer"
-                          style={{ color: "blue" }}
                         >
                           Transcript
                         </a>
@@ -303,45 +301,41 @@ export default function ProfileEdit() {
               <div className="pagination-job flex justify-center">
                 <nav aria-label="Page navigation">
                   <ul className="flex items-center -space-x-px h-10 text-base">
-                    <li>
-                      <a
-                        href="#"
-                        className={`flex items-center justify-center ${
-                          currentPage === 1 ? "disabled" : ""
-                        }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          currentPage > 1 && handlePageChange(currentPage - 1);
-                        }}
-                      >
-                        <span className="sr-only">Previous</span>
-                        <svg
-                          className="w-5 h-5 rtl:rotate-180"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 6 10"
+                    {currentPage > 1 && (
+                      <li>
+                        <a
+                          href="#"
+                          className="flex items-center justify-center"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handlePageChange(currentPage - 1);
+                          }}
                         >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M5 1 1 5l4 4"
-                          />
-                        </svg>
-                      </a>
-                    </li>
+                          <span className="sr-only">Previous</span>
+                          <svg
+                            className="w-5 h-5 rtl:rotate-180"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 6 10"
+                          >
+                            <path
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M5 1 1 5l4 4"
+                            />
+                          </svg>
+                        </a>
+                      </li>
+                    )}
                     {[...Array(totalPages)].map((_, i) => (
                       <li key={i} style={{ marginRight: "10px" }}>
                         <a
                           href="#"
-                          aria-current={
-                            currentPage === i + 1 ? "page" : undefined
-                          }
-                          className={`page-job ${
-                            currentPage === i + 1 ? "active" : ""
-                          }`}
+                          aria-current={currentPage === i + 1 ? "page" : undefined}
+                          className={`page-job ${currentPage === i + 1 ? "active" : ""}`}
                           onClick={(e) => {
                             e.preventDefault();
                             handlePageChange(i + 1);
@@ -351,38 +345,38 @@ export default function ProfileEdit() {
                         </a>
                       </li>
                     ))}
-                    <li>
-                      <a
-                        href="#"
-                        className={`flex items-center justify-center ${
-                          currentPage === totalPages ? "disabled" : ""
-                        }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          currentPage < totalPages &&
+                    {currentPage < totalPages && (
+                      <li>
+                        <a
+                          href="#"
+                          className="flex items-center justify-center"
+                          onClick={(e) => {
+                            e.preventDefault();
                             handlePageChange(currentPage + 1);
-                        }}
-                      >
-                        <span className="sr-only">Next</span>
-                        <svg
-                          className="w-5 h-5 rtl:rotate-180"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 6 10"
+                          }}
                         >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="m1 9 4-4-4-4"
-                          />
-                        </svg>
-                      </a>
-                    </li>
+                          <span className="sr-only">Next</span>
+                          <svg
+                            className="w-5 h-5 rtl:rotate-180"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 6 10"
+                          >
+                            <path
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="m1 9 4-4-4-4"
+                            />
+                          </svg>
+                        </a>
+                      </li>
+                    )}
                   </ul>
                 </nav>
+
               </div>
             </div>
           </div>
