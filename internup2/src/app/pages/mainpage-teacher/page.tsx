@@ -24,19 +24,23 @@ export default function Home() {
   const checkAuthStatus = () => {
     const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('userRole');
-
+  
     if (token && userRole) {
       const redirectMap = {
         student: '/pages/mainpage-student',
         teacher: '/pages/mainpage-teacher',
       };
       router.push(redirectMap[userRole] || '/');
+    } else {
+      // Redirect to home page if token or userRole is missing
+      router.push('/');
     }
   };
-
+  
   useEffect(() => {
     checkAuthStatus();
   }, []);
+  
 
   useEffect(() => {
     axios

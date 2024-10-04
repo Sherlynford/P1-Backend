@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/ConfirmJobApplications")
-@CrossOrigin("*")
+@CrossOrigin("http://localhost:3000")
 @RequiredArgsConstructor
 public class ConfirmJobApplicationController {
 

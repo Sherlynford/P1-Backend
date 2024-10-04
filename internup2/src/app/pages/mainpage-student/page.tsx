@@ -31,6 +31,9 @@ export default function Home() {
         teacher: '/pages/mainpage-teacher',
       };
       router.push(redirectMap[userRole] || '/');
+    }else {
+      // Redirect to home page if token or userRole is missing
+      router.push('/');
     }
   };
 
