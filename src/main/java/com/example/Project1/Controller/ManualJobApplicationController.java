@@ -2,6 +2,7 @@ package com.example.Project1.Controller;
 
 import com.example.Project1.Entity.ManualJobApplication;
 import com.example.Project1.Service.ManualJobApplicationService;
+import com.example.Project1.Service.TokenService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,34 +20,58 @@ import java.util.Optional;
 public class ManualJobApplicationController {
 
     private final ManualJobApplicationService manualJobApplicationService;
+    private final TokenService tokenService;  // Inject TokenService
 
     @PostMapping("/")
-    public ResponseEntity<ManualJobApplication> createManualJobApplication(@RequestBody ManualJobApplication manualJobApplication) {
+    public ResponseEntity<ManualJobApplication> createManualJobApplication(@RequestHeader("Authorization") String token,
+                                                                           @RequestBody ManualJobApplication manualJobApplication) {
+        if (!tokenService.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         ManualJobApplication newManualJobApplication = manualJobApplicationService.createManualJobApplication(manualJobApplication);
         return new ResponseEntity<>(newManualJobApplication, HttpStatus.CREATED);
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<ManualJobApplication>> getAllManualJobApplications() {
+    public ResponseEntity<List<ManualJobApplication>> getAllManualJobApplications(@RequestHeader("Authorization") String token) {
+        if (!tokenService.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         List<ManualJobApplication> manualJobApplications = manualJobApplicationService.getAllManualJobApplications();
         return new ResponseEntity<>(manualJobApplications, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ManualJobApplication> getManualJobApplicationById(@PathVariable Long id) {
+    public ResponseEntity<ManualJobApplication> getManualJobApplicationById(@RequestHeader("Authorization") String token,
+                                                                            @PathVariable Long id) {
+        if (!tokenService.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         Optional<ManualJobApplication> manualJobApplication = manualJobApplicationService.getManualJobApplicationById(id);
         return manualJobApplication.map(ResponseEntity::ok)
                                    .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ManualJobApplication> updateManualJobApplication(@PathVariable Long id, @RequestBody ManualJobApplication newManualJobApplication) {
+    public ResponseEntity<ManualJobApplication> updateManualJobApplication(@RequestHeader("Authorization") String token,
+                                                                           @PathVariable Long id,
+                                                                           @RequestBody ManualJobApplication newManualJobApplication) {
+        if (!tokenService.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         ManualJobApplication updatedManualJobApplication = manualJobApplicationService.updateManualJobApplication(newManualJobApplication, id);
         return new ResponseEntity<>(updatedManualJobApplication, HttpStatus.OK);
     }
 
     @PutMapping("/{id}/choose")
-    public ResponseEntity<ManualJobApplication> chooseManualJobApplication(@PathVariable Long id) {
+    public ResponseEntity<ManualJobApplication> chooseManualJobApplication(@RequestHeader("Authorization") String token,@PathVariable Long id) {
+        if (!tokenService.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         try {
             ManualJobApplication chosenApplication = manualJobApplicationService.chooseManualJobApplication(id);
             return new ResponseEntity<>(chosenApplication, HttpStatus.OK);
@@ -56,7 +81,10 @@ public class ManualJobApplicationController {
     }
     
     @PutMapping("/{id}/confirm")
-    public ResponseEntity<ManualJobApplication> confirmManualJobApplication(@PathVariable Long id) {
+    public ResponseEntity<ManualJobApplication> confirmManualJobApplication(@RequestHeader("Authorization") String token,@PathVariable Long id) {
+        if (!tokenService.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         try {
             ManualJobApplication confirmedManualJobApplication = manualJobApplicationService.confirmManualJobApplication(id);
             return new ResponseEntity<>(confirmedManualJobApplication, HttpStatus.OK);
@@ -66,7 +94,12 @@ public class ManualJobApplicationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteManualJobApplication(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteManualJobApplication(@RequestHeader("Authorization") String token,
+                                                           @PathVariable Long id) {
+        if (!tokenService.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         manualJobApplicationService.deleteManualJobApplication(id);
         return ResponseEntity.noContent().build();
     }

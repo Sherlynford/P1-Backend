@@ -54,10 +54,15 @@ export default function ProfileEdit() {
   }, []);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
     if (!id) return;
 
     axios
-      .get(`${urlPerson}${id}`)
+      .get(`${urlPerson}${id}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
       .then((response) => {
         const teacherProfile = response.data.teacherProfile;
         if (teacherProfile && teacherProfile.id) {
@@ -71,10 +76,15 @@ export default function ProfileEdit() {
   }, [id]);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
     if (!teacherProfileId) return;
 
     axios
-      .get(`${url1}${teacherProfileId}`)
+      .get(`${url1}${teacherProfileId}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
       .then((response) => {
         setTeacherMajor(response.data.major);
         setTeacherData(response.data);
@@ -87,10 +97,15 @@ export default function ProfileEdit() {
   }, [teacherProfileId]);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
     if (!teacherMajor) return;
 
     axios
-      .get(`${url2}${teacherMajor}`)
+      .get(`${url2}${teacherMajor}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
       .then((response) => {
         setStudentData(response.data);
         const jobApplication = response.data
@@ -174,6 +189,7 @@ export default function ProfileEdit() {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+  const token = localStorage.getItem('token');
 
   return (
     <AuthGuard>
@@ -271,9 +287,15 @@ export default function ProfileEdit() {
 
                                   // Use the specific application ID for the current row
                                   axios
-                                    .put(
-                                      `http://localhost:8080/api/ManualJobApplications/${application.id}/confirm`
-                                    )
+                                  .put(
+                                    `http://localhost:8080/api/ManualJobApplications/${application.id}/confirm`,
+                                    {}, // No data to send with this request
+                                    {
+                                      headers: {
+                                        'Authorization': `Bearer ${token}`
+                                      }
+                                    }
+                                  )
                                     .then((response) => {
                                       window.location.href = "/pages/form";
                                     })

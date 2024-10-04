@@ -50,10 +50,15 @@ export default function Status() {
   }, []);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     if (!id) return;
 
     axios
-      .get(`${urlPerson}${id}`)
+      .get(`${urlPerson}${id}`,{
+        headers: {
+            'Authorization': `Bearer ${token}`, // Add token to request headers
+        },
+      })
       .then((response) => {
         const teacherProfile = response.data.teacherProfile;
         if (teacherProfile && teacherProfile.id) {
@@ -67,10 +72,15 @@ export default function Status() {
   }, [id]);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     if (!teacherProfileId) return;
 
     axios
-      .get(`${url1}${teacherProfileId}`)
+      .get(`${url1}${teacherProfileId}`,{
+        headers: {
+            'Authorization': `Bearer ${token}`, // Add token to request headers
+        },
+      })
       .then((response) => {
         setTeacherMajor(response.data.major);
       })
@@ -82,10 +92,15 @@ export default function Status() {
   }, [teacherProfileId]);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     if (!teacherMajor) return;
 
     axios
-      .get(`${url2}${teacherMajor}`)
+      .get(`${url2}${teacherMajor}`,{
+        headers: {
+            'Authorization': `Bearer ${token}`, // Add token to request headers
+        },
+      })
       .then((response) => {
         setStudentData(response.data);
       })
@@ -202,7 +217,6 @@ export default function Status() {
                         href={application.cv}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ color: "blue" }}
                       >
                         CV
                       </a>
@@ -212,7 +226,6 @@ export default function Status() {
                         href={application.transcript}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ color: "blue" }}
                       >
                         Transcript
                       </a>

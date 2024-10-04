@@ -30,8 +30,7 @@ public class TokenService {
         claims.put("id", person.getId());
         claims.put("email", person.getEmail());
         claims.put("role", person.getRole());
-        
-        // Add only necessary information from profiles (e.g., IDs or roles)
+
         if (person.getStudentProfile() != null) {
             claims.put("studentProfileId", person.getStudentProfile().getId());
         }
@@ -54,5 +53,18 @@ public class TokenService {
 
         Long personId = claims.get("id", Long.class);
         return personRepository.findById(personId);
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            // Parse the token to check if it's valid
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token.replace("Bearer ", "")); // Remove 'Bearer ' prefix
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

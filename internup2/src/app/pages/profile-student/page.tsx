@@ -169,6 +169,9 @@ export default function Profile() {
           try {
             const imageResponse1 = await fetch(imageUploadUrl, {
               method: "POST",
+              headers: {
+                "Authorization": `Bearer ${token}`, // Add token to request headers
+              },
               body: imageFormData1,
             });
             const imageResponseData1 = await imageResponse1.json();
@@ -195,6 +198,9 @@ export default function Profile() {
           try {
             const imageResponse2 = await fetch(imageUploadUrl, {
               method: "POST",
+              headers: {
+                "Authorization": `Bearer ${token}`, // Add token to request headers
+              },
               body: imageFormData2,
             });
             const imageResponseData2 = await imageResponse2.json();
@@ -221,6 +227,9 @@ export default function Profile() {
           try {
             const imageResponse3 = await fetch(imageUploadUrl, {
               method: "POST",
+              headers: {
+                "Authorization": `Bearer ${token}`, // Add token to request headers
+              },
               body: imageFormData3,
             });
             const imageResponseData3 = await imageResponse3.json();
@@ -264,7 +273,7 @@ export default function Profile() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Add token to request headers
+            "Authorization": `Bearer ${token}`, // Add token to request headers
           },
           body: JSON.stringify(postData),
         });
@@ -329,10 +338,15 @@ export default function Profile() {
   }, []);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     if (!id) return;
 
     axios
-      .get(`http://localhost:8080/api/persons/${id}`)
+      .get(`http://localhost:8080/api/persons/${id}`,{              
+        headers: {
+        "Authorization": `Bearer ${token}`, // Add token to request headers
+        },
+    })
       .then((response) => {
         const studentProfile = response.data.studentProfile;
 

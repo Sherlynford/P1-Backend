@@ -108,9 +108,14 @@ export default function ProfileEdit() {
   }, [studentData]);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     if (id) {
       axios
-        .get(`http://localhost:8080/api/persons/${id}`)
+        .get(`http://localhost:8080/api/persons/${id}`,{
+          headers: {
+              'Authorization': `Bearer ${token}`, // Add token to request headers
+          },
+        })
         .then((response) => {
           const studentProfile = response.data.studentProfile; // ดึง studentProfile
           setStudentData(studentProfile);
@@ -201,7 +206,7 @@ export default function ProfileEdit() {
         const handleFileUpload = async (file: File, url: string) => {
           const formData = new FormData();
           formData.append("files", file);
-          const response = await fetch(url, { method: "POST", body: formData });
+          const response = await fetch(url, { method: "POST",headers: {'Authorization': `Bearer ${token}`}, body: formData });
           const data = await response.json();
           if (data.fileUrls && data.fileUrls.length > 0) {
             return data.fileUrls[0];
@@ -259,7 +264,7 @@ export default function ProfileEdit() {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            "Authorization": `Bearer ${token}`,
           },
           body: JSON.stringify(putData),
         });

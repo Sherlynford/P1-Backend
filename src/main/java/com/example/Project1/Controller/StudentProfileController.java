@@ -2,8 +2,8 @@ package com.example.Project1.Controller;
 
 import com.example.Project1.Entity.StudentProfile;
 import com.example.Project1.Service.StudentProfileService;
-
 import com.example.Project1.Service.FileStorageService;
+import com.example.Project1.Service.TokenService;
 
 import io.jsonwebtoken.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -27,15 +27,26 @@ public class StudentProfileController {
 
     private final StudentProfileService studentProfileService;
     private final FileStorageService fileStorageService;
+    private final TokenService tokenService;  // Inject TokenService
 
     @PostMapping("/")
-    public ResponseEntity<StudentProfile> createStudentProfile(@RequestBody StudentProfile studentProfile) {
+    public ResponseEntity<StudentProfile> createStudentProfile(@RequestHeader("Authorization") String token,
+                                                               @RequestBody StudentProfile studentProfile) {
+        if (!tokenService.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         StudentProfile newStudentProfile = studentProfileService.createStudentProfile(studentProfile);
         return new ResponseEntity<>(newStudentProfile, HttpStatus.CREATED);
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<Map<String, List<String>>> uploadFiles(@RequestParam("files") MultipartFile[] files) {
+    public ResponseEntity<Map<String, List<String>>> uploadFiles(@RequestHeader("Authorization") String token,
+                                                                 @RequestParam("files") MultipartFile[] files) {
+        if (!tokenService.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         List<String> fileUrls = new ArrayList<>();
         Map<String, List<String>> response = new HashMap<>();
 
@@ -53,33 +64,55 @@ public class StudentProfileController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<StudentProfile>> getAllStudentProfiles() {
+    public ResponseEntity<List<StudentProfile>> getAllStudentProfiles(@RequestHeader("Authorization") String token) {
+        if (!tokenService.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         List<StudentProfile> studentProfiles = studentProfileService.getAllStudentProfiles();
         return new ResponseEntity<>(studentProfiles, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StudentProfile> getStudentProfileById(@PathVariable Long id) {
+    public ResponseEntity<StudentProfile> getStudentProfileById(@RequestHeader("Authorization") String token,
+                                                                @PathVariable Long id) {
+        if (!tokenService.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         Optional<StudentProfile> studentProfile = studentProfileService.getStudentProfileById(id);
         return studentProfile.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/major/{major}")
-    public ResponseEntity<List<StudentProfile>> getStudentProfilesByMajor(@PathVariable String major) {
+    public ResponseEntity<List<StudentProfile>> getStudentProfilesByMajor(@RequestHeader("Authorization") String token,@PathVariable String major) {
+        if (!tokenService.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         List<StudentProfile> studentProfiles = studentProfileService.getStudentProfilesByMajor(major);
         return new ResponseEntity<>(studentProfiles, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<StudentProfile> updateStudentProfile(@PathVariable Long id,
-            @RequestBody StudentProfile newStudentProfile) {
+    public ResponseEntity<StudentProfile> updateStudentProfile(@RequestHeader("Authorization") String token,
+                                                               @PathVariable Long id,
+                                                               @RequestBody StudentProfile newStudentProfile) {
+        if (!tokenService.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         StudentProfile updatedStudentProfile = studentProfileService.updateStudentProfile(newStudentProfile, id);
         return new ResponseEntity<>(updatedStudentProfile, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteStudentProfile(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteStudentProfile(@RequestHeader("Authorization") String token,
+                                                     @PathVariable Long id) {
+        if (!tokenService.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         studentProfileService.deleteStudentProfile(id);
         return ResponseEntity.noContent().build();
     }

@@ -31,8 +31,13 @@ export default function ProfileEdit() {
     }, []);
 
     useEffect(() => {
+        const token = localStorage.getItem("token");
         if (id) {
-            axios.get(`http://localhost:8080/api/persons/${id}`)
+            axios.get(`http://localhost:8080/api/persons/${id}`,{
+                headers: {
+                    'Authorization': `Bearer ${token}`, // Add token to request headers
+                },
+              })
                 .then(response => {
                     const studentProfile = response.data.studentProfile;
                     if (studentProfile && studentProfile.id) {
@@ -45,10 +50,15 @@ export default function ProfileEdit() {
         }
     }, [id]);
     useEffect(() => {
+        const token = localStorage.getItem("token");
         if (!studentProfileId) return; // Ensure studentProfileId is available before making the request
 
         // Fetch job applications based on studentProfileId
-        axios.get(`${url2}${studentProfileId}`)
+        axios.get(`${url2}${studentProfileId}`,{
+            headers: {
+                'Authorization': `Bearer ${token}`, // Add token to request headers
+            },
+          })
             .then(response => {
                 setJobApplications(response.data.manualJobApplications || []); // Ensure it's an array
             })

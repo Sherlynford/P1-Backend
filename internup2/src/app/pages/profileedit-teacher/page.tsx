@@ -73,8 +73,13 @@ export default function ProfileEdit() {
     }, [teacherData]);
 
     useEffect(() => {
+      const token = localStorage.getItem("token");
         if (id) {
-            axios.get(`http://localhost:8080/api/persons/${id}`)
+            axios.get(`http://localhost:8080/api/persons/${id}`,{
+              headers: {
+                  'Authorization': `Bearer ${token}`, // Add token to request headers
+              },
+            })
                 .then(response => {
                     const teacherProfile = response.data.teacherProfile; 
                     setTeacherData(teacherProfile);
@@ -144,62 +149,68 @@ export default function ProfileEdit() {
             let errorMessages: string[] = [];
     
             try {
-                const token = localStorage.getItem('token');
-                
-                // File upload handling
-                const handleFileUpload = async (file: File, url: string) => {
-                    const formData = new FormData();
-                    formData.append('files', file);
-                    const response = await fetch(url, { method: 'POST', body: formData });
-                    const data = await response.json();
-                    if (data.fileUrls && data.fileUrls.length > 0) {
-                        return data.fileUrls[0];
-                    } else {
-                        throw new Error('Failed to upload file');
-                    }
-                };
-    
-                // Upload files and keep existing URLs if not uploaded
-                const profileImgUrl = formData.profileIMG instanceof File
-                    ? await handleFileUpload(formData.profileIMG, imageUploadUrl).catch(err => {
-                        errorMessages.push(err.message);
-                        return teacherData.profileIMG; // Use existing URL
-                    })
-                    : teacherData.profileIMG;
-    
-    
-                const putData = {
-                    person: { id: id || "" },
-                    firstName,
-                    lastName,
-                    phoneNumber,
-                    faculty,
-                    major,
-                    profileIMG: profileImgUrl,
-
-                };
-    
-                // Send updated data
-                const response = await fetch(`${url}${teacherProfileId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`,
-                    },
-                    body: JSON.stringify(putData),
-                });
-    
-                if (response.ok) {
-                    Swal.fire('สำเร็จ', 'บันทึกข้อมูลสำเร็จ!', 'success');
-                    resetForm();
-                    window.location.href = '/pages/profile-teacher';
-                } else {
-                    const responseData = await response.json();
-                    const errorMessage = responseData.message || 'ไม่สามารถบันทึกข้อมูลได้ กรุณาลองอีกครั้ง';
-                    Swal.fire('ข้อผิดพลาด', errorMessage, 'error');
-                }
-    
-            } catch (error) {
+              const token = localStorage.getItem('token');
+          
+              // File upload handling with Authorization header
+              const handleFileUpload = async (file: File, url: string) => {
+                  const formData = new FormData();
+                  formData.append('files', file);
+                  
+                  const response = await fetch(url, {
+                      method: 'POST',
+                      headers: {
+                          'Authorization': `Bearer ${token}`
+                      },
+                      body: formData,
+                  });
+          
+                  const data = await response.json();
+                  if (data.fileUrls && data.fileUrls.length > 0) {
+                      return data.fileUrls[0];
+                  } else {
+                      throw new Error('Failed to upload file');
+                  }
+              };
+          
+              // Upload files and keep existing URLs if not uploaded
+              const profileImgUrl = formData.profileIMG instanceof File
+                  ? await handleFileUpload(formData.profileIMG, imageUploadUrl).catch(err => {
+                      errorMessages.push(err.message);
+                      return teacherData.profileIMG; // Use existing URL
+                  })
+                  : teacherData.profileIMG;
+          
+              const putData = {
+                  person: { id: id || "" },
+                  firstName,
+                  lastName,
+                  phoneNumber,
+                  faculty,
+                  major,
+                  profileIMG: profileImgUrl,
+              };
+          
+              // Send updated data with Authorization header
+              const response = await fetch(`${url}${teacherProfileId}`, {
+                  method: 'PUT',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${token}`,
+                  },
+                  body: JSON.stringify(putData),
+              });
+          
+              if (response.ok) {
+                  Swal.fire('สำเร็จ', 'บันทึกข้อมูลสำเร็จ!', 'success');
+                  resetForm();
+                  window.location.href = '/pages/profile-teacher';
+              } else {
+                  const responseData = await response.json();
+                  const errorMessage = responseData.message || 'ไม่สามารถบันทึกข้อมูลได้ กรุณาลองอีกครั้ง';
+                  Swal.fire('ข้อผิดพลาด', errorMessage, 'error');
+              }
+              
+          } catch (error) {
                 console.error('Error:', error);
                 Swal.fire('ข้อผิดพลาด', 'ไม่สามารถบันทึกข้อมูลได้ กรุณาลองอีกครั้ง', 'error');
             } finally {

@@ -110,6 +110,9 @@ if (result.isConfirmed) {
           try {
               const imageResponse1 = await fetch(imageUploadUrl, {
                   method: 'POST',
+                  headers: {
+                    'Authorization': `Bearer ${token}`, // Add token to request headers
+                },
                   body: imageFormData1,
               });
               const imageResponseData1 = await imageResponse1.json();
@@ -195,9 +198,14 @@ useEffect(() => {
 }, []);
 
 useEffect(() => {
+  const token = localStorage.getItem("token");
   if (!id) return;
 
-  axios.get(`http://localhost:8080/api/persons/${id}`)
+  axios.get(`http://localhost:8080/api/persons/${id}`,{
+    headers: {
+        'Authorization': `Bearer ${token}`, // Add token to request headers
+    },
+  })
       .then(response => {
           const teacherProfile = response.data.teacherProfile;
 

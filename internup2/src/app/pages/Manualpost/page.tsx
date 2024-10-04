@@ -61,8 +61,14 @@ export default function Manualpost() {
     }, []);
 
     useEffect(() => {
+        const token = localStorage.getItem('token');
         if (!id) return;
-        axios.get(`http://localhost:8080/api/persons/${id}`)
+        axios.get(`http://localhost:8080/api/persons/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        })
             .then(response => setStudentProfileId(response.data.studentProfile.id))
             .catch(err => {
                 setError(err.message);

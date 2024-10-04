@@ -58,9 +58,14 @@ export default function NavberLogin() {
 }, []);
 
 useEffect(() => {
+  const token = localStorage.getItem('token');
   if (!id) return;
 
-  axios.get(`http://localhost:8080/api/persons/${id}`)
+  axios.get(`http://localhost:8080/api/persons/${id}`, {
+    headers: {
+        'Authorization': `Bearer ${token}`
+    }
+})
       .then(response => {
           const teacherProfile = response.data.teacherProfile;
 
