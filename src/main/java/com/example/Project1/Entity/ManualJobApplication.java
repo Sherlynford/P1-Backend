@@ -6,8 +6,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -48,8 +46,4 @@ public class ManualJobApplication {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate applicationDate;
 
-    @OneToOne(mappedBy = "manualJobApplication", fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "manual-ConfirmApply")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private ConfirmJobApplication confirmJobApplication;
 }

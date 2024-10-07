@@ -35,6 +35,11 @@ public class StudentProfileController {
         if (!tokenService.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        String role = tokenService.getRoleFromToken(token);
+
+        if (!role.equals("student")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
 
         StudentProfile newStudentProfile = studentProfileService.createStudentProfile(studentProfile);
         return new ResponseEntity<>(newStudentProfile, HttpStatus.CREATED);
@@ -64,10 +69,10 @@ public class StudentProfileController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<StudentProfile>> getAllStudentProfiles(@RequestHeader("Authorization") String token) {
-        if (!tokenService.validateToken(token)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    public ResponseEntity<List<StudentProfile>> getAllStudentProfiles(@RequestHeader("X-API-KEY") String apiKey) {
+        if (!tokenService.validateApiKey(apiKey)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+          }
 
         List<StudentProfile> studentProfiles = studentProfileService.getAllStudentProfiles();
         return new ResponseEntity<>(studentProfiles, HttpStatus.OK);
@@ -78,6 +83,12 @@ public class StudentProfileController {
                                                                 @PathVariable Long id) {
         if (!tokenService.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String role = tokenService.getRoleFromToken(token);
+        Long studentProfileId = tokenService.getStudentProfileIdFromToken(token);
+
+        if (!role.equals("student") && !studentProfileId.equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         Optional<StudentProfile> studentProfile = studentProfileService.getStudentProfileById(id);
@@ -90,6 +101,12 @@ public class StudentProfileController {
         if (!tokenService.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        String role = tokenService.getRoleFromToken(token);
+        String tokenMajor = tokenService.getMajorFromToken(token);
+
+        if (!role.equals("teacher") && !tokenMajor.equals(major)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         List<StudentProfile> studentProfiles = studentProfileService.getStudentProfilesByMajor(major);
         return new ResponseEntity<>(studentProfiles, HttpStatus.OK);
     }
@@ -101,17 +118,23 @@ public class StudentProfileController {
         if (!tokenService.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        String role = tokenService.getRoleFromToken(token);
+        Long studentProfileId = tokenService.getStudentProfileIdFromToken(token);
+
+        if (!role.equals("student") && !studentProfileId.equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
 
         StudentProfile updatedStudentProfile = studentProfileService.updateStudentProfile(newStudentProfile, id);
         return new ResponseEntity<>(updatedStudentProfile, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteStudentProfile(@RequestHeader("Authorization") String token,
+    public ResponseEntity<Void> deleteStudentProfile(@RequestHeader("X-API-KEY") String apiKey,
                                                      @PathVariable Long id) {
-        if (!tokenService.validateToken(token)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+     if (!tokenService.validateApiKey(apiKey)) {
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+     }
 
         studentProfileService.deleteStudentProfile(id);
         return ResponseEntity.noContent().build();

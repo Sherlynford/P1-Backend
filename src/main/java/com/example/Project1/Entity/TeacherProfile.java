@@ -1,11 +1,6 @@
 package com.example.Project1.Entity;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,12 +29,5 @@ public class TeacherProfile {
     private String major;
 
     private String profileIMG;
-
-    @OneToMany(mappedBy = "teacherProfile", fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "teacher-ConfirmApply")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonIgnore
-    private List<ConfirmJobApplication> confirmJobApplications;
-
 
 }

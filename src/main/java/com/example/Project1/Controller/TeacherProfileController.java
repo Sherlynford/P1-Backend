@@ -35,6 +35,11 @@ public class TeacherProfileController {
         if (!tokenService.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        String role = tokenService.getRoleFromToken(token);
+
+        if (!role.equals("teacher")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
 
         TeacherProfile newTeacherProfile = teacherProfileService.createTeacherProfile(teacherProfile);
         return new ResponseEntity<>(newTeacherProfile, HttpStatus.CREATED);
@@ -64,9 +69,9 @@ public class TeacherProfileController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<TeacherProfile>> getAllTeacherProfiles(@RequestHeader("Authorization") String token) {
-        if (!tokenService.validateToken(token)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    public ResponseEntity<List<TeacherProfile>> getAllTeacherProfiles(@RequestHeader("X-API-KEY") String apiKey) {
+        if (!tokenService.validateApiKey(apiKey)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         List<TeacherProfile> teacherProfiles = teacherProfileService.getAllTeacherProfiles();
@@ -78,6 +83,12 @@ public class TeacherProfileController {
                                                                 @PathVariable Long id) {
         if (!tokenService.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String role = tokenService.getRoleFromToken(token);
+        Long teacherId = tokenService.getTeacherProfileIdFromToken(token);
+
+        if (!role.equals("teacher") && !teacherId.equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         Optional<TeacherProfile> teacherProfile = teacherProfileService.getTeacherProfileById(id);
@@ -92,17 +103,23 @@ public class TeacherProfileController {
         if (!tokenService.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        String role = tokenService.getRoleFromToken(token);
+        Long teacherId = tokenService.getTeacherProfileIdFromToken(token);
+
+        if (!role.equals("teacher") && !teacherId.equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
 
         TeacherProfile updatedTeacherProfile = teacherProfileService.updateTeacherProfile(newTeacherProfile, id);
         return new ResponseEntity<>(updatedTeacherProfile, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTeacherProfile(@RequestHeader("Authorization") String token,
+    public ResponseEntity<Void> deleteTeacherProfile(@RequestHeader("X-API-KEY") String apiKey,
                                                      @PathVariable Long id) {
-        if (!tokenService.validateToken(token)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    if (!tokenService.validateApiKey(apiKey)) {
+       return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+     }
 
         teacherProfileService.deleteTeacherProfile(id);
         return ResponseEntity.noContent().build();

@@ -26,17 +26,17 @@ public class PersonController {
     private final TokenService tokenService;
 
     @PostMapping("/")
-    public ResponseEntity<Person> createPerson(@RequestBody Person person) {
+    public ResponseEntity<Person> createPerson(@RequestBody Person person ) {
         Person newPerson = personService.createPerson(person);
         return new ResponseEntity<>(newPerson, HttpStatus.CREATED);
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Person>> getAllPersons(@RequestHeader("Authorization") String token) {
-        if (!tokenService.validateToken(token)) {
+    public ResponseEntity<List<Person>> getAllPersons(@RequestHeader("X-API-KEY") String apiKey) {
+        
+        if (!tokenService.validateApiKey(apiKey)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-
         List<Person> persons = personService.getAllPersons();
         return new ResponseEntity<>(persons, HttpStatus.OK);
     }
@@ -46,15 +46,18 @@ public class PersonController {
         if (!tokenService.validateToken(token)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-
+        Long tokenId = tokenService.getIdFromToken(token);
+        if (!tokenId.equals(id)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         Optional<Person> person = personService.getPersonById(id);
         return person.map(ResponseEntity::ok)
                    .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Person> updatePerson(@PathVariable Long id, @RequestBody Person newPerson, @RequestHeader("Authorization") String token) {
-        if (!tokenService.validateToken(token)) {
+    public ResponseEntity<Person> updatePerson(@PathVariable Long id, @RequestBody Person newPerson,@RequestHeader("X-API-KEY") String apiKey) {
+        if (!tokenService.validateApiKey(apiKey)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
@@ -63,8 +66,8 @@ public class PersonController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePerson(@PathVariable Long id, @RequestHeader("Authorization") String token) {
-        if (!tokenService.validateToken(token)) {
+    public ResponseEntity<Void> deletePerson(@PathVariable Long id,@RequestHeader("X-API-KEY") String apiKey) {
+        if (!tokenService.validateApiKey(apiKey)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 

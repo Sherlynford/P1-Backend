@@ -28,8 +28,6 @@ function parseJwt(token: string) {
   }
 }
 
-const url = 'http://localhost:8080/api/teachers/';
-
 export default function NavberLogin() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const router = useRouter(); // Initialize useRouter for redirection

@@ -29,14 +29,19 @@ public class ManualJobApplicationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
+        String role = tokenService.getRoleFromToken(token);
+        if (!role.equals("student")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         ManualJobApplication newManualJobApplication = manualJobApplicationService.createManualJobApplication(manualJobApplication);
         return new ResponseEntity<>(newManualJobApplication, HttpStatus.CREATED);
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<ManualJobApplication>> getAllManualJobApplications(@RequestHeader("Authorization") String token) {
-        if (!tokenService.validateToken(token)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    public ResponseEntity<List<ManualJobApplication>> getAllManualJobApplications(@RequestHeader("X-API-KEY") String apiKey) {
+        if (!tokenService.validateApiKey(apiKey)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         List<ManualJobApplication> manualJobApplications = manualJobApplicationService.getAllManualJobApplications();
@@ -48,6 +53,12 @@ public class ManualJobApplicationController {
                                                                             @PathVariable Long id) {
         if (!tokenService.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String role = tokenService.getRoleFromToken(token);
+        List<Long> manualJobApplicationIds = tokenService.getManualJobApplicationIdsFromToken(token);
+
+        if (!role.equals("student") || !manualJobApplicationIds.contains(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         Optional<ManualJobApplication> manualJobApplication = manualJobApplicationService.getManualJobApplicationById(id);
@@ -62,28 +73,25 @@ public class ManualJobApplicationController {
         if (!tokenService.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        String role = tokenService.getRoleFromToken(token);
+        List<Long> manualJobApplicationIds = tokenService.getManualJobApplicationIdsFromToken(token);
+
+        if (!role.equals("student") || !manualJobApplicationIds.contains(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
 
         ManualJobApplication updatedManualJobApplication = manualJobApplicationService.updateManualJobApplication(newManualJobApplication, id);
         return new ResponseEntity<>(updatedManualJobApplication, HttpStatus.OK);
-    }
-
-    @PutMapping("/{id}/choose")
-    public ResponseEntity<ManualJobApplication> chooseManualJobApplication(@RequestHeader("Authorization") String token,@PathVariable Long id) {
-        if (!tokenService.validateToken(token)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        try {
-            ManualJobApplication chosenApplication = manualJobApplicationService.chooseManualJobApplication(id);
-            return new ResponseEntity<>(chosenApplication, HttpStatus.OK);
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
     }
     
     @PutMapping("/{id}/confirm")
     public ResponseEntity<ManualJobApplication> confirmManualJobApplication(@RequestHeader("Authorization") String token,@PathVariable Long id) {
         if (!tokenService.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String role = tokenService.getRoleFromToken(token);
+        if (!role.equals("teacher")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         try {
             ManualJobApplication confirmedManualJobApplication = manualJobApplicationService.confirmManualJobApplication(id);
@@ -94,11 +102,11 @@ public class ManualJobApplicationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteManualJobApplication(@RequestHeader("Authorization") String token,
+    public ResponseEntity<Void> deleteManualJobApplication(@RequestHeader("X-API-KEY") String apiKey,
                                                            @PathVariable Long id) {
-        if (!tokenService.validateToken(token)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    if (!tokenService.validateApiKey(apiKey)) {
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
 
         manualJobApplicationService.deleteManualJobApplication(id);
         return ResponseEntity.noContent().build();

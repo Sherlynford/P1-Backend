@@ -48,23 +48,6 @@ public class ManualJobApplicationService {
     }
 
     @Transactional
-    public ManualJobApplication chooseManualJobApplication(Long id) {
-        return manualJobApplicationRepository.findById(id)
-                .map(manualJobApplication -> {
-                    Optional<ManualJobApplication> existingChosenApplication = manualJobApplicationRepository
-                            .findByStudentProfileAndApplicationStatus(manualJobApplication.getStudentProfile(), "เลือก");
-                    
-                    if (existingChosenApplication.isPresent()) {
-                        throw new IllegalStateException("Student has already chosen a job application.");
-                    }
-                    manualJobApplication.setApplicationStatus("เลือก");
-                    return manualJobApplicationRepository.save(manualJobApplication);
-                })
-                .orElseThrow(() -> new IllegalStateException("Manual job application not found"));
-    }
-    
-
-    @Transactional
     public ManualJobApplication confirmManualJobApplication(Long id) {
         return manualJobApplicationRepository.findById(id)
                 .map(manualJobApplication -> {
