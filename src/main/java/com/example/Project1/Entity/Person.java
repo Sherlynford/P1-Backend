@@ -2,6 +2,7 @@ package com.example.Project1.Entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -28,6 +29,9 @@ public class Person {
     @NotBlank(message = "Email cannot be null or empty")
     @Column(nullable = false, unique = true)   
     private String email;
+
+    @JsonProperty("isAdmin")
+    private boolean isAdmin;
 
     @OneToOne(mappedBy = "person", fetch = FetchType.LAZY)
     @JsonManagedReference(value = "person-student")

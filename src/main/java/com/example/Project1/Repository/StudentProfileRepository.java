@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StudentProfileRepository extends JpaRepository<StudentProfile, Long> {
     List<StudentProfile> findByMajor(String major);  // This should return java.util.List<StudentProfile>
+    List<StudentProfile> findByFaculty(String faculty);
 }

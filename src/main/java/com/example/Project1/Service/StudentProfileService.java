@@ -31,6 +31,9 @@ public class StudentProfileService {
     public List<StudentProfile> getStudentProfilesByMajor(String major) {
         return studentProfileRepository.findByMajor(major);
     }
+    public List<StudentProfile> getStudentProfilesByFaculty(String faculty) {
+        return studentProfileRepository.findByFaculty(faculty);
+    }
 
     public StudentProfile updateStudentProfile(StudentProfile newStudentProfile, Long id) {
         return studentProfileRepository.findById(id)

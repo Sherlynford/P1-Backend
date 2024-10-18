@@ -13,8 +13,6 @@ export default function Register() {
 
     const router = useRouter();
 
-          // Function to check authentication state
-
   const checkAuthStatus = () => {
     const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('userRole');
@@ -51,7 +49,8 @@ export default function Register() {
         const user = {
             role: 'teacher',
             email,
-            password
+            password,
+            isAdmin: true
         };
 
         const { isConfirmed } = await Swal.fire({

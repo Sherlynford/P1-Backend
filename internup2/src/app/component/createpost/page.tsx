@@ -204,7 +204,7 @@ export default function Createpost() {
             <div className="enter-detail">
               <form className="flex flex-col" onSubmit={handleSubmit}>
                 <label htmlFor="username" className="title-nameuser">
-                  ชื่อ
+                  *ชื่อ
                 </label>
                 <input
                   id="username"
@@ -217,7 +217,7 @@ export default function Createpost() {
                 />
 
                 <label htmlFor="topic" className="Title">
-                  หัวข้อ
+                  *หัวข้อ
                 </label>
                 <input
                   id="topic"
@@ -246,7 +246,7 @@ export default function Createpost() {
                 />
 
                 <label htmlFor="detail" className="title-detail">
-                  รายละเอียด
+                  *รายละเอียด
                 </label>
                 <textarea
                   id="detail"

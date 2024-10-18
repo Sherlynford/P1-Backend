@@ -32,6 +32,7 @@ export default function NavberLogin() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const router = useRouter(); // Initialize useRouter for redirection
   const [id, setId] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false); // State to store admin status
   const [formData, setFormData] = useState({
     teacherProfile: {
       profileIMG: '',
@@ -46,41 +47,39 @@ export default function NavberLogin() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
-        return;
+      return;
     }
     const decoded = parseJwt(token);
     if (decoded) {
-        setId(decoded.id || null);
-    } else {
+      setId(decoded.id || null);
+      setIsAdmin(decoded.admin || false); // Store isAdmin status from the decoded token
     }
-}, []);
+  }, []);
 
-useEffect(() => {
-  const token = localStorage.getItem('token');
-  if (!id) return;
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!id) return;
 
-  axios.get(`http://localhost:8080/api/persons/${id}`, {
-    headers: {
+    axios.get(`http://localhost:8080/api/persons/${id}`, {
+      headers: {
         'Authorization': `Bearer ${token}`
-    }
-})
+      }
+    })
       .then(response => {
-          const teacherProfile = response.data.teacherProfile;
+        const teacherProfile = response.data.teacherProfile;
 
-          // Log the full response for debugging
-
-          // Check if studentProfile exists, and update the states accordingly
-          if (teacherProfile) {
-              setFormData(response.data);
-          } 
+        // Check if teacherProfile exists, and update the states accordingly
+        if (teacherProfile) {
+          setFormData(response.data);
+        }
       })
-}, [id]);
+  }, [id]);
 
   // Handle Logout
   const handleLogout = () => {
     // Clear local storage
-    localStorage.clear(); 
-    
+    localStorage.clear();
+
     router.push('/pages/login'); // Adjust the path if needed
   };
 
@@ -94,7 +93,8 @@ useEffect(() => {
         <p style={{ marginLeft: "40px" }}><a href="/pages/status-student">สถานะนิสิต</a></p>
       </div>
       <div className='nav-teacher-right flex items-center'>
-      <div className=' mr-10'>อาจารย์</div>
+        {/* Conditionally render based on isAdmin */}
+        <div className='mr-10'>{isAdmin ? 'แอดมิน' : 'อาจารย์'}</div>
         <button className='profile-teacher-nav' onClick={toggleDropdown}>
           <img src={formData?.teacherProfile?.profileIMG} alt='this is image teacher' />
         </button>
