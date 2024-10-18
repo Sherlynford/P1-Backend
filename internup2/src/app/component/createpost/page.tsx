@@ -65,7 +65,6 @@ export default function Createpost() {
       showCancelButton: true,
       confirmButtonText: "ตกลง",
       cancelButtonText: "ยกเลิก",
-      reverseButtons: true,
     });
 
     if (result.isConfirmed) {
