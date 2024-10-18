@@ -38,6 +38,7 @@ public class TokenService {
         claims.put("id", person.getId());
         claims.put("email", person.getEmail());
         claims.put("role", person.getRole());
+        claims.put("admin",person.isAdmin());
 
         if (person.getStudentProfile() != null) {
             claims.put("studentProfileId", person.getStudentProfile().getId());
@@ -110,6 +111,11 @@ public class TokenService {
     public String getMajorFromToken(String token) {
         Claims claims = parseToken(token);
         return claims.get("major", String.class);
+    }
+
+    public String getFacultyFromToken(String token){
+        Claims claims = parseToken(token);
+        return claims.get("faculty",String.class);
     }
 
     @SuppressWarnings("unchecked")

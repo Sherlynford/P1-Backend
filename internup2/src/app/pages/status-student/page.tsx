@@ -30,6 +30,7 @@ const urlPerson = "http://localhost:8080/api/persons/";
 
 export default function Status() {
   const [teacherMajor, setTeacherMajor] = useState(null);
+  const [teacherFaculty, setTeacherFaculty] = useState(null);
   const [studentData, setStudentData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -37,6 +38,7 @@ export default function Status() {
   const [id, setId] = useState(null); // Holds the 'id' from token
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isAdmin, setIsAdmin] = useState(false);
   const itemsPerPage = 5;
 
   useEffect(() => {
@@ -44,6 +46,7 @@ export default function Status() {
     const decoded = parseJwt(token);
     if (decoded) {
       setId(decoded.id || null); // Set the person id from token
+      setIsAdmin(decoded.admin || false);
     } else {
       setLoading(false);
     }
@@ -63,6 +66,9 @@ export default function Status() {
         const teacherProfile = response.data.teacherProfile;
         if (teacherProfile && teacherProfile.id) {
           setTeacherProfileId(teacherProfile.id);
+          if (isAdmin) {
+            setTeacherFaculty(teacherProfile.faculty); // For admins, set faculty
+          }
         }
       })
       .catch((err) => {
@@ -73,7 +79,7 @@ export default function Status() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!teacherProfileId) return;
+    if (!teacherProfileId || isAdmin) return;
 
     axios
       .get(`${url1}${teacherProfileId}`,{
@@ -90,6 +96,27 @@ export default function Status() {
       })
       .finally(() => setLoading(false));
   }, [teacherProfileId]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!teacherFaculty || !isAdmin) return; // Only run this if the user is an admin
+  
+    axios
+      .get(`http://localhost:8080/api/students/faculty/${teacherFaculty}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`, // Add token to request headers
+        },
+      })
+      .then((response) => {
+        setStudentData(response.data);
+      })
+      .catch((err) => {
+        setError(err.message);
+        console.error("Error fetching students by faculty:", err);
+      })
+      .finally(() => setLoading(false));
+  }, [teacherFaculty, isAdmin]);
+  
 
   useEffect(() => {
     const token = localStorage.getItem("token");

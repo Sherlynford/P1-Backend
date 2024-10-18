@@ -111,6 +111,22 @@ public class StudentProfileController {
         return new ResponseEntity<>(studentProfiles, HttpStatus.OK);
     }
 
+    @GetMapping("/faculty/{faculty}")
+public ResponseEntity<List<StudentProfile>> getStudentProfilesByFaculty(@RequestHeader("Authorization") String token,
+                                                                        @PathVariable String faculty) {
+    if (!tokenService.validateToken(token)) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+    String role = tokenService.getRoleFromToken(token);
+    String tokenFaculty = tokenService.getFacultyFromToken(token);
+
+    if (!role.equals("teacher") && !tokenFaculty.equals(faculty)) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+    List<StudentProfile> studentProfiles = studentProfileService.getStudentProfilesByFaculty(faculty);
+    return new ResponseEntity<>(studentProfiles, HttpStatus.OK);
+}
+
     @PutMapping("/{id}")
     public ResponseEntity<StudentProfile> updateStudentProfile(@RequestHeader("Authorization") String token,
                                                                @PathVariable Long id,

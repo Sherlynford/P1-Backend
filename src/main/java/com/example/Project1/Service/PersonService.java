@@ -31,6 +31,7 @@ public class PersonService {
                     person.setPassword(newPerson.getPassword());
                     person.setRole(newPerson.getRole());
                     person.setEmail(newPerson.getEmail());
+                    person.setAdmin(newPerson.isAdmin());
                     return personRepository.save(person);
                 })
                 .orElseGet(() -> {

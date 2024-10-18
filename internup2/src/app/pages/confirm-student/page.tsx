@@ -42,12 +42,15 @@ export default function ProfileEdit() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [teacherFaculty, setTeacherFaculty] = useState(null); // Step 1
+  const [isAdmin, setIsAdmin] = useState(false); // Step 1
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const decoded = parseJwt(token);
     if (decoded) {
       setId(decoded.id);
+      setIsAdmin(decoded.admin || false); // Check if user is admin
     } else {
       setLoading(false);
     }
@@ -67,6 +70,10 @@ export default function ProfileEdit() {
         const teacherProfile = response.data.teacherProfile;
         if (teacherProfile && teacherProfile.id) {
           setTeacherProfileId(teacherProfile.id);
+          if (isAdmin) {
+            setTeacherFaculty(teacherProfile.faculty); // Step 3: Set faculty for admins
+            setTeacherData(teacherProfile);
+          }
         }
       })
       .catch((err) => {
@@ -77,7 +84,7 @@ export default function ProfileEdit() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (!teacherProfileId) return;
+    if (!teacherProfileId || isAdmin) return;
 
     axios
       .get(`${url1}${teacherProfileId}`, {
@@ -95,6 +102,26 @@ export default function ProfileEdit() {
       })
       .finally(() => setLoading(false));
   }, [teacherProfileId]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!teacherFaculty || !isAdmin) return; // Only run this if the user is an admin
+  
+    axios
+      .get(`http://localhost:8080/api/students/faculty/${teacherFaculty}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`, // Add token to request headers
+        },
+      })
+      .then((response) => {
+        setStudentData(response.data);
+      })
+      .catch((err) => {
+        setError(err.message);
+        console.error("Error fetching students by faculty:", err);
+      })
+      .finally(() => setLoading(false));
+  }, [teacherFaculty, isAdmin]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
