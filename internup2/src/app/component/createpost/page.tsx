@@ -197,13 +197,14 @@ export default function Createpost() {
                     aria-label="Upload file"
                     onChange={handleChange}
                   />
+                  <span style={{ color: 'red' }}>*</span>
                 </label>
               </div>
             </div>
             <div className="enter-detail">
               <form className="flex flex-col" onSubmit={handleSubmit}>
                 <label htmlFor="username" className="title-nameuser">
-                  *ชื่อ
+                  ชื่อ<span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   id="username"
@@ -216,7 +217,7 @@ export default function Createpost() {
                 />
 
                 <label htmlFor="topic" className="Title">
-                  *หัวข้อ
+                  หัวข้อ<span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   id="topic"
@@ -245,7 +246,7 @@ export default function Createpost() {
                 />
 
                 <label htmlFor="detail" className="title-detail">
-                  *รายละเอียด
+                  รายละเอียด<span style={{ color: 'red' }}>*</span>
                 </label>
                 <textarea
                   id="detail"

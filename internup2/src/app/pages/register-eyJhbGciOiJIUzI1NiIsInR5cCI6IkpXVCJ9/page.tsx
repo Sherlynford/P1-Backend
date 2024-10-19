@@ -98,10 +98,10 @@ export default function Register() {
             <div className='register-container flex justify-center items-center'>
                 <div className='block-register'>
                     <div className='content-register'>
-                        <h1>ลงทะเบียน</h1>
+                        <h1>ลงทะเบียนสำหรับอาจารย์</h1>
                         <form onSubmit={handleSubmit}>
                             <div className='flex flex-col'>
-                            <label htmlFor="email" className='title-email'>*อีเมล</label>
+                            <label htmlFor="email" className='title-email'>อีเมล<span style={{ color: 'red' }}>*</span></label>
                                 <input
                                     id="email"
                                     className='email'
@@ -112,7 +112,7 @@ export default function Register() {
                                 />
                             </div>
                             <div className='flex flex-col'>
-                                <label htmlFor="password" className='title-password'>*รหัสผ่าน</label>
+                                <label htmlFor="password" className='title-password'>รหัสผ่าน<span style={{ color: 'red' }}>*</span></label>
                                 <input
                                     id="password"
                                     className='password'
@@ -121,7 +121,7 @@ export default function Register() {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
-                                <label htmlFor="confirm-password" className='title-confirm-password'>*ยืนยันรหัสผ่าน</label>
+                                <label htmlFor="confirm-password" className='title-confirm-password'>ยืนยันรหัสผ่าน<span style={{ color: 'red' }}>*</span></label>
                                 <input
                                     id="confirm-password"
                                     className='password'
