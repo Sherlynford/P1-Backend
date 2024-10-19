@@ -27,15 +27,6 @@ function parseJwt(token: string) {
     return null;
   }
 }
-type Job = {
-    id: number,
-    topic: string,
-    organizationName: string,
-    dateTime: string,
-    detail: string,
-    img: string,
-    location: string
-}
 
 const JobCard = ({ job }: { job: Job }) => {
   const [role, setRole] = useState<'student' | 'teacher' | 'login' | null>(null);
