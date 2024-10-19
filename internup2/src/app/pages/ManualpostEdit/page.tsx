@@ -202,7 +202,7 @@ export default function Manualpost() {
                                 </div>
                                 <div className='enter-manual'>
                                     <form className='flex flex-col' onSubmit={handleSubmit}>
-                                        <label htmlFor="organizationName" className='title-nameuser'>*ชื่อหน่วยงาน</label>
+                                        <label htmlFor="organizationName" className='title-nameuser'>ชื่อหน่วยงาน<span style={{ color: 'red' }}>*</span></label>
                                         <input id="organizationName" className='nameorganization' type="text" placeholder='กรุณากรอก ชื่อหน่วยงาน....' value={formData.organizationName} onChange={handleChange} />
 
                                         <label htmlFor="organizationAddress" className='title-Link'>ที่อยู่หน่วยงาน</label>
@@ -214,7 +214,7 @@ export default function Manualpost() {
                                         <label htmlFor="organizationPhone" className='title-phone'>เบอร์หน่วยงาน</label>
                                         <input id="organizationPhone" className='phone' type="text" placeholder='กรุณากรอก เบอร์หน่วยงาน....' value={formData.organizationPhone} onChange={handleChange} />
 
-                                        <label htmlFor="jobName" className='postition-job'>*ชื่อตำแหน่งงาน</label>
+                                        <label htmlFor="jobName" className='postition-job'>ชื่อตำแหน่งงาน<span style={{ color: 'red' }}>*</span></label>
                                         <input id="jobName" className='postition-job' type="text" placeholder='กรุณากรอก ชื่อตำแหน่งงาน....' value={formData.jobName} onChange={handleChange} />
 
                                         <label htmlFor="applicationStatus" className='title-status-apply'>สถานะการสมัคร</label>
